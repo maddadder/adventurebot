@@ -21,7 +21,8 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
             ILogger log)
         {
             var instanceId = await client.StartNewAsync(nameof(DemoOrchestrator), null);
-            return new OkObjectResult("");
+
+            return new OkObjectResult("This HTTP triggered function executed successfully.");
         }
     }
 }
