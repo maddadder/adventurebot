@@ -1,6 +1,11 @@
-public static class Strings
+
+namespace DurableFunctionDemoConfig.Models
 {
-    public const string CosmosDBDatabaseName = "leenetDb";
-    public const string CosmosDBContainerName = "adventureBotCollection";
-    public const string CosmosDBConnection = "CosmosDbConnectionString";
+    public static class DbStrings
+    {
+        public const string CosmosDBDatabaseName = "leenetDb";
+        public const string CosmosDBContainerName = "adventureBotCollection";
+        public const string CosmosDBConnection = "CosmosDbConnectionString";
+    }
+    
 }
