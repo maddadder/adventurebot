@@ -16,7 +16,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
     {
         [FunctionName(nameof(HttpTrigger))]
         public static async Task<IActionResult> HttpStart(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             [DurableClient] IDurableClient client,
             ILogger log)
         {
