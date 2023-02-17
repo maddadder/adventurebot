@@ -16,6 +16,7 @@ namespace DurableFunctionDemoConfig.Services
     public class AwsSesApiService : IAwsSesApiService
     {
         private readonly string SmtpHost;
+        private readonly string SmtpPort;
         private readonly string SmtpUserName;
         private readonly string SmtpPassword;
         private readonly string SmtpToEmail;
@@ -32,6 +33,7 @@ namespace DurableFunctionDemoConfig.Services
             var gitHubApiConfigValue = gitHubApiConfig.Value;
             var applicationConfigValue = applicationConfig.Value;
             SmtpHost = awsSesApiConfigValue.SmtpHost;
+            SmtpPort = awsSesApiConfigValue.SmtpPort;
             SmtpUserName = awsSesApiConfigValue.SmtpUserName;
             SmtpPassword = awsSesApiConfigValue.SmtpPassword;
             SmtpToEmail = awsSesApiConfigValue.SmtpToEmail;
@@ -57,6 +59,7 @@ To unsubscribe from these messages click here:");
         public async Task SendEmail(string Subject, string Body)
         {
             int port = 25;
+            int.TryParse(SmtpPort, out port);
             using (var client = new System.Net.Mail.SmtpClient(SmtpHost, port))
             {
                 client.Credentials = new System.Net.NetworkCredential(SmtpUserName, SmtpPassword);
