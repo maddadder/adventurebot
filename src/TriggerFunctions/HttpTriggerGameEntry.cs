@@ -51,7 +51,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
         [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Description = "The OK response")]
         public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
             string partitionKey,
@@ -71,7 +71,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Description = "The OK response")]
         public async Task<IActionResult> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
@@ -102,7 +102,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Description = "The OK response")]
         public async Task<IActionResult> Put
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Put, Route = Route.Put)] HttpRequest req,
@@ -117,17 +117,42 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
             var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            GameEntry gameEntryInput = JsonConvert.DeserializeObject<GameEntry>(requestBody);
+            dynamic gameEntryInput = JsonConvert.DeserializeObject(requestBody);
             gameEntryInput.__T = partitionKey;
             gameEntryInput.id = GameEntryId;
             gameEntryInput.Modified = DateTime.UtcNow;
             _logger.LogInformation($"Put GameEntryId: {GameEntryId}");
-            GameEntry upsertedItem = await container.UpsertItemAsync<GameEntry>(
+            await container.UpsertItemAsync<dynamic>(
                 item: gameEntryInput,
                 partitionKey: new PartitionKey(partitionKey)
             );
 
             return new OkObjectResult(gameEntryInput);
+        }
+
+        [FunctionName(Name.Delete)]
+        [OpenApiOperation($"{Resource.Name}-Delete", tags: new[] { Resource.Name }, Summary = Summary.Delete)]
+        [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
+        [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
+        [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK, Description = "The OK response")]
+        public async Task<IActionResult> Delete
+        (
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Delete, Route = Route.Delete)] HttpRequest req,
+            string partitionKey,
+            Guid GameEntryId,
+            [CosmosDB(
+                databaseName: DbStrings.CosmosDBDatabaseName, 
+                containerName: DbStrings.CosmosDBContainerName, 
+                Connection = DbStrings.CosmosDBConnection)] 
+                CosmosClient client)
+        {
+            var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+            _logger.LogInformation($"Delete GameEntryId: {GameEntryId}");
+            await container.DeleteItemAsync<dynamic>(
+                id: GameEntryId.ToString(),
+                partitionKey: new PartitionKey(partitionKey)
+            );
+            return new OkResult();
         }
     }
 }

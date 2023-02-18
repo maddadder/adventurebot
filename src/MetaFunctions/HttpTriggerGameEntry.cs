@@ -20,6 +20,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
             public const string Get = $"Retrieve one {resource}";
             public const string Post = $"Create one {resource}";
             public const string Put = $"Update one {resource}";
+            public const string Delete = $"Delete one {resource}";
         }
         private static class Parameter
         {
