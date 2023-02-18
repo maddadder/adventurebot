@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DurableFunctionDemoConfig.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -28,47 +29,53 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
 
         [FunctionName(Name.List)]
         [OpenApiOperation(operationId: $"{Resource.Name}-List", tags: new[] { Resource.Name }, Summary = Summary.List)]
-        [OpenApiParameter(name: Parameter.Name, In = Parameter.In, Type = typeof(string), Description = "The **name** parameter")]
+        [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
+        [OpenApiParameter(name: Parameter.Name, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **name** parameter")]
         [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry[]), Description = Description.List)]
         public async Task<IActionResult> List(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.List)] HttpRequest req,
+            string partitionKey,
             string GameEntryName,
             [CosmosDB(
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection,
-                SqlQuery = "select * from gameentry ge where ge.__T = 'ge' and ge.name = {GameEntryName}")] 
+                SqlQuery = "select * from gameentry ge where ge.__T = {partitionKey} and ge.name = {GameEntryName}")] 
                 IEnumerable<GameEntry> gameEntries)
         {
-            _logger.LogInformation($"name: {GameEntryName}");
+            _logger.LogInformation($"List name: {GameEntryName}");
             return new OkObjectResult(gameEntries);
         }
 
         [FunctionName(Name.Get)]
         [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
-        [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **pid** parameter")]
+        [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
+        [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
-            string GameEntryId,
+            string partitionKey,
+            Guid GameEntryId,
             [CosmosDB(
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection,
-                SqlQuery = "select * from gameentry ge where ge.__T = 'ge' and ge.id = {GameEntryId}")] 
-                IEnumerable<GameEntry> gameEntries)
+                Id = "{GameEntryId}",
+                PartitionKey = "{partitionKey}")] GameEntry gameEntry)
         {
-            _logger.LogInformation($"GameEntryId: {GameEntryId}");
-            return new OkObjectResult(gameEntries.FirstOrDefault());
+            _logger.LogInformation($"Get GameEntryId: {GameEntryId}");
+            return new OkObjectResult(gameEntry);
         }
 
         [FunctionName(Name.Post)]
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
+        [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
+            string partitionKey,
             [CosmosDB(
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
@@ -76,16 +83,52 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
                 IAsyncCollector<dynamic> documentsOut)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            GameEntry gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
-            _logger.LogInformation($"GameEntryId: {gameEntry.name}");
-            gameEntry.id = Guid.NewGuid();
+            dynamic gameEntry = JsonConvert.DeserializeObject<dynamic>(requestBody);
+            
+            if(gameEntry.id == Guid.Empty)
+            {
+                gameEntry.id = Guid.NewGuid();
+            }
+            _logger.LogInformation($"Post GameEntryId: {gameEntry.id}");
             gameEntry.Created = DateTime.UtcNow;
             gameEntry.Modified = DateTime.UtcNow;
-            gameEntry.__T = "ge";
+            gameEntry.__T = partitionKey;
             await documentsOut.AddAsync(gameEntry);
-            return new CreatedResult($"/api/{Resource.Name}/get/{gameEntry.id}", gameEntry);
+            return new CreatedResult($"/api/{Resource.Name}/get/{partitionKey}/{gameEntry.id}", gameEntry);
         }
         
+        [FunctionName(Name.Put)]
+        [OpenApiOperation($"{Resource.Name}-Put", tags: new[] { Resource.Name }, Summary = Summary.Put)]
+        [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
+        [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
+        [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
+        public async Task<IActionResult> Put
+        (
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Put, Route = Route.Put)] HttpRequest req,
+            string partitionKey,
+            Guid GameEntryId,
+            [CosmosDB(
+                databaseName: DbStrings.CosmosDBDatabaseName, 
+                containerName: DbStrings.CosmosDBContainerName, 
+                Connection = DbStrings.CosmosDBConnection)] 
+                CosmosClient client)
+        {
+            var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            GameEntry gameEntryInput = JsonConvert.DeserializeObject<GameEntry>(requestBody);
+            gameEntryInput.__T = partitionKey;
+            gameEntryInput.id = GameEntryId;
+            gameEntryInput.Modified = DateTime.UtcNow;
+            _logger.LogInformation($"Put GameEntryId: {GameEntryId}");
+            GameEntry upsertedItem = await container.UpsertItemAsync<GameEntry>(
+                item: gameEntryInput,
+                partitionKey: new PartitionKey(partitionKey)
+            );
+
+            return new OkObjectResult(gameEntryInput);
+        }
     }
 }
 

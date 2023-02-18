@@ -5,20 +5,12 @@ using Newtonsoft.Json;
 
 namespace DurableFunctionDemoConfig.Models
 {
-    public class GameEntry
+    public class GameEntry : Entry
     {
-        [Required]
-        public Guid id { get; set; }
-        [Required]
-        public string __T {get;set;}
-        [Required]
-        public string name { get; set; }
         [Required]
         public List<string> description { get; set; }
         [Required]
         public List<GameOption> options { get; set; }
-        public DateTime Created { get;set; }
-        public DateTime Modified { get;set; }
-
+        
     }
 }

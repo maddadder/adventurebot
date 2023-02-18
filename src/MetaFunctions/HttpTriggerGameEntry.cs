@@ -19,9 +19,11 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
             public const string List = $"Retrieve each {resource} by name";
             public const string Get = $"Retrieve one {resource}";
             public const string Post = $"Create one {resource}";
+            public const string Put = $"Update one {resource}";
         }
         private static class Parameter
         {
+            public const string partitionKey = nameof(partitionKey);
             public const string Id = $"{Resource.Name}Id";
             public const string Name = $"{Resource.Name}Name";
             public const ParameterLocation In = ParameterLocation.Path;
@@ -35,15 +37,17 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
             public const string Delete = prefix + nameof(Delete);
             public const string Get = prefix + nameof(Get);
             public const string Post = prefix + nameof(Post);
+            public const string Put = prefix + nameof(Put);
         }
 
         private static class Route
         {
             private const string prefix = Resource.Name;
-            public const string List = prefix + "/search/{"+ Parameter.Name + ":required}";
-            public const string Get = prefix + "/get/{"+ Parameter.Id + ":required}";
-            public const string Delete = prefix + "/delete/{"+ Parameter.Id + ":required}";
-            public const string Post = prefix + "/post";
+            public const string List = prefix + "/search/{" + Parameter.partitionKey + ":required}/{"+ Parameter.Name + ":required}";
+            public const string Get = prefix + "/get/{" + Parameter.partitionKey + ":required}/{"+ Parameter.Id + ":required}";
+            public const string Delete = prefix + "/delete/{" + Parameter.partitionKey + ":required}/{"+ Parameter.Id + ":required}";
+            public const string Post = prefix + "/post/{" + Parameter.partitionKey + ":required}";
+            public const string Put = prefix + "/put/{" + Parameter.partitionKey + ":required}/{"+ Parameter.Id + ":required}";
         }
 
         private static class Method
@@ -51,6 +55,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
             public const string Get = nameof(HttpMethod.Get);
             public const string Delete = nameof(HttpMethod.Delete);
             public const string Post = nameof(HttpMethod.Post);
+            public const string Put = nameof(HttpMethod.Put);
         }
         private static class ResponseBody
         {
