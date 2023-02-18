@@ -33,4 +33,5 @@ GitHub:Username=YourUsername
 
 ### Debugging:
 
+In VS Code: File -> Open Folder -> Select src/ReadWrite
 Azurite: Start
