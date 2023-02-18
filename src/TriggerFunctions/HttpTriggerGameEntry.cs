@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,10 +13,11 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace DurableFunctionDemoConfig.TriggerFunctions
 {
-    public class HttpTriggerGameEntry
+    public partial class HttpTriggerGameEntry
     {
         private readonly ILogger<HttpTriggerGameEntry> _logger;
 
@@ -35,7 +37,7 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection,
-                SqlQuery = "select * from gameentry ge where ge.name = {GameEntryName}")] 
+                SqlQuery = "select * from gameentry ge where ge.__T = 'ge' and ge.name = {GameEntryName}")] 
                 IEnumerable<GameEntry> gameEntries)
         {
             _logger.LogInformation($"name: {GameEntryName}");
@@ -48,70 +50,42 @@ namespace DurableFunctionDemoConfig.TriggerFunctions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
-            string GameEntryPid,
+            string GameEntryId,
             [CosmosDB(
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection,
-                SqlQuery = "select * from gameentry ge where ge.pid = {GameEntryPid}")] 
+                SqlQuery = "select * from gameentry ge where ge.__T = 'ge' and ge.id = {GameEntryId}")] 
                 IEnumerable<GameEntry> gameEntries)
         {
-            _logger.LogInformation($"GameEntryPid: {GameEntryPid}");
+            _logger.LogInformation($"GameEntryId: {GameEntryId}");
             return new OkObjectResult(gameEntries.FirstOrDefault());
         }
+
+        [FunctionName(Name.Post)]
+        [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
+        [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "The OK response")]
+        public async Task<IActionResult> Post
+        (
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
+            [CosmosDB(
+                databaseName: DbStrings.CosmosDBDatabaseName, 
+                containerName: DbStrings.CosmosDBContainerName, 
+                Connection = DbStrings.CosmosDBConnection)] 
+                IAsyncCollector<dynamic> documentsOut)
+        {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            GameEntry gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
+            _logger.LogInformation($"GameEntryId: {gameEntry.name}");
+            gameEntry.id = Guid.NewGuid();
+            gameEntry.Created = DateTime.UtcNow;
+            gameEntry.Modified = DateTime.UtcNow;
+            gameEntry.__T = "ge";
+            await documentsOut.AddAsync(gameEntry);
+            return new CreatedResult($"/api/{Resource.Name}/get/{gameEntry.id}", gameEntry);
+        }
         
-        private static class Resource
-        {
-            public const string Name = "GameEntry";
-        }
-
-        private static class Summary
-        {
-            private const string resource = Resource.Name;
-            public const string List = $"Retrieve each {resource} by name";
-            public const string Get = $"Retrieve one {resource}";
-        }
-        private static class Parameter
-        {
-            public const string Id = $"{Resource.Name}Pid";
-            public const string Name = $"{Resource.Name}Name";
-            public const ParameterLocation In = ParameterLocation.Path;
-            public const bool IsRequired = true;
-        }
-
-        private static class Name
-        {
-            private const string prefix = nameof(GameEntry);
-            public const string List = prefix + nameof(List);
-            public const string Delete = prefix + nameof(Delete);
-            public const string Get = prefix + nameof(Get);
-        }
-
-        private static class Route
-        {
-            private const string prefix = Resource.Name;
-            public const string List = prefix + "/search/{"+ Parameter.Name + ":required}";
-            public const string Get = prefix + "/get/{"+ Parameter.Id + ":required}";
-            public const string Delete = prefix + "/delete/{"+ Parameter.Id + ":required}";
-        }
-
-        private static class Method
-        {
-            public const string Get = nameof(HttpMethod.Get);
-            public const string Delete = nameof(HttpMethod.Delete);
-        }
-        private static class ResponseBody
-        {
-            public const HttpStatusCode StatusCode = HttpStatusCode.OK;
-            public const string ContentType = "application/json";
-        }
-
-        private static class Description
-        {
-            private const string resource = Resource.Name;
-            public const string List = $"Retrieve each {resource} by name";
-            public const string Get = $"Retrieve one {resource}";
-        }
     }
 }
 
