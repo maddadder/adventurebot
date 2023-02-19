@@ -20,8 +20,5 @@
       <SourceUri>https://playleenetadventurebot.azurewebsites.net/api/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Shared\AdventureBotUI.Shared.csproj" />
-  </ItemGroup>
 
 </Project>
