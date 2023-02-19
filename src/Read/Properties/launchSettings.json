@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "ReadWrite": {
+    "Read": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7006",
+      "commandLineArgs": "--port 7005",
       "launchBrowser": false
     }
   }

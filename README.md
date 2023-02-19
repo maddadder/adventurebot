@@ -33,5 +33,10 @@ GitHub:Username=YourUsername
 
 ### Debugging:
 
-In VS Code: File -> Open Folder -> Select src/ReadWrite
+You have the following options:
+
+1. For multiple projects loaded at the same time: In VS Code: Open `main.code-workspace` then click Open Workspace. If you use this then set in local.settings.json `AzureWebJobsStorage` to `DefaultEndpointsProtocol=https;AccountName=redacted;AccountKey=redacted;EndpointSuffix=core.windows.net`. For more info see: https://github.com/microsoft/vscode-azurefunctions/issues/1121
+
+2. Otherwise open `Read` or `ReadWrite` as separate projects. If you use separate projects then you can use `Azurite`. If you use Azurite then set in local.settings.json `AzureWebJobsStorage` to `UseDevelopmentStorage=true`
+
 Azurite: Start

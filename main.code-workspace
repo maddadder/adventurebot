@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "src/Read"
+		},
+		{
+			"path": "src/adventureBotLib"
+		},
+		{
+			"path": "src/ReadWrite"
+		}
+	],
+	"settings": {
+		"debug.internalConsoleOptions": "neverOpen"
+	},
+	"launch": {
+		"configurations": [],
+		"compounds": [
+			{
+				"name": "Attach to both apps",
+				"configurations": [
+					"Read",
+					"ReadWrite"
+				]/
+			}
+		]
+	}
+}
