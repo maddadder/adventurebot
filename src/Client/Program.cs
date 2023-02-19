@@ -12,6 +12,8 @@ builder.Services.AddScoped<AdventureBotReadService>();
 builder.Services.AddMsalAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
+    options.ProviderOptions.DefaultAccessTokenScopes
+        .Add("https://graph.microsoft.com/User.Read");
 });
 
 await builder.Build().RunAsync();
