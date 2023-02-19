@@ -31,7 +31,7 @@ GitHub:Username=YourUsername
 `local.settings.json` contains a required field: `CosmosDbConnectionString` with the value `AccountEndpoint=https://redacted.documents.azure.com:443/;AccountKey=redacted`. Go to the `Function App`, `Configuration` tab. Add a new setting with property `CosmosDbConnectionString` and value `@Microsoft.KeyVault(SecretUri=https://redacted.vault.azure.net/secrets/CosmosDbConnectionString)`. Create an entry in the azure vault called `CosmosDbConnectionString`
 
 
-### Debugging:
+### Debugging Azure Functions:
 
 You have the following options:
 
@@ -40,3 +40,7 @@ You have the following options:
 2. Otherwise open `Read` or `ReadWrite` as separate projects. If you use separate projects then you can use `Azurite`. If you use Azurite then set in local.settings.json `AzureWebJobsStorage` to `UseDevelopmentStorage=true`
 
 Azurite: Start
+
+### Debugging Blazor App:
+
+navigate to src/AdventureBotUI/Client and run dotnet watch

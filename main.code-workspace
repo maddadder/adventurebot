@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "src/ReadWrite"
+		},
+		{
+			"path": "src/AdventureBotUI"
 		}
 	],
 	"settings": {

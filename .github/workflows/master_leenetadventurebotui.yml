@@ -23,7 +23,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release ./src/AdventureBotUI/Server/AdventureBotUI.Server.csproj
 
       - name: dotnet publish
         run: dotnet publish ./src/AdventureBotUI/Server/AdventureBotUI.Server.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
