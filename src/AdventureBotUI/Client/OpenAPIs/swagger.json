@@ -1,0 +1,137 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "OpenAPI Document on Azure Functions",
+    "version": "1.0.0"
+  },
+  "host": "playleenetadventurebot.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/GameEntry/search/{partitionKey}/{GameEntryName}": {
+      "get": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Retrieve each GameEntry by name",
+        "operationId": "GameEntry-List",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "GameEntryName",
+            "description": "The **name** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieve each GameEntry by name",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/gameEntry"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GameEntry/get/{partitionKey}/{GameEntryId}": {
+      "get": {
+        "tags": [
+          "GameEntry"
+        ],
+        "summary": "Retrieve one GameEntry",
+        "operationId": "GameEntry-Get",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "GameEntryId",
+            "description": "The **GameEntryId** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "schema": {
+              "$ref": "#/definitions/gameEntry"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "gameEntry": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/gameOption"
+          }
+        },
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "__T": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "created": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "modified": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "gameOption": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "next": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

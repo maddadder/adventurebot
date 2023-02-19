@@ -1,0 +1,81 @@
+﻿@page "/gameview/{Name?}"
+@using AdventureBotUI.Shared
+@using AdventureBotUI.Client.Services
+@inject AdventureBotReadService adventureBotReadService
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Adventure Bot</h1>
+
+@if (gameEntries == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">loading...</div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>@PageName</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var gameEntry in gameEntries.OrderBy(x => x.Created))
+                        {
+                        <tr>
+                            <td>
+                                <ul style="margin:0px;padding:0px;">
+                                @foreach (var desc in gameEntry.Description)
+                                {
+                                    <li>@desc</li>
+                                }
+                                </ul>
+                                <br/>
+                                <b>Option(s):</b>
+                                <ul>
+                                @if(gameEntry.Options != null)
+                                {
+                                    @foreach (var gameOption in gameEntry.Options)
+                                    {
+                                        <li><a style="text-decoration:underline" href="/gameview/@gameOption.Next" role="button">@gameOption.Description</a></li>
+                                    }
+                                    if(!gameEntry.Options.Any()){
+                                        <li>Game over. Click <a style="text-decoration:underline" href="/gameview/begin">here</a> to start over.</li>
+                                    }
+                                }
+                                </ul>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+    private string PageName {get; set; }
+    protected List<GameEntry> gameEntries = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Name = Name ?? "begin";
+        gameEntries = (await adventureBotReadService.GameEntryListAsync(Name)).ToList();
+        if(gameEntries.Any()){
+            PageName = Name;
+        }
+        else{
+            PageName = "404 - File Not Found";
+        }
+    }
+}
