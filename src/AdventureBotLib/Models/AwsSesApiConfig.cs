@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DurableFunctionDemoConfig.Models
+namespace AdventureBot.Models
 {
     public class AwsSesApiConfig
     {

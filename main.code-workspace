@@ -4,7 +4,7 @@
 			"path": "src/Read"
 		},
 		{
-			"path": "src/adventureBotLib"
+			"path": "src/AdventureBotLib"
 		},
 		{
 			"path": "src/ReadWrite"
@@ -21,7 +21,7 @@
 				"configurations": [
 					"Read",
 					"ReadWrite"
-				]/
+				]
 			}
 		]
 	}

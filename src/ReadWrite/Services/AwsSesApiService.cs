@@ -1,4 +1,4 @@
-using DurableFunctionDemoConfig.Models;
+using AdventureBot.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace DurableFunctionDemoConfig.Services
+namespace AdventureBot.Services
 {
     public class AwsSesApiService : IAwsSesApiService
     {

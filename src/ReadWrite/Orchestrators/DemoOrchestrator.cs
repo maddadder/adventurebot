@@ -1,5 +1,5 @@
-﻿using DurableFunctionDemoConfig.ActivityFunctions;
-using DurableFunctionDemoConfig.Models;
+﻿using AdventureBot.ActivityFunctions;
+using AdventureBot.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DurableFunctionDemoConfig.Orchestrators
+namespace AdventureBot.Orchestrators
 {
     public class DemoOrchestrator
     {

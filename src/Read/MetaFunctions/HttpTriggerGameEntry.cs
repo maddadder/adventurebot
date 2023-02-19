@@ -1,10 +1,10 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using DurableFunctionDemoConfig.Models;
+using AdventureBot.Models;
 using Microsoft.OpenApi.Models;
 
-namespace DurableFunctionDemoConfig.TriggerFunctions
+namespace AdventureBot.TriggerFunctions
 {
     public partial class HttpTriggerGameEntry
     {

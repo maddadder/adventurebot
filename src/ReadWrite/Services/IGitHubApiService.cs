@@ -1,10 +1,10 @@
-﻿using DurableFunctionDemoConfig.Models;
+﻿using AdventureBot.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DurableFunctionDemoConfig.Services
+namespace AdventureBot.Services
 {
     public interface IGitHubApiService
     {

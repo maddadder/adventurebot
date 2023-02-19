@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DurableFunctionDemoConfig.Models
+namespace AdventureBot.Models
 {
     public class GameOption
     {

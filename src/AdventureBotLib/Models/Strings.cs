@@ -1,5 +1,5 @@
 
-namespace DurableFunctionDemoConfig.Models
+namespace AdventureBot.Models
 {
     public static class DbStrings
     {

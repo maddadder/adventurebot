@@ -1,4 +1,4 @@
-﻿namespace DurableFunctionDemoConfig.Models
+﻿namespace AdventureBot.Models
 {
     public class RepoViewCount
     {

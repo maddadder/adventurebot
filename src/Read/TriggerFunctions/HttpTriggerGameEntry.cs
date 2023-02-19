@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using DurableFunctionDemoConfig.Models;
+using AdventureBot.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
-namespace DurableFunctionDemoConfig.TriggerFunctions
+namespace AdventureBot.TriggerFunctions
 {
     public partial class HttpTriggerGameEntry
     {

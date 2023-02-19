@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DurableFunctionDemoConfig.Models
+namespace AdventureBot.Models
 {
     public class Entry
     {

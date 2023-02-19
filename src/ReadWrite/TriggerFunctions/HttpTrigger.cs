@@ -1,4 +1,4 @@
-﻿using DurableFunctionDemoConfig.Orchestrators;
+﻿using AdventureBot.Orchestrators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DurableFunctionDemoConfig.TriggerFunctions
+namespace AdventureBot.TriggerFunctions
 {
     public static class HttpTrigger
     {

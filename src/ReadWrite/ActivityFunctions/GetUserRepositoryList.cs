@@ -1,11 +1,11 @@
-﻿using DurableFunctionDemoConfig.Services;
+﻿using AdventureBot.Services;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DurableFunctionDemoConfig.ActivityFunctions
+namespace AdventureBot.ActivityFunctions
 {
     public class GetUserRepositoryList
     {

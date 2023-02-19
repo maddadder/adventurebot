@@ -1,12 +1,12 @@
-﻿using DurableFunctionDemoConfig.Models;
+﻿using AdventureBot.Models;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Azure.Identity;
 
-[assembly: FunctionsStartup(typeof(DurableFunctionDemoConfig.Startup))]
-namespace DurableFunctionDemoConfig
+[assembly: FunctionsStartup(typeof(AdventureBot.Startup))]
+namespace AdventureBot
 {
     public class Startup : FunctionsStartup
     {
