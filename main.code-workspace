@@ -10,7 +10,7 @@
 			"path": "src/ReadWrite"
 		},
 		{
-			"path": "src/AdventureBotUI"
+			"path": "src/Client"
 		}
 	],
 	"settings": {
