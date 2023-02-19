@@ -43,10 +43,10 @@ else
                                 {
                                     @foreach (var gameOption in gameEntry.Options)
                                     {
-                                        <li><a style="text-decoration:underline" href="/gameview/@gameOption.Next" role="button">@gameOption.Description</a></li>
+                                        <li><a style="text-decoration:underline" href="gameview/@gameOption.Next" role="button">@gameOption.Description</a></li>
                                     }
                                     if(!gameEntry.Options.Any()){
-                                        <li>Game over. Click <a style="text-decoration:underline" href="/gameview/begin">here</a> to start over.</li>
+                                        <li>Game over. Click <a style="text-decoration:underline" href="gameview/begin">here</a> to start over.</li>
                                     }
                                 }
                                 </ul>
