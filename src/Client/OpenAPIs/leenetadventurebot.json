@@ -16,8 +16,8 @@
         "tags": [
           "GameEntry"
         ],
-        "summary": "Retrieve each GameEntry by name",
-        "operationId": "GameEntry-List",
+        "summary": "Search each GameEntry by name",
+        "operationId": "GameEntry-Search",
         "produces": [
           "application/json"
         ],
@@ -39,7 +39,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Retrieve each GameEntry by name",
+            "description": "Search each GameEntry by name",
             "schema": {
               "type": "array",
               "items": {
@@ -210,8 +210,8 @@
         "tags": [
           "UserProfile"
         ],
-        "summary": "Retrieve each UserProfile by name",
-        "operationId": "UserProfile-List",
+        "summary": "Search each UserProfile by name",
+        "operationId": "UserProfile-Search",
         "produces": [
           "application/json"
         ],
@@ -227,6 +227,38 @@
             "in": "path",
             "name": "PreferredUsername",
             "description": "The **PreferredUsername** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search each UserProfile by name",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userProfile"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UserProfile/list/{partitionKey}": {
+      "get": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Retrieve each UserProfile by name",
+        "operationId": "UserProfile-List",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
             "required": true,
             "type": "string"
           }

@@ -70,7 +70,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         Name = Name ?? "begin";
-        gameEntries = (await adventureBotReadService.GameEntryListAsync(Name)).ToList();
+        gameEntries = (await adventureBotReadService.GameEntrySearchAsync(Name)).ToList();
         if(gameEntries.Any()){
             PageName = Name;
         }

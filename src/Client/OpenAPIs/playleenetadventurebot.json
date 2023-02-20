@@ -16,8 +16,8 @@
         "tags": [
           "GameEntry"
         ],
-        "summary": "Retrieve each GameEntry by name",
-        "operationId": "GameEntry-List",
+        "summary": "Search each GameEntry by name",
+        "operationId": "GameEntry-Search",
         "produces": [
           "application/json"
         ],
@@ -39,7 +39,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Retrieve each GameEntry by name",
+            "description": "Search each GameEntry by name",
             "schema": {
               "type": "array",
               "items": {

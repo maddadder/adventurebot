@@ -12,11 +12,11 @@ public class AdventureBotReadWriteService
         client = new leenetadventurebotClient(_httpClient);
     }
 
-    public async Task<IEnumerable<GameEntry>> GameEntryListAsync(string search)
+    public async Task<IEnumerable<GameEntry>> GameEntrySearchAsync(string search)
     {
         try
         {
-            return await client.GameEntryListAsync("ge", search);
+            return await client.GameEntrySearchAsync("ge", search);
         }
         catch
         {
@@ -41,11 +41,23 @@ public class AdventureBotReadWriteService
         await client.GameEntryDeleteAsync("ge", gameEntryId);
     }
 
-    public async Task<IEnumerable<UserProfile>> UserProfileListAsync(string search)
+    public async Task<IEnumerable<UserProfile>> UserProfileSearchAsync(string search)
     {
         try
         {
-            return await client.UserProfileListAsync("up", search);
+            return await client.UserProfileSearchAsync("up", search);
+        }
+        catch
+        {
+            return new List<UserProfile>();
+        }
+    }
+
+    public async Task<IEnumerable<UserProfile>> UserProfileListAsync()
+    {
+        try
+        {
+            return await client.UserProfileListAsync("up");
         }
         catch
         {

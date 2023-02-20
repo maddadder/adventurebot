@@ -76,13 +76,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if(authState.User.Identity?.IsAuthenticated == true){
-            string userName = authState.User.Username();
-            if(!string.IsNullOrEmpty(userName))
-            {
-                userProfiles = await adventureBotReadWriteService.UserProfileListAsync(userName);
-            }
-        }
+        userProfiles = await adventureBotReadWriteService.UserProfileListAsync();
     }
 }

@@ -11,8 +11,8 @@ public class AdventureBotReadService
         _httpClient = httpClient;
         client = new playleenetadventurebotClient(_httpClient);
     }
-    public async Task<ICollection<GameEntry>> GameEntryListAsync(string name)
+    public async Task<ICollection<GameEntry>> GameEntrySearchAsync(string name)
     {
-        return await client.GameEntryListAsync("ge",name);
+        return await client.GameEntrySearchAsync("ge",name);
     }
 }
