@@ -7,6 +7,7 @@ ToDo: Build an adventure bot in c#
 
 https://medium.com/analytics-vidhya/a-practical-guide-to-azure-durable-functions-part-3-configurations-6baa1b49f532
 
+https://github.com/Azure/azure-functions-openapi-extension/blob/main/docs/openapi-core.md
 
 ### Configuration explorer settings
 ```

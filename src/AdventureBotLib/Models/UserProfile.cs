@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Newtonsoft.Json;
 
 namespace AdventureBot.Models
 {
@@ -16,9 +16,9 @@ namespace AdventureBot.Models
         [Required]
         [EmailAddress]
         public string PreferredUsername { get; set; }
-        [OpenApiProperty(Nullable = false, Default=false)]
+        [JsonProperty(PropertyName = "receiveEmailNotificationFromSms", Required = Required.Always)]
         public bool ReceiveEmailNotificationFromSms { get; set; }
-        [OpenApiProperty(Nullable = false, Default=false)]
+        [JsonProperty(PropertyName = "emailIsVerified", Required = Required.Always)]
         public bool EmailIsVerified { get; set; }
         
     }

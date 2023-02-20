@@ -30,7 +30,7 @@ namespace AdventureBot.TriggerFunctions
         [FunctionName(Name.List)]
         [OpenApiOperation(operationId: $"{Resource.Name}-List", tags: new[] { Resource.Name }, Summary = Summary.List)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
-        [OpenApiParameter(name: Parameter.Name, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **name** parameter")]
+        [OpenApiParameter(name: Parameter.PreferredUsername, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **PreferredUsername** parameter")]
         [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile[]), Description = Description.List)]
         public async Task<IActionResult> List(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.List)] HttpRequest req,
