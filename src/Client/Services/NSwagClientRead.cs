@@ -3,7 +3,7 @@
 /// </summary>
 namespace Read
 {
-    public partial class playleenetadventurebotClient 
+    public partial class NSwagClientRead 
     {
         public partial class ApiException : System.Exception
         {

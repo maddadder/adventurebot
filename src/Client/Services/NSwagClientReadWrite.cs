@@ -3,7 +3,7 @@
 /// </summary>
 namespace ReadWrite
 {
-    public partial class leenetadventurebotClient 
+    public partial class NSwagClientReadWrite 
     {
         public partial class ApiException : System.Exception
         {

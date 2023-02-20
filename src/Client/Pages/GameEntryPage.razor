@@ -91,7 +91,7 @@ else
     [Parameter]
     public string Name { get; set; }
     private string PageName {get; set; }
-    protected List<GameEntry> gameEntries = new();
+    protected List<GameEntry> gameEntries = null;
 
     protected override async Task OnParametersSetAsync()
     {

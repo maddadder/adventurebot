@@ -3,13 +3,13 @@ using ReadWrite;
 
 public class AdventureBotReadWriteService
 {
-    private readonly leenetadventurebotClient client;
+    private readonly NSwagClientReadWrite client;
     private readonly HttpClient _httpClient;
     
     public AdventureBotReadWriteService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        client = new leenetadventurebotClient(_httpClient);
+        client = new NSwagClientReadWrite(_httpClient);
     }
 
     public async Task<IEnumerable<GameEntry>> GameEntrySearchAsync(string search)

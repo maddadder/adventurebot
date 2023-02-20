@@ -7,21 +7,25 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+var bindAppSettings = new AppSettings();
+builder.Configuration.Bind("AppSettings", bindAppSettings);
+builder.Services.AddSingleton(bindAppSettings);
+
 builder.Services.AddScoped<ApiAuthorizationMessageHandler>();
 
 builder.Services.AddHttpClient<AdventureBotReadService>(client =>
 {
-    client.BaseAddress = new Uri("https://playleenetadventurebot.azurewebsites.net/api/");
+    client.BaseAddress = new Uri($"{bindAppSettings.ReadApiUrl}/api/");
 });
 
 builder.Services.AddHttpClient<AdventureBotReadWriteService>(client =>
 {
-    client.BaseAddress = new Uri("https://leenetadventurebot.azurewebsites.net/api/");
+    client.BaseAddress = new Uri($"{bindAppSettings.ReadWriteApiUrl}/api/");
 }).AddHttpMessageHandler<ApiAuthorizationMessageHandler>();
 
 builder.Services.AddMsalAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAd", options.ProviderOptions.Authentication);
-    options.ProviderOptions.DefaultAccessTokenScopes.Add("api://efdbc13e-cee9-4f9b-8fa2-4044faa4674a/user_impersonation");
+    options.ProviderOptions.DefaultAccessTokenScopes.Add(bindAppSettings.ReadWriteScope);
 });
 await builder.Build().RunAsync();

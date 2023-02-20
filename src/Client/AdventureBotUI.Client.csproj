@@ -19,11 +19,15 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\playleenetadventurebot.json" CodeGenerator="NSwagCSharp" Namespace="Read">
+    <OpenApiReference Include="OpenAPIs\NSwagClientRead.json" CodeGenerator="NSwagCSharp" Namespace="Read">
       <SourceUri>https://playleenetadventurebot.azurewebsites.net/api/swagger.json</SourceUri>
+      <ClassName>NSwagClientRead</ClassName>
+      <OutputPath>NSwagClientRead.cs</OutputPath>
     </OpenApiReference>
-    <OpenApiReference Include="OpenAPIs\leenetadventurebot.json" CodeGenerator="NSwagCSharp" Namespace="ReadWrite">
+    <OpenApiReference Include="OpenAPIs\NSwagClientReadWrite.json" CodeGenerator="NSwagCSharp" Namespace="ReadWrite">
       <SourceUri>https://leenetadventurebot.azurewebsites.net/api/swagger.json</SourceUri>
+      <ClassName>NSwagClientReadWrite</ClassName>
+      <OutputPath>NSwagClientReadWrite.cs</OutputPath>
     </OpenApiReference>
   </ItemGroup>
 
