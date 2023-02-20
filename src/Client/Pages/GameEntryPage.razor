@@ -1,12 +1,13 @@
-﻿@page "/gameview/{Name?}"
+﻿@page "/gameentry/{Name?}"
 @using AdventureBotUI.Client.Services
-@using Read
-@inject AdventureBotReadService adventureBotReadService
+@using ReadWrite;
+@inject AdventureBotReadWriteService GameEntryService
 
 <PageTitle>Adventure Bot</PageTitle>
 
 <h1>Adventure Bot</h1>
-
+<AuthorizeView>
+    <Authorized Context="Auth">
 @if (gameEntries == null)
 {
     <div class="container">
@@ -19,6 +20,15 @@ else
 {
     <div class="container">
         <div class="row">
+            <div class="col-xs-2 col-md-2">
+                <a href='gameentry/add' class="btn btn-primary" role="button">
+                    <i class="fas fa-user-plus"></i>
+                    Add Content Entry
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                &#160;
+            </div>
             <div class="col-xs-12 col-md-12">
                 <table class="table">
                     <thead>
@@ -31,6 +41,16 @@ else
                         {
                         <tr>
                             <td>
+                                <a href='gameentry/edit/@gameEntry.Id' class="btn btn-outline-dark" role="button">
+                                    Edit
+                                </a> | 
+                                <a href='gameentry/delete/@gameEntry.Id' class="btn btn-outline-danger" role="button">
+                                    Delete
+                                </a><br/>
+                                <span><b>Page Name:</b> '@gameEntry.Name'</span><br/> 
+                                <span><b>Created:</b> @gameEntry.Created?.ToString("MM/dd/yy")</span><br/>
+                                <span><b>Modified:</b> @gameEntry.Modified?.ToString("MM/dd/yy")</span><br/>
+                                <b>Paragraph(s):</b>
                                 <ul style="margin:0px;padding:0px;">
                                 @foreach (var desc in gameEntry.Description)
                                 {
@@ -44,10 +64,10 @@ else
                                 {
                                     @foreach (var gameOption in gameEntry.Options)
                                     {
-                                        <li><a style="text-decoration:underline" href="gameview/@gameOption.Next" role="button">@gameOption.Description</a></li>
+                                        <li><b>link-name:</b> '@gameOption.Next'<b>, link-title:</b> '<a style="text-decoration:underline" href="gameentry/@gameOption.Next" role="button">@gameOption.Description</a>'</li>
                                     }
                                     if(!gameEntry.Options.Any()){
-                                        <li>Game over. Click <a style="text-decoration:underline" href="gameview/begin">here</a> to start over.</li>
+                                        <li>No more content. Click <a style="text-decoration:underline" href="/gameentry/begin">here</a> to start over.</li>
                                     }
                                 }
                                 </ul>
@@ -60,6 +80,11 @@ else
         </div>
     </div>
 }
+</Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     [Parameter]
@@ -70,7 +95,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         Name = Name ?? "begin";
-        gameEntries = (await adventureBotReadService.GameEntryListAsync(Name)).ToList();
+        gameEntries = (await GameEntryService.List(Name)).ToList();
         if(gameEntries.Any()){
             PageName = Name;
         }

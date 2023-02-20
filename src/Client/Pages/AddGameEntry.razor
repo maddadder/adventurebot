@@ -1,0 +1,153 @@
+@page "/gameentry/add"
+@page "/gameentry/edit/{gameEntryId}"
+@using AdventureBotUI.Client.Services
+@using ReadWrite
+@inject AdventureBotReadWriteService GameEntryService
+@inject NavigationManager NavigationManager
+@inject NavigationManager UriHelper
+
+<h1>@Title GameEntry</h1>
+<hr />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-light" @onclick="Cancel">Cancel</a>
+            </div>
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label for="Body" class="form-label">Page Name</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="gameEntry.Name" placeholder="link-name" />
+                </div>
+                <ValidationMessage For="@(() => gameEntry.Name)" />
+            </div>
+            @foreach (var desc in gameEntry.Descriptions) 
+            {
+                <div class="mb-3">
+                    <label for="desc.Value" class="form-label">Paragraph @(gameEntry.Descriptions.IndexOf(desc) + 1)</label>
+                    <div class="col-md-4">
+                        <InputTextArea rows="5" class="form-control" @bind-Value="desc.Value" placeholder="Enter your paragraph here" />
+                    </div>
+                    <ValidationMessage For="@(() => desc.Value)" />
+                </div>
+            }
+            <span @onclick="AddDescription" style="text-decoration:underline;cursor:pointer">Add Paragraph</span> | <span @onclick="DeleteDescription" style="text-decoration:underline;cursor:pointer">Delete Paragraph</span>
+            <div>&#160;</div>
+            <hr/>
+            @foreach (var option in gameEntry.Options) 
+            {
+                <div class="mb-3">
+                    <label for="To" class="form-label">link-name</label>
+                    <div class="col-md-4">
+                        <InputText class="form-control" @bind-Value="option.Next" placeholder="link-name" />
+                    </div>
+                    <ValidationMessage For="@(() => option.Next)" />
+                </div>
+                <div class="mb-3">
+                    <label for="To" class="form-label">link-title</label>
+                    <div class="col-md-4">
+                        <InputText class="form-control" @bind-Value="option.Description" placeholder="link-title" />
+                    </div>
+                    <ValidationMessage For="@(() => option.Description)" />
+                </div>
+                <div>&#160;</div>
+                <hr/>
+            }
+            <span @onclick="AddOption" style="text-decoration:underline;cursor:pointer">Add Option</span> | <span @onclick="DeleteOption" style="text-decoration:underline;cursor:pointer">Delete Option</span>
+            <div>&#160;</div>
+        </EditForm>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string gameEntryId { get; set; }
+
+    private EditContext editContext;
+    protected string Title = "Add";
+    protected GameEntryOverride gameEntry = new();
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(gameEntryId))
+        {
+            Title = "Edit";
+            var _gameEntry = await GameEntryService.Get(gameEntryId);
+            gameEntry.__T = _gameEntry.__T;
+            gameEntry.Description = _gameEntry.Description;
+            gameEntry.Name = _gameEntry.Name;
+            gameEntry.Options = _gameEntry.Options;
+            gameEntry.Id = _gameEntry.Id;
+            gameEntry.Descriptions = (from row in _gameEntry.Description
+                                      select new GameEntryDescription(){
+                                        Value = row
+                                     }).ToList();
+        }
+        else
+        {
+            gameEntry.Id = Guid.Empty;
+            gameEntry.Descriptions = new List<GameEntryDescription>(){
+                    new GameEntryDescription{
+                        Value = ""
+                    }
+                };
+        }
+    }
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(gameEntry);
+    }
+    protected async Task SaveUser()
+    {
+        gameEntry.Description = gameEntry.Descriptions.Select(x => x.Value).ToList();
+        if (!editContext.Validate())
+            return;
+        if (gameEntry.Id != Guid.Empty)
+        {
+            await GameEntryService.Put(gameEntry);
+        }
+        else
+        {
+            await GameEntryService.Post(gameEntry);
+        }
+        Cancel();
+    }
+    public void Cancel()
+    {
+        UriHelper.NavigateTo($"gameentry/{gameEntry?.Name}", true);
+    }
+    private void AddDescription()
+    {
+        gameEntry.Descriptions.Add(new GameEntryDescription()
+        {
+            Value=""
+        });
+    }
+    private void DeleteDescription()
+    {
+        if(gameEntry.Descriptions.Any())
+        {
+            gameEntry.Descriptions.RemoveAt(gameEntry.Descriptions.Count - 1);
+        }
+    }
+    private void AddOption()
+    {
+        gameEntry.Options.Add(new GameOption()
+        {
+            Description="",
+            Next=""
+        });
+    }
+    private void DeleteOption()
+    {
+        List<GameOption> options = gameEntry.Options.ToList();
+        if(options.Any())
+        {
+            options.RemoveAt(options.Count - 1);
+        }
+        gameEntry.Options = options.ToList();
+    }
+}

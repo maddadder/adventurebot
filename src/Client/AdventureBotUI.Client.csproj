@@ -15,10 +15,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <OpenApiReference Include="OpenAPIs\swagger.json" CodeGenerator="NSwagCSharp">
+    <OpenApiReference Include="OpenAPIs\playleenetadventurebot.json" CodeGenerator="NSwagCSharp" Namespace="Read">
       <SourceUri>https://playleenetadventurebot.azurewebsites.net/api/swagger.json</SourceUri>
+    </OpenApiReference>
+    <OpenApiReference Include="OpenAPIs\leenetadventurebot.json" CodeGenerator="NSwagCSharp" Namespace="ReadWrite">
+      <SourceUri>https://leenetadventurebot.azurewebsites.net/api/swagger.json</SourceUri>
     </OpenApiReference>
   </ItemGroup>
 

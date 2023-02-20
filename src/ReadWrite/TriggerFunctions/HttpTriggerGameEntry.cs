@@ -71,7 +71,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: ResponseBody.ContentType, bodyType: typeof(GameEntry), Description = "The Created response")]
         public async Task<IActionResult> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
