@@ -1,0 +1,52 @@
+@page "/gameentry/delete/{gameEntryId}"
+@using AdventureBotUI.Client.Services
+@using ReadWrite
+@inject AdventureBotReadWriteService GameEntryService
+@inject NavigationManager NavigationManager
+@inject NavigationManager UriHelper
+
+<h2>Delete Game Entry</h2>
+<br />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <div class="form-group">
+            <h4>Do you want to delete this game entry?</h4>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>@gameEntry.Name</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Delete" @onclick="(async () => await RemoveGameEntry(gameEntry.Id))" class="btn btn-danger" />
+            <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string gameEntryId { get; set; }
+    GameEntry gameEntry = new GameEntry();
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(gameEntryId))
+        {
+            gameEntry = await GameEntryService.Get(gameEntryId);
+        }
+    }
+    protected async Task RemoveGameEntry(Guid? Id)
+    {
+        await GameEntryService.Delete(Id?.ToString());
+        NavigationManager.NavigateTo("gameentry");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("gameentry");
+    }
+}
