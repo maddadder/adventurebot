@@ -26,14 +26,13 @@ namespace AdventureBot.TriggerFunctions
         {
             _logger = log;
         }
-
-        [FunctionName(Name.List)]
-        [OpenApiOperation(operationId: $"{Resource.Name}-List", tags: new[] { Resource.Name }, Summary = Summary.List)]
+        [FunctionName(Name.Search)]
+        [OpenApiOperation(operationId: $"{Resource.Name}-Search", tags: new[] { Resource.Name }, Summary = Summary.Search)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.PreferredUsername, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **PreferredUsername** parameter")]
-        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile[]), Description = Description.List)]
-        public async Task<IActionResult> List(
-            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.List)] HttpRequest req,
+        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile[]), Description = Description.Search)]
+        public async Task<IActionResult> Search(
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Search)] HttpRequest req,
             string partitionKey,
             string PreferredUsername,
             [CosmosDB(
@@ -44,6 +43,24 @@ namespace AdventureBot.TriggerFunctions
                 IEnumerable<UserProfile> gameEntries)
         {
             _logger.LogInformation($"List name: {PreferredUsername}");
+            return new OkObjectResult(gameEntries);
+        }
+
+        [FunctionName(Name.List)]
+        [OpenApiOperation(operationId: $"{Resource.Name}-List", tags: new[] { Resource.Name }, Summary = Summary.List)]
+        [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
+        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile[]), Description = Description.List)]
+        public async Task<IActionResult> List(
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.List)] HttpRequest req,
+            string partitionKey,
+            [CosmosDB(
+                databaseName: DbStrings.CosmosDBDatabaseName, 
+                containerName: DbStrings.CosmosDBContainerName, 
+                Connection = DbStrings.CosmosDBConnection,
+                SqlQuery = "select * from userprofile up where up.__T = {partitionKey}")] 
+                IEnumerable<UserProfile> gameEntries)
+        {
+            _logger.LogInformation($"List __T: {partitionKey}");
             return new OkObjectResult(gameEntries);
         }
 

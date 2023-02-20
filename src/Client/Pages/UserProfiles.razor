@@ -20,7 +20,7 @@
             </div>
             @if (userProfiles == null)
             {
-                <p><em>Loading...</em></p>
+                <p style="margin-top:10px;"><em>Loading...</em></p>
             }
             else
             {
@@ -76,6 +76,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        userProfiles = await adventureBotReadWriteService.UserProfileListAsync("");
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if(authState.User.Identity?.IsAuthenticated == true){
+            string userName = authState.User.Username();
+            if(!string.IsNullOrEmpty(userName))
+            {
+                userProfiles = await adventureBotReadWriteService.UserProfileListAsync(userName);
+            }
+        }
     }
 }

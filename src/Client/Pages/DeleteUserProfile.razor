@@ -1,0 +1,52 @@
+@page "/userprofiles/delete/{userProfileId}"
+@using AdventureBotUI.Client.Services
+@using ReadWrite
+@inject AdventureBotReadWriteService adventureBotReadWriteService
+@inject NavigationManager NavigationManager
+@inject NavigationManager UriHelper
+
+<h2>Delete Game Entry</h2>
+<br />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <div class="form-group">
+            <h4>Do you want to delete this game entry?</h4>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>@userProfile.PreferredUsername</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Delete" @onclick="(async () => await RemoveUserProfile(userProfile.Id))" class="btn btn-danger" />
+            <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [Parameter]
+    public string userProfileId { get; set; }
+    UserProfile userProfile = new UserProfile();
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(userProfileId))
+        {
+            userProfile = await adventureBotReadWriteService.UserProfileGetAsync(userProfileId);
+        }
+    }
+    protected async Task RemoveUserProfile(Guid? Id)
+    {
+        await adventureBotReadWriteService.UserProfileDeleteAsync(Id?.ToString());
+        NavigationManager.NavigateTo("userprofiles");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("userprofiles");
+    }
+}

@@ -16,6 +16,7 @@ namespace AdventureBot.TriggerFunctions
         private static class Summary
         {
             private const string resource = Resource.Name;
+            public const string Search = $"Search each {resource} by name";
             public const string List = $"Retrieve each {resource} by name";
             public const string Get = $"Retrieve one {resource}";
             public const string Post = $"Create one {resource}";
@@ -35,6 +36,7 @@ namespace AdventureBot.TriggerFunctions
         {
             private const string prefix = nameof(UserProfile);
             public const string List = prefix + nameof(List);
+            public const string Search = prefix + nameof(Search);
             public const string Delete = prefix + nameof(Delete);
             public const string Get = prefix + nameof(Get);
             public const string Post = prefix + nameof(Post);
@@ -44,7 +46,8 @@ namespace AdventureBot.TriggerFunctions
         private static class Route
         {
             private const string prefix = Resource.Name;
-            public const string List = prefix + "/search/{" + Parameter.partitionKey + ":required}/{"+ Parameter.PreferredUsername + ":required}";
+            public const string List = prefix + "/list/{" + Parameter.partitionKey + ":required}";
+            public const string Search = prefix + "/search/{" + Parameter.partitionKey + ":required}/{"+ Parameter.PreferredUsername + ":required}";
             public const string Get = prefix + "/get/{" + Parameter.partitionKey + ":required}/{"+ Parameter.Id + ":required}";
             public const string Delete = prefix + "/delete/{" + Parameter.partitionKey + ":required}/{"+ Parameter.Id + ":required}";
             public const string Post = prefix + "/post/{" + Parameter.partitionKey + ":required}";
@@ -68,6 +71,7 @@ namespace AdventureBot.TriggerFunctions
         {
             private const string resource = Resource.Name;
             public const string List = $"Retrieve each {resource} by name";
+            public const string Search = $"Search each {resource} by name";
             public const string Get = $"Retrieve one {resource}";
         }
     }

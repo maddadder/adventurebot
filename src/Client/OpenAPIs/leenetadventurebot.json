@@ -2,6 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "OpenAPI Document on Azure Functions",
+    "description": "This is the OpenAPI Document on Azure Functions",
     "version": "1.0.0"
   },
   "host": "leenetadventurebot.azurewebsites.net",
@@ -204,7 +205,7 @@
         }
       }
     },
-    "/UserProfile/search/{partitionKey}/{UserProfileName}": {
+    "/UserProfile/search/{partitionKey}/{PreferredUsername}": {
       "get": {
         "tags": [
           "UserProfile"
@@ -224,8 +225,8 @@
           },
           {
             "in": "path",
-            "name": "UserProfileName",
-            "description": "The **name** parameter",
+            "name": "PreferredUsername",
+            "description": "The **PreferredUsername** parameter",
             "required": true,
             "type": "string"
           }
@@ -401,9 +402,16 @@
   },
   "definitions": {
     "gameEntry": {
+      "required": [
+        "name",
+        "description",
+        "options",
+        "id"
+      ],
       "type": "object",
       "properties": {
         "name": {
+          "minLength": 1,
           "type": "string"
         },
         "description": {
@@ -420,6 +428,7 @@
         },
         "id": {
           "format": "uuid",
+          "minLength": 1,
           "type": "string"
         },
         "__T": {
@@ -436,23 +445,39 @@
       }
     },
     "gameOption": {
+      "required": [
+        "description",
+        "next"
+      ],
       "type": "object",
       "properties": {
         "description": {
+          "minLength": 1,
           "type": "string"
         },
         "next": {
+          "minLength": 1,
           "type": "string"
         }
       }
     },
     "userProfile": {
+      "required": [
+        "receiveEmailNotificationFromSms",
+        "emailIsVerified",
+        "firstName",
+        "lastName",
+        "preferredUsername",
+        "id"
+      ],
       "type": "object",
       "properties": {
         "firstName": {
+          "minLength": 1,
           "type": "string"
         },
         "lastName": {
+          "minLength": 1,
           "type": "string"
         },
         "email": {
@@ -461,6 +486,7 @@
         },
         "preferredUsername": {
           "format": "email",
+          "minLength": 1,
           "type": "string"
         },
         "receiveEmailNotificationFromSms": {
@@ -471,6 +497,7 @@
         },
         "id": {
           "format": "uuid",
+          "minLength": 1,
           "type": "string"
         },
         "__T": {

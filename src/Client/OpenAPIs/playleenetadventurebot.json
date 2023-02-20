@@ -2,6 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "OpenAPI Document on Azure Functions",
+    "description": "This is the OpenAPI Document on Azure Functions",
     "version": "1.0.0"
   },
   "host": "playleenetadventurebot.azurewebsites.net",
@@ -88,8 +89,18 @@
   },
   "definitions": {
     "gameEntry": {
+      "required": [
+        "name",
+        "description",
+        "options",
+        "id"
+      ],
       "type": "object",
       "properties": {
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        },
         "description": {
           "type": "array",
           "items": {
@@ -104,12 +115,10 @@
         },
         "id": {
           "format": "uuid",
+          "minLength": 1,
           "type": "string"
         },
         "__T": {
-          "type": "string"
-        },
-        "name": {
           "type": "string"
         },
         "created": {
@@ -123,12 +132,18 @@
       }
     },
     "gameOption": {
+      "required": [
+        "description",
+        "next"
+      ],
       "type": "object",
       "properties": {
         "description": {
+          "minLength": 1,
           "type": "string"
         },
         "next": {
+          "minLength": 1,
           "type": "string"
         }
       }
