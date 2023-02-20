@@ -9,8 +9,6 @@ namespace AdventureBot.Models
         [Required]
         public Guid id { get; set; }
         public string __T {get;set;}
-        [Required]
-        public string name { get; set; }
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
     }
