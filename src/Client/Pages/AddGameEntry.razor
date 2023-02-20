@@ -2,7 +2,7 @@
 @page "/gameentry/edit/{gameEntryId}"
 @using AdventureBotUI.Client.Services
 @using ReadWrite
-@inject AdventureBotReadWriteService GameEntryService
+@inject AdventureBotReadWriteService adventureBotReadWriteService
 @inject NavigationManager NavigationManager
 @inject NavigationManager UriHelper
 
@@ -75,7 +75,7 @@
         if (!string.IsNullOrEmpty(gameEntryId))
         {
             Title = "Edit";
-            var _gameEntry = await GameEntryService.Get(gameEntryId);
+            var _gameEntry = await adventureBotReadWriteService.GameEntryGetAsync(gameEntryId);
             gameEntry.__T = _gameEntry.__T;
             gameEntry.Description = _gameEntry.Description;
             gameEntry.Name = _gameEntry.Name;
@@ -107,11 +107,11 @@
             return;
         if (gameEntry.Id != Guid.Empty)
         {
-            await GameEntryService.Put(gameEntry);
+            await adventureBotReadWriteService.GameEntryPutAsync(gameEntry);
         }
         else
         {
-            await GameEntryService.Post(gameEntry);
+            await adventureBotReadWriteService.GameEntryPostAsync(gameEntry);
         }
         Cancel();
     }

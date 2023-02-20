@@ -1,7 +1,7 @@
 ﻿@page "/gameentry/{Name?}"
 @using AdventureBotUI.Client.Services
 @using ReadWrite;
-@inject AdventureBotReadWriteService GameEntryService
+@inject AdventureBotReadWriteService adventureBotReadWriteService
 
 <PageTitle>Adventure Bot</PageTitle>
 
@@ -96,7 +96,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         Name = Name ?? "begin";
-        gameEntries = (await GameEntryService.List(Name)).ToList();
+        gameEntries = (await adventureBotReadWriteService.GameEntryListAsync(Name)).ToList();
         if(gameEntries.Any()){
             PageName = Name;
         }

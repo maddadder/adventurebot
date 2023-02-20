@@ -15,7 +15,9 @@ namespace AdventureBot.Models
         [Required]
         [EmailAddress]
         public string PreferredUsername { get; set; }
+        [Required]
         public bool ReceiveEmailNotificationFromSms { get; set; }
+        [Required]
         public bool EmailIsVerified { get; set; }
         
     }

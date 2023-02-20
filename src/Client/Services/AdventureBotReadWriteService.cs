@@ -12,7 +12,7 @@ public class AdventureBotReadWriteService
         client = new leenetadventurebotClient(_httpClient);
     }
 
-    public async Task<IEnumerable<GameEntry>> List(string search)
+    public async Task<IEnumerable<GameEntry>> GameEntryListAsync(string search)
     {
         try
         {
@@ -23,21 +23,50 @@ public class AdventureBotReadWriteService
             return new List<GameEntry>();
         }
     }
-    public async Task<GameEntry> Get(string id)
+    public async Task<GameEntry> GameEntryGetAsync(string id)
     {
         return await client.GameEntryGetAsync("ge", id);
     }
-    public async Task Put(GameEntry gameEntry)
+    public async Task GameEntryPutAsync(GameEntry gameEntry)
     {
         await client.GameEntryPutAsync("ge", gameEntry.Id.ToString(), gameEntry);
     }
     
-    public async Task Post(GameEntry gameEntry)
+    public async Task GameEntryPostAsync(GameEntry gameEntry)
     {
         await client.GameEntryPostAsync("ge", gameEntry);
     }
-    public async Task Delete(string gameEntryId)
+    public async Task GameEntryDeleteAsync(string gameEntryId)
     {
         await client.GameEntryDeleteAsync("ge", gameEntryId);
+    }
+
+    public async Task<IEnumerable<UserProfile>> UserProfileListAsync(string search)
+    {
+        try
+        {
+            return await client.UserProfileListAsync("up", search);
+        }
+        catch
+        {
+            return new List<UserProfile>();
+        }
+    }
+    public async Task<UserProfile> UserProfileGetAsync(string id)
+    {
+        return await client.UserProfileGetAsync("up", id);
+    }
+    public async Task UserProfilePutAsync(UserProfile userProfile)
+    {
+        await client.UserProfilePutAsync("up", userProfile.Id.ToString(), userProfile);
+    }
+    
+    public async Task UserProfilePostAsync(UserProfile userProfile)
+    {
+        await client.UserProfilePostAsync("up", userProfile);
+    }
+    public async Task UserProfileDeleteAsync(string userProfileId)
+    {
+        await client.UserProfileDeleteAsync("up", userProfileId);
     }
 }

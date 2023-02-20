@@ -203,12 +203,209 @@
           }
         }
       }
+    },
+    "/UserProfile/search/{partitionKey}/{UserProfileName}": {
+      "get": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Retrieve each UserProfile by name",
+        "operationId": "UserProfile-List",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "UserProfileName",
+            "description": "The **name** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieve each UserProfile by name",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userProfile"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UserProfile/get/{partitionKey}/{UserProfileId}": {
+      "get": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Retrieve one UserProfile",
+        "operationId": "UserProfile-Get",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "UserProfileId",
+            "description": "The **UserProfileId** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        }
+      }
+    },
+    "/UserProfile/post/{partitionKey}": {
+      "post": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Create one UserProfile",
+        "operationId": "UserProfile-Post",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The **UserProfile** parameter",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The Created response",
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        }
+      }
+    },
+    "/UserProfile/put/{partitionKey}/{UserProfileId}": {
+      "put": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Update one UserProfile",
+        "operationId": "UserProfile-Put",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "UserProfileId",
+            "description": "The **UserProfileId** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The **UserProfile** parameter",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        }
+      }
+    },
+    "/UserProfile/delete/{partitionKey}/{UserProfileId}": {
+      "delete": {
+        "tags": [
+          "UserProfile"
+        ],
+        "summary": "Delete one UserProfile",
+        "operationId": "UserProfile-Delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "partitionKey",
+            "description": "The **partitionKey** parameter",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "UserProfileId",
+            "description": "The **UserProfileId** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response"
+          }
+        }
+      }
     }
   },
   "definitions": {
     "gameEntry": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "description": {
           "type": "array",
           "items": {
@@ -228,9 +425,6 @@
         "__T": {
           "type": "string"
         },
-        "name": {
-          "type": "string"
-        },
         "created": {
           "format": "date-time",
           "type": "string"
@@ -248,6 +442,46 @@
           "type": "string"
         },
         "next": {
+          "type": "string"
+        }
+      }
+    },
+    "userProfile": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "preferredUsername": {
+          "format": "email",
+          "type": "string"
+        },
+        "receiveEmailNotificationFromSms": {
+          "type": "boolean"
+        },
+        "emailIsVerified": {
+          "type": "boolean"
+        },
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "__T": {
+          "type": "string"
+        },
+        "created": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "modified": {
+          "format": "date-time",
           "type": "string"
         }
       }
