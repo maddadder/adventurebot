@@ -47,6 +47,7 @@ else
                                 <a href='gameentry/delete/@gameEntry.Id' class="btn btn-outline-danger" role="button">
                                     Delete
                                 </a><br/>
+                                <br/>
                                 <span><b>Page Name:</b> '@gameEntry.Name'</span><br/> 
                                 <span><b>Created:</b> @gameEntry.Created?.ToString("MM/dd/yy")</span><br/>
                                 <span><b>Modified:</b> @gameEntry.Modified?.ToString("MM/dd/yy")</span><br/>
@@ -67,7 +68,7 @@ else
                                         <li><b>link-name:</b> '@gameOption.Next'<b>, link-title:</b> '<a style="text-decoration:underline" href="gameentry/@gameOption.Next" role="button">@gameOption.Description</a>'</li>
                                     }
                                     if(!gameEntry.Options.Any()){
-                                        <li>No more content. Click <a style="text-decoration:underline" href="/gameentry/begin">here</a> to start over.</li>
+                                        <li>No more content. Click <a style="text-decoration:underline" href="gameentry/begin">here</a> to start over.</li>
                                     }
                                 }
                                 </ul>
