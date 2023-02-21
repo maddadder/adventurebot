@@ -9,7 +9,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "AdventureBotUI.Client.dll": "sha256-lTx3AH7dC2GjEhThvm5D5I3Sfp0QE\/nEwZlsGEVH9ZA=",
+      "AdventureBotUI.Client.dll": "sha256-5YZJQa0CqLIZtixatykhCWJhWETaI2Fl0p+SziHBq18=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-7fN0ukwwbbkPKaStbiZQJfJzUsdaV6k2XuM6ajteQkA=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-\/4W9n7HrhUwFWiMb8I0S4nyPEhPgmF+Cp4e5zjVwL\/I=",
       "Microsoft.AspNetCore.Components.dll": "sha256-BVUCPOL1irEWj7RX2Z0XYKQoDCEqa2k0zKSVo9eQ4Cg=",
