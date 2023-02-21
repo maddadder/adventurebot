@@ -9,7 +9,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "AdventureBotUI.Client.dll": "sha256-6KXFJMs\/0GcMV23Cm2K\/zWL8sro6Zpa7BuGYhRqKI1s=",
+      "AdventureBotUI.Client.dll": "sha256-lTx3AH7dC2GjEhThvm5D5I3Sfp0QE\/nEwZlsGEVH9ZA=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-7fN0ukwwbbkPKaStbiZQJfJzUsdaV6k2XuM6ajteQkA=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-\/4W9n7HrhUwFWiMb8I0S4nyPEhPgmF+Cp4e5zjVwL\/I=",
       "Microsoft.AspNetCore.Components.dll": "sha256-BVUCPOL1irEWj7RX2Z0XYKQoDCEqa2k0zKSVo9eQ4Cg=",
@@ -55,6 +55,7 @@
       "System.Linq.Expressions.dll": "sha256-nMmS8K3J+B513bsh5qSxMGxObgcUS8dFI7yJ2n3TWSY=",
       "System.Memory.dll": "sha256-gDaKbsx6vP0iZXZw2UKct1OanzfmCr3BInmcHEEbdtQ=",
       "System.Net.Http.dll": "sha256-aLh2NDXxYA\/joUQRpojYtztwXUuuWEwE9YV8nlETBPY=",
+      "System.Net.Mail.dll": "sha256-SM53yGr3aIrUP84fRvlDnW7IjAPHJ\/Cb89cPBMCX5tA=",
       "System.Net.Primitives.dll": "sha256-T63wAaMhP6ShtXqla90xdQVPIjcCX8r2XgbljBji+d8=",
       "System.ObjectModel.dll": "sha256-kPEr6alM3rnEOObGkhiE1hxP7d4CGXRCA28UWICs4CQ=",
       "System.Private.CoreLib.dll": "sha256-MWzjG+lfwpgjmccM3qckClz729VnWvoiRo84jgf5Lk4=",
