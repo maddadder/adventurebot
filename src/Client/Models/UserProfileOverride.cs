@@ -10,7 +10,6 @@ public partial class UserProfileOverride : UserProfile
         
     }
 
-    [JsonProperty(Required = Required.Always)]
     public string EmailEntry
     { 
         get
@@ -19,8 +18,14 @@ public partial class UserProfileOverride : UserProfile
         }
         set
         {
-            var address = new MailAddress(value); 
-            this.Email = value;
+            if(!string.IsNullOrEmpty(value)){
+                var address = new MailAddress(value); 
+                this.Email = value;
+            }
+            else
+            {
+                this.Email = value;
+            }
         }
     }
     [JsonProperty(Required = Required.Always)]

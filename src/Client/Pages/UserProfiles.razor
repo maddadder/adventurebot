@@ -30,6 +30,7 @@
                         <tr>
                             <th>FirstName</th>
                             <th>LastName</th>
+                            <th>Game State</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Receive Email Notifications</th>
@@ -44,10 +45,12 @@
                             <tr>
                                 <td>@userProfile.FirstName</td>
                                 <td>@userProfile.LastName</td>
+                                <td>@userProfile.GameEntryState</td>
                                 <td>@userProfile.PreferredUsername</td>
                                 <td>@userProfile.Email</td>
                                 <td>@userProfile.ReceiveEmailNotificationFromSms</td>
                                 <td>@userProfile.EmailIsVerified</td>
+                                
                                 <td>
                                     <a href='userprofiles/edit/@userProfile.Id' class="btn btn-outline-dark" role="button">
                                         Edit

@@ -28,6 +28,13 @@
                 <ValidationMessage For="@(() => userProfile.LastName)" />
             </div>
             <div class="mb-3">
+                <label for="GameEntryState" class="form-label">Game State</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="userProfile.GameEntryState" placeholder="begin" />
+                </div>
+                <ValidationMessage For="@(() => userProfile.GameEntryState)" />
+            </div>
+            <div class="mb-3">
                 <label for="PreferredUsername" class="form-label">preferred username</label>
                 <div class="col-md-4">
                     <InputText class="form-control" @bind-Value="userProfile.PreferredUsernameEntry" placeholder="user@contoso.onmicrosoft.com" />
@@ -75,6 +82,7 @@
             userProfile.__T = _userProfile.__T;
             userProfile.FirstName = _userProfile.FirstName;
             userProfile.LastName = _userProfile.LastName;
+            userProfile.GameEntryState = _userProfile.GameEntryState;
             userProfile.PreferredUsername = _userProfile.PreferredUsername;
             userProfile.Email = _userProfile.Email;
             userProfile.ReceiveEmailNotificationFromSms = _userProfile.ReceiveEmailNotificationFromSms;
