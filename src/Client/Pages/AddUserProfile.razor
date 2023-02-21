@@ -30,16 +30,16 @@
             <div class="mb-3">
                 <label for="PreferredUsername" class="form-label">preferred username</label>
                 <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="userProfile.PreferredUsername" placeholder="user@contoso.onmicrosoft.com" />
+                    <InputText class="form-control" @bind-Value="userProfile.PreferredUsernameEntry" placeholder="user@contoso.onmicrosoft.com" />
                 </div>
-                <ValidationMessage For="@(() => userProfile.PreferredUsername)" />
+                <ValidationMessage For="@(() => userProfile.PreferredUsernameEntry)" />
             </div>
             <div class="mb-3">
                 <label for="Email" class="form-label">Email</label>
                 <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="userProfile.Email" placeholder="jdoe@gmail.com" />
+                    <InputText class="form-control" @bind-Value="userProfile.EmailEntry" placeholder="jdoe@gmail.com" />
                 </div>
-                <ValidationMessage For="@(() => userProfile.Email)" />
+                <ValidationMessage For="@(() => userProfile.EmailEntry)" />
             </div>
             <div class="mb-3">
                 <label for="ReceiveEmailNotificationFromSms" class="form-label">Receive Email Notifications</label>
@@ -64,7 +64,7 @@
     public string userProfileId { get; set; }
     private EditContext editContext;
     protected string Title = "Add";
-    protected UserProfile userProfile = new();
+    protected UserProfileOverride userProfile = new();
     protected string ValidationErrorMessage = "";
     protected override async Task OnParametersSetAsync()
     {

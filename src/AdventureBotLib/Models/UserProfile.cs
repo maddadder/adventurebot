@@ -20,6 +20,7 @@ namespace AdventureBot.Models
         public bool ReceiveEmailNotificationFromSms { get; set; }
         [JsonProperty(PropertyName = "emailIsVerified", Required = Required.Always)]
         public bool EmailIsVerified { get; set; }
-        
+        [Required]
+        public string GameEntryState { get; set; }
     }
 }
