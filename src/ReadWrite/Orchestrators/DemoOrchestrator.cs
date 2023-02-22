@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Linq;
 namespace AdventureBot.Orchestrators
 {
     public class DemoOrchestrator
@@ -17,23 +17,28 @@ namespace AdventureBot.Orchestrators
             [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log)
         {
-            var repos = await context.CallActivityAsync<List<string>>(nameof(GetUserRepositoryList), null);
-            var list = string.Join(',', repos);
-            log.LogInformation($"Repository list: {list}");
+            var UserProfiles = await context.CallActivityAsync<List<UserProfile>>(nameof(GetUserProfileList), null);
+            var list = string.Join(',', UserProfiles.Select(x => x.PreferredUsername));
+            log.LogInformation($"Users: {list}");
 
-            var tasks = new List<Task<RepoViewCount>>();
+            var queryTasks = new List<Task<UserProfileGameEntry>>();
 
             // fan-out
-            foreach (var repo in repos)
+            foreach (var userProfile in UserProfiles)
             {
-                var task = context.CallActivityAsync<RepoViewCount>(nameof(GetRepositoryViewCount), repo);
-                tasks.Add(task);
+                var task = context.CallActivityAsync<UserProfileGameEntry>(nameof(GetGameStateFromUser), userProfile);
+                queryTasks.Add(task);
             }
 
             // fan-in
-            var repoViewCounts = await Task.WhenAll(tasks);
-
-            await context.CallActivityAsync(nameof(ReportRepoViewCount), repoViewCounts);
+            UserProfileGameEntry[] entries = await Task.WhenAll(queryTasks);
+            var emailTasks = new List<Task>();
+            foreach (var entry in entries)
+            {
+                var task = context.CallActivityAsync(nameof(ReportGameEntryState), entry);
+                emailTasks.Add(task);
+            }
+            await Task.WhenAll(emailTasks);
         }
     }
 }

@@ -129,9 +129,9 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                CosmosClient client)
+                CosmosClient cosmosClient)
         {
-            var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+            var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic userProfileInput = JsonConvert.DeserializeObject(requestBody);

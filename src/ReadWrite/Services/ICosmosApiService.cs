@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AdventureBot.Services
 {
-    public interface IGitHubApiService
+    public interface ICosmosApiService
     {
-        Task<List<string>> GetUserRepositoryList();
-        Task<RepoViewCount> GetRepositoryViewCount(string repoName);
+        Task<List<UserProfile>> GetUserProfileList();
+        Task<UserProfileGameEntry> GetGameStateFromUser(UserProfile userProfile);
     }
 }

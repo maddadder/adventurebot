@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -41,32 +42,48 @@ namespace AdventureBot.Services
             BaseUrl = applicationConfigValue.BaseUrl;
             GithubUsername = gitHubApiConfigValue.Username;
         }
-        public async Task<string> RenderRepoViewCount(RepoViewCount[] repoViewCounts){
+        public async Task<string> RenderUserProfileGameEntry(UserProfileGameEntry userProfileGameEntry){
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.Append($@"Dear {SmtpToEmail},
-A user has requested to a repo view count from {GithubUsername}
-");
-            foreach(RepoViewCount repoViewCount in repoViewCounts){
-                sb.Append($"{repoViewCount.RepoName} ({repoViewCount.ViewCount})\n");
+            if(userProfileGameEntry.userProfile == null)
+                return "";
+            if(userProfileGameEntry.gameEntry == null)
+                return "";
+            string UserName = $"{userProfileGameEntry.userProfile.FirstName} {userProfileGameEntry.userProfile.LastName}";
+            sb.Append($@"Dear {UserName},<br/>
+Your game state is the following: {userProfileGameEntry.gameEntry.name}<br/><br/>");
+            foreach(var desc in userProfileGameEntry.gameEntry.description){
+                sb.Append($"{desc}<br/>");
             }
-            sb.Append($@"
-
-You received the above message because you have 'Receive Email Notifications' turned on. 
-To resend this message click here: {BaseUrl}/api/HttpTrigger
+            sb.Append($"<br/>Options:<br/>");
+            foreach(var option in userProfileGameEntry.gameEntry.options){
+                sb.Append($"<a href='{BaseUrl}/gameview/{option.next}'>{option.description}</a><br/>");
+            }
+            sb.Append($@"<br/>
+<br/>
+You received the above message because you have 'Receive Email Notifications' turned on. <br/>
 To unsubscribe from these messages click here:");
             return sb.ToString();
         }
-        public async Task SendEmail(string Subject, string Body)
+        public async Task SendEmail(UserProfile userProfile, string Subject, string Body)
         {
+            if(userProfile.ReceiveEmailNotificationFromSms == false)
+            {
+                return;
+            }
+            if(string.IsNullOrEmpty(userProfile.Email))
+            {
+                return;
+            }
             int port = 25;
             int.TryParse(SmtpPort, out port);
             using (var client = new System.Net.Mail.SmtpClient(SmtpHost, port))
             {
                 client.Credentials = new System.Net.NetworkCredential(SmtpUserName, SmtpPassword);
                 client.EnableSsl = true;
-                var mailMessage = new System.Net.Mail.MailMessage(SmtpFromEmail, SmtpToEmail);
+                var mailMessage = new System.Net.Mail.MailMessage(SmtpFromEmail, userProfile.Email);
                 mailMessage.Subject = Subject;
                 mailMessage.Body = Body;
+                mailMessage.IsBodyHtml = true;
                 await client.SendMailAsync(mailMessage);
             }
         }
