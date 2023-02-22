@@ -9,11 +9,11 @@ using AdventureBot.Models;
 
 namespace AdventureBot.ActivityFunctions
 {
-    public class GetUserProfileList
+    public class GetActiveUserProfileList
     {
         private readonly ICosmosApiService _cosmosApiService;
         
-        public GetUserProfileList(
+        public GetActiveUserProfileList(
             
             ICosmosApiService cosmosApiService
         )
@@ -21,13 +21,13 @@ namespace AdventureBot.ActivityFunctions
             _cosmosApiService = cosmosApiService;
         }
 
-        [FunctionName(nameof(GetUserProfileList))]
+        [FunctionName(nameof(GetActiveUserProfileList))]
         public async Task<List<UserProfile>> Run(
             [ActivityTrigger] IDurableActivityContext context,
             ILogger log)
         {
             
-            return await _cosmosApiService.GetUserProfileList();
+            return await _cosmosApiService.GetActiveUserProfileList();
         }
     }
 }

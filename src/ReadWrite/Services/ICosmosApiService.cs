@@ -8,7 +8,7 @@ namespace AdventureBot.Services
 {
     public interface ICosmosApiService
     {
-        Task<List<UserProfile>> GetUserProfileList();
+        Task<List<UserProfile>> GetActiveUserProfileList();
         Task<UserProfileGameEntry> GetGameStateFromUser(UserProfile userProfile);
     }
 }

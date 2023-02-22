@@ -49,11 +49,11 @@
                 <ValidationMessage For="@(() => userProfile.EmailEntry)" />
             </div>
             <div class="mb-3">
-                <label for="ReceiveEmailNotificationFromSms" class="form-label">Receive Email Notifications</label>
+                <label for="ReceiveGameAdvanceEmail" class="form-label">Receive Email Notifications</label>
                 <div class="col-md-4">
-                    <InputCheckbox @bind-Value="userProfile.ReceiveEmailNotificationFromSms" />
+                    <InputCheckbox @bind-Value="userProfile.ReceiveGameAdvanceEmail" />
                 </div>
-                <ValidationMessage For="@(() => userProfile.ReceiveEmailNotificationFromSms)" />
+                <ValidationMessage For="@(() => userProfile.ReceiveGameAdvanceEmail)" />
             </div>
             <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
             <div class="form-group">
@@ -85,7 +85,7 @@
             userProfile.GameEntryState = _userProfile.GameEntryState;
             userProfile.PreferredUsername = _userProfile.PreferredUsername;
             userProfile.Email = _userProfile.Email;
-            userProfile.ReceiveEmailNotificationFromSms = _userProfile.ReceiveEmailNotificationFromSms;
+            userProfile.ReceiveGameAdvanceEmail = _userProfile.ReceiveGameAdvanceEmail;
             userProfile.EmailIsVerified = _userProfile.EmailIsVerified;
             userProfile.Id = _userProfile.Id;
         }
@@ -102,7 +102,7 @@
     {
         if (!editContext.Validate())
             return;
-        if(userProfile.ReceiveEmailNotificationFromSms && string.IsNullOrEmpty(userProfile.Email))
+        if(userProfile.ReceiveGameAdvanceEmail && string.IsNullOrEmpty(userProfile.Email))
         {
             ValidationErrorMessage = "Email is required when Receive Email Notifications is checked";
         }

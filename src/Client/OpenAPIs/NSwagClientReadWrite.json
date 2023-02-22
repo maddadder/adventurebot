@@ -495,7 +495,7 @@
     },
     "userProfile": {
       "required": [
-        "receiveEmailNotificationFromSms",
+        "receiveGameAdvanceEmail",
         "emailIsVerified",
         "firstName",
         "lastName",
@@ -522,7 +522,7 @@
           "minLength": 1,
           "type": "string"
         },
-        "receiveEmailNotificationFromSms": {
+        "receiveGameAdvanceEmail": {
           "type": "boolean"
         },
         "emailIsVerified": {

@@ -17,7 +17,7 @@ namespace AdventureBot.Orchestrators
             [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log)
         {
-            var UserProfiles = await context.CallActivityAsync<List<UserProfile>>(nameof(GetUserProfileList), null);
+            var UserProfiles = await context.CallActivityAsync<List<UserProfile>>(nameof(GetActiveUserProfileList), null);
             var list = string.Join(',', UserProfiles.Select(x => x.PreferredUsername));
             log.LogInformation($"Users: {list}");
 

@@ -16,8 +16,8 @@ namespace AdventureBot.Models
         [Required]
         [EmailAddress]
         public string PreferredUsername { get; set; }
-        [JsonProperty(PropertyName = "receiveEmailNotificationFromSms", Required = Required.Always)]
-        public bool ReceiveEmailNotificationFromSms { get; set; }
+        [JsonProperty(PropertyName = "receiveGameAdvanceEmail", Required = Required.Always)]
+        public bool ReceiveGameAdvanceEmail { get; set; }
         [JsonProperty(PropertyName = "emailIsVerified", Required = Required.Always)]
         public bool EmailIsVerified { get; set; }
         [Required]

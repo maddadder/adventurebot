@@ -67,13 +67,13 @@ namespace AdventureBot.Services
             return result;
         }
 
-        public async Task<List<UserProfile>> GetUserProfileList()
+        public async Task<List<UserProfile>> GetActiveUserProfileList()
         {
             var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
             
             // Build query definition
             var parameterizedQuery = new QueryDefinition(
-                query: "SELECT * FROM userProfiles up WHERE up.__T = @partitionKey"
+                query: "SELECT * FROM userProfiles up WHERE IS_DEFINED(up.email) and up.email != '' and up.receiveGameAdvanceEmail = true and up.__T = @partitionKey"
             )
                 .WithParameter("@partitionKey", "up");
 

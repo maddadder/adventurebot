@@ -62,7 +62,7 @@ else
                 userProfile = userProfiles.FirstOrDefault();
                 if(userProfile != null)
                 {
-                    userProfile.ReceiveEmailNotificationFromSms = false;
+                    userProfile.ReceiveGameAdvanceEmail = false;
                     await adventureBotReadWriteService.UserProfilePutAsync(userProfile);
                 }
             }
