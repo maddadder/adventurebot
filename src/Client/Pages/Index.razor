@@ -1,7 +1,30 @@
 ﻿@page "/"
+@inject AuthenticationStateProvider authenticationStateProvider
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+@if(currentUser != null)
+{
+    foreach(var claim in currentUser.Claims)
+    {
+        <div>@claim.Value</div>
+        <div>@claim.Type</div>
+    }
+}
+
+@code{
+
+    System.Security.Claims.ClaimsPrincipal currentUser;
+    protected override async Task OnInitializedAsync()
+    {
+        /*
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if(authState.User.Identity?.IsAuthenticated == true)
+        {
+            currentUser = authState.User;
+        }*/
+    }
+}

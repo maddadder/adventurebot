@@ -9,7 +9,7 @@
 
 <h1>@Title UserProfile</h1>
 <hr />
-<AuthorizeView>
+<AuthorizeView Roles="game.manage">
     <Authorized Context="Auth">
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />

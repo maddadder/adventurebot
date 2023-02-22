@@ -1,0 +1,89 @@
+﻿@page "/gameadvance/{Name?}"
+@using AdventureBotUI.Client.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using ReadWrite
+@inject AdventureBotReadWriteService adventureBotReadWriteService
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Adventure Bot</h1>
+<AuthorizeView>
+    <Authorized Context="Auth">
+@if (gameEntries == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">loading...</div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">Your choice was saved successfully.</div>
+        </div>
+    </div>
+}
+</Authorized>
+    <NotAuthorized>
+        <div>Click save to continue</div>
+        <button class="btn btn-primary" @onclick="StartLogin">Save</button>
+    </NotAuthorized>
+</AuthorizeView>
+@code 
+{
+
+    [Parameter]
+    public string Name { get; set; }
+    private string PageName {get; set; }
+    protected List<GameEntry> gameEntries = null;
+    
+    private void StartLogin()
+    {
+        InteractiveRequestOptions requestOptions = new()
+        {
+            Interaction = InteractionType.SignIn,
+            ReturnUrl = $"gameadvance/{Name}",
+        };
+
+        NavigationManager.NavigateToLogin("authentication/login", requestOptions);
+
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if(string.IsNullOrEmpty(Name))
+        {
+            return;
+        }
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if(authState.User.Identity?.IsAuthenticated == true)
+        {
+            string userName = authState.User.Username();
+            if(!string.IsNullOrEmpty(userName))
+            {
+                var userProfiles = await adventureBotReadWriteService.UserProfileSearchAsync(userName);
+                var userProfile = userProfiles.FirstOrDefault();
+                if(userProfile != null)
+                {
+                    gameEntries = (await adventureBotReadWriteService.GameEntrySearchAsync(Name)).ToList();
+                    if(gameEntries.Any())
+                    {
+                        PageName = Name;
+                        var gameEntry = gameEntries.First();
+                        userProfile.GameEntryState = gameEntry.Name;
+                    }
+                    else
+                    {
+                        PageName = "404 - File Not Found";
+                        userProfile.GameEntryState = "begin";
+                    }
+                    await adventureBotReadWriteService.UserProfilePutAsync(userProfile);
+                }
+            }
+        }
+    }
+}

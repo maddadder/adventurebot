@@ -1,5 +1,5 @@
 namespace AdventureBotUI.Client.Services;
-public static class ClaimsPrincipal 
+public static class ClaimsPrincipalExtension
 {
     public static string Username(this System.Security.Claims.ClaimsPrincipal user)
     {

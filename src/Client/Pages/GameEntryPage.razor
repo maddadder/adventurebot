@@ -6,7 +6,7 @@
 <PageTitle>Adventure Bot</PageTitle>
 
 <h1>Adventure Bot</h1>
-<AuthorizeView>
+<AuthorizeView Roles="game.manage">
     <Authorized Context="Auth">
 @if (gameEntries == null)
 {

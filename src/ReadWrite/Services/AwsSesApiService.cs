@@ -56,7 +56,7 @@ Your game state is the following: {userProfileGameEntry.gameEntry.name}<br/><br/
             }
             sb.Append($"<br/>Options:<br/>");
             foreach(var option in userProfileGameEntry.gameEntry.options){
-                sb.Append($"<a href='{BaseUrl}/gameview/{option.next}'>{option.description}</a><br/>");
+                sb.Append($"<a href='{BaseUrl}/gameadvance/{option.next}'>{option.description}</a><br/>");
             }
             sb.Append($@"<br/>
 <br/>
