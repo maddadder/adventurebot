@@ -7,3 +7,8 @@ dotnet new blazorwasm --auth SingleOrg -o "AdventureBotUI.Client" --client-id "0
 https://stackoverflow.com/questions/64809121/blazor-client-side-get-cors-error-when-accessing-azure-function-using-azure-acti
 
 https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/graph-api?view=aspnetcore-7.0&pivots=graph-sdk
+
+https://learn.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/azure-active-directory-groups-and-roles?view=aspnetcore-7.0#app-roles
+

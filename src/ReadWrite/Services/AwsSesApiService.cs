@@ -61,7 +61,7 @@ Your game state is the following: {userProfileGameEntry.gameEntry.name}<br/><br/
             sb.Append($@"<br/>
 <br/>
 You received the above message because you have 'Receive Email Notifications' turned on. <br/>
-To unsubscribe from these messages click here:");
+To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a>");
             return sb.ToString();
         }
         public async Task SendEmail(UserProfile userProfile, string Subject, string Body)

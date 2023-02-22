@@ -33,11 +33,14 @@ namespace AdventureBot.Orchestrators
             // fan-in
             UserProfileGameEntry[] entries = await Task.WhenAll(queryTasks);
             var emailTasks = new List<Task>();
+
+            // fan-out
             foreach (var entry in entries)
             {
                 var task = context.CallActivityAsync(nameof(ReportGameEntryState), entry);
                 emailTasks.Add(task);
             }
+            // fan-in
             await Task.WhenAll(emailTasks);
         }
     }
