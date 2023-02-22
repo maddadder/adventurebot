@@ -3,6 +3,8 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using AdventureBotUI.Client.Services
 @using ReadWrite;
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inject AdventureBotReadWriteService adventureBotReadWriteService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
