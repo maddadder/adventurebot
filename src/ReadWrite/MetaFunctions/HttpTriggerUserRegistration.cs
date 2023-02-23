@@ -49,7 +49,7 @@ namespace AdventureBot.TriggerFunctions
         private static class ResponseBody
         {
             public const HttpStatusCode StatusCode = HttpStatusCode.OK;
-            public const string ContentType = "application/json";
+            public const string Json = "application/json";
         }
     }
 }

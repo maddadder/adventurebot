@@ -32,8 +32,8 @@ namespace AdventureBot.TriggerFunctions
         
         [FunctionName(Name.Post)]
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
-        [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(UserRegistrationInput), Required = true, Description = "The **UserRegistrationInput** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Accepted, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "A Check Status Response")]
+        [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(UserRegistrationInput), Required = true, Description = "The **UserRegistrationInput** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Accepted, contentType: ResponseBody.Json, bodyType: typeof(CheckStatusResponse), Description = "A Check Status Response")]
         public async Task<HttpResponseMessage> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequestMessage req,
@@ -80,7 +80,7 @@ namespace AdventureBot.TriggerFunctions
         [FunctionName(Name.Get)]
         [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
         [OpenApiParameter(name: Parameter.instanceId, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **instanceId** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Description = "The OK response")]
         public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
             [DurableClient] IDurableClient client, 

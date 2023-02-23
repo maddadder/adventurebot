@@ -476,7 +476,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "202": {
             "description": "A Check Status Response",
             "schema": {
               "type": "string"
@@ -578,11 +578,12 @@
     },
     "userProfile": {
       "required": [
+        "email",
+        "preferredUsername",
         "receiveGameAdvanceEmail",
         "emailIsVerified",
         "firstName",
         "lastName",
-        "preferredUsername",
         "gameEntryState",
         "id"
       ],
@@ -602,7 +603,6 @@
         },
         "preferredUsername": {
           "format": "email",
-          "minLength": 1,
           "type": "string"
         },
         "receiveGameAdvanceEmail": {

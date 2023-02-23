@@ -30,7 +30,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiOperation(operationId: $"{Resource.Name}-Search", tags: new[] { Resource.Name }, Summary = Summary.Search)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.PreferredUsername, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **PreferredUsername** parameter")]
-        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile[]), Description = Description.Search)]
+        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.Json, bodyType: typeof(UserProfile[]), Description = Description.Search)]
         public async Task<IActionResult> Search(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Search)] HttpRequest req,
             string partitionKey,
@@ -49,7 +49,7 @@ namespace AdventureBot.TriggerFunctions
         [FunctionName(Name.List)]
         [OpenApiOperation(operationId: $"{Resource.Name}-List", tags: new[] { Resource.Name }, Summary = Summary.List)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
-        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile[]), Description = Description.List)]
+        [OpenApiResponseWithBody(statusCode: ResponseBody.StatusCode, contentType: ResponseBody.Json, bodyType: typeof(UserProfile[]), Description = Description.List)]
         public async Task<IActionResult> List(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.List)] HttpRequest req,
             string partitionKey,
@@ -68,7 +68,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **UserProfileId** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Description = "The OK response")]
         public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
             string partitionKey,
@@ -87,8 +87,8 @@ namespace AdventureBot.TriggerFunctions
         [FunctionName(Name.Post)]
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
-        [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile), Required = true, Description = "The **UserProfile** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile), Description = "The Created response")]
+        [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Required = true, Description = "The **UserProfile** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Description = "The Created response")]
         public async Task<IActionResult> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
@@ -118,8 +118,8 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiOperation($"{Resource.Name}-Put", tags: new[] { Resource.Name }, Summary = Summary.Put)]
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **UserProfileId** parameter")]
-        [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile), Required = true, Description = "The **UserProfile** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.ContentType, bodyType: typeof(UserProfile), Description = "The OK response")]
+        [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Required = true, Description = "The **UserProfile** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Description = "The OK response")]
         public async Task<IActionResult> Put
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Put, Route = Route.Put)] HttpRequest req,
