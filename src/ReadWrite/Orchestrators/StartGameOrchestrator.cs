@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Linq;
 namespace AdventureBot.Orchestrators
 {
-    public class DemoOrchestrator
+    public class StartGameOrchestrator
     {
-        [FunctionName(nameof(DemoOrchestrator))]
+        [FunctionName(nameof(StartGameOrchestrator))]
         public async Task RunOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log)

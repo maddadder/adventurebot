@@ -15,21 +15,11 @@ namespace AdventureBot.Services
 {
     public class CosmosApiService : ICosmosApiService
     {
-        private readonly string _username;
-        private readonly string _password;
-        private readonly string _baseUrl;
-        private HttpClient _httpClient = new HttpClient();
         private readonly CosmosClient cosmosClient;
 
-        public CosmosApiService(
-            CosmosClient cosmosClient, 
-            IOptions<GitHubApiConfig> gitHubApiConfig)
+        public CosmosApiService(CosmosClient cosmosClient)
         {
             this.cosmosClient = cosmosClient;
-            var configValue = gitHubApiConfig.Value;
-            _username = configValue.Username;
-            _password = configValue.Password;
-            _baseUrl = configValue.BaseUrl;
         }
 
         public async Task<UserProfileGameEntry> GetGameStateFromUser(UserProfile userProfile)
@@ -95,12 +85,6 @@ namespace AdventureBot.Services
                 }
             }
             return results;
-        }
-
-        private void PrepareHttpClient()
-        {
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("C# agent");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_username}:{_password}")));
         }
     }
 }

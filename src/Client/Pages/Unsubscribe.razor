@@ -52,7 +52,7 @@ else
         NavigationManager.NavigateToLogin("authentication/login", requestOptions);
 
     }
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
         if(authState.User.Identity?.IsAuthenticated == true)

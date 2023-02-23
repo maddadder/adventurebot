@@ -22,16 +22,13 @@ namespace AdventureBot.Services
         private readonly string SmtpPassword;
         private readonly string SmtpToEmail;
         private readonly string SmtpFromEmail;
-        private readonly string GithubUsername;
         private readonly string BaseUrl;
         
         public AwsSesApiService(
             IOptions<AwsSesApiConfig> awsSesApiConfig,
-            IOptions<GitHubApiConfig> gitHubApiConfig,
             IOptions<ApplicationConfig> applicationConfig)
         {
             var awsSesApiConfigValue = awsSesApiConfig.Value;
-            var gitHubApiConfigValue = gitHubApiConfig.Value;
             var applicationConfigValue = applicationConfig.Value;
             SmtpHost = awsSesApiConfigValue.SmtpHost;
             SmtpPort = awsSesApiConfigValue.SmtpPort;
@@ -40,7 +37,6 @@ namespace AdventureBot.Services
             SmtpToEmail = awsSesApiConfigValue.SmtpToEmail;
             SmtpFromEmail = awsSesApiConfigValue.SmtpFromEmail;
             BaseUrl = applicationConfigValue.BaseUrl;
-            GithubUsername = gitHubApiConfigValue.Username;
         }
         public async Task<string> RenderUserProfileGameEntry(UserProfileGameEntry userProfileGameEntry){
             System.Text.StringBuilder sb = new System.Text.StringBuilder();

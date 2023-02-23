@@ -37,7 +37,6 @@ namespace AdventureBot
             builder.Services.Replace(new ServiceDescriptor(typeof(IConfiguration), builtConfig));
 
             // config the strongly typed section
-            builder.Services.Configure<GitHubApiConfig>(builtConfig.GetSection("GitHub"));
             builder.Services.Configure<AwsSesApiConfig>(builtConfig.GetSection("AwsSes"));
             builder.Services.Configure<ApplicationConfig>(builtConfig.GetSection("App"));
 

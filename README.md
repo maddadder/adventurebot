@@ -9,18 +9,19 @@ https://medium.com/analytics-vidhya/a-practical-guide-to-azure-durable-functions
 
 https://github.com/Azure/azure-functions-openapi-extension/blob/main/docs/openapi-core.md
 
+### Setup Database
+
+Create an Azure Cosmos DB and upload the json file in `adventure-bot-game-entries.zip`. Use the parameters found in src/AdventureBotLib/Models/Strings.cs. When you create the database you can choose serverless which only bills when the app is in use.
+
 ### Configuration explorer settings
 ```
-App:BaseUrl=https://redacted.azurewebsites.net
+App:BaseUrl=https://yourblazorwasmhostedsite.com
 AwsSes:SmtpFromEmail=youremail@gmail.com
 AwsSes:SmtpHost=smtp.gmail.com
 AwsSes:SmtpPort=587
 AwsSes:SmtpPassword=Your Gmail app-specific password
 AwsSes:SmtpToEmail=youremail@gmail.com
 AwsSes:SmtpUserName=youremail@gmail.com
-GitHub:BaseUrl=https://api.github.com
-GitHub:Password=YourPersonalAccessToken
-GitHub:Username=YourUsername
 ```
 
 ### local.settings.json

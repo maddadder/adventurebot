@@ -12,17 +12,19 @@ using System.Threading.Tasks;
 
 namespace AdventureBot.TriggerFunctions
 {
-    public static class HttpTrigger
+    public static class HttpTriggerStartGame
     {
-        [FunctionName(nameof(HttpTrigger))]
+        [FunctionName(nameof(HttpTriggerStartGame))]
         public static async Task<IActionResult> HttpStart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             [DurableClient] IDurableClient client,
             ILogger log)
         {
-            var instanceId = await client.StartNewAsync(nameof(DemoOrchestrator), null);
+            var instanceId = await client.StartNewAsync(nameof(StartGameOrchestrator), null);
 
-            return new OkObjectResult("This HTTP triggered function executed successfully.");
+            log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
+
+            return client.CreateCheckStatusResponse(req, instanceId);
         }
     }
 }
