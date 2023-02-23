@@ -122,18 +122,19 @@
         {
             await adventureBotReadWriteService.UserProfilePutAsync((UserProfile)userProfile);
         }
-        await VerifyEmailAddressIfChanged();
+        CheckStatusResponse response = await VerifyEmailAddressIfChanged();
         Cancel();
     }
-    protected async Task VerifyEmailAddressIfChanged()
+    protected async Task<CheckStatusResponse> VerifyEmailAddressIfChanged()
     {
         if(
             !string.IsNullOrEmpty(userProfile.Email) && 
             !userProfile.EmailIsVerified
         )
         {
-            await adventureBotReadWriteService.UserRegistrationPostAsync((UserProfile)userProfile);
+            return await adventureBotReadWriteService.UserRegistrationPostAsync((UserProfile)userProfile);
         }
+        return null;
     }
     public void Cancel()
     {

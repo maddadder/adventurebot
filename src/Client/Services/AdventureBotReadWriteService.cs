@@ -81,11 +81,11 @@ public class AdventureBotReadWriteService
     {
         await client.UserProfileDeleteAsync("up", userProfileId);
     }
-    public async Task UserRegistrationPostAsync(UserProfile userProfile)
+    public async Task<CheckStatusResponse> UserRegistrationPostAsync(UserProfile userProfile)
     {
         UserRegistrationInput input = new UserRegistrationInput();
         input.Email = userProfile.Email;
         input.Name = userProfile.FirstName + " " + userProfile.LastName;
-        await client.UserRegistrationPostAsync(input);
+        return await client.UserRegistrationPostAsync(input);
     }
 }
