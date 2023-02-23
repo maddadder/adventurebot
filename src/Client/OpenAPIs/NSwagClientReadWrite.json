@@ -205,6 +205,26 @@
         }
       }
     },
+    "/StartGame/get": {
+      "get": {
+        "tags": [
+          "StartGame"
+        ],
+        "summary": "Retrieve one StartGame",
+        "operationId": "StartGame-Get",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/UserProfile/search/{partitionKey}/{PreferredUsername}": {
       "get": {
         "tags": [
@@ -430,6 +450,69 @@
           }
         }
       }
+    },
+    "/UserRegistration/post": {
+      "post": {
+        "tags": [
+          "UserRegistration"
+        ],
+        "summary": "Create one UserRegistration",
+        "operationId": "UserRegistration-Post",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The **UserRegistrationInput** parameter",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userRegistrationInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "A Check Status Response",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/UserRegistration/get/{instanceId}": {
+      "get": {
+        "tags": [
+          "UserRegistration"
+        ],
+        "summary": "Retrieve one UserRegistration",
+        "operationId": "UserRegistration-Get",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instanceId",
+            "description": "The **instanceId** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -546,6 +629,23 @@
         },
         "modified": {
           "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "userRegistrationInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "baseUri": {
+          "type": "string"
+        },
+        "instanceId": {
           "type": "string"
         }
       }

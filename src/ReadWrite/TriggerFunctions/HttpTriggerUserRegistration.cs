@@ -33,7 +33,7 @@ namespace AdventureBot.TriggerFunctions
         [FunctionName(Name.Post)]
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
         [OpenApiRequestBody(contentType: ResponseBody.ContentType, bodyType: typeof(UserRegistrationInput), Required = true, Description = "The **UserRegistrationInput** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "A Check Status Response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Accepted, contentType: ResponseBody.ContentType, bodyType: typeof(string), Description = "A Check Status Response")]
         public async Task<HttpResponseMessage> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequestMessage req,

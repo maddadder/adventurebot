@@ -1,47 +1,33 @@
-@page "/userprofiles/add"
-@page "/userprofiles/edit/{userProfileId}"
+@page "/userprofile/edit"
 @using Microsoft.AspNetCore.Components.Authorization
 @using AdventureBotUI.Client.Services
-@using ReadWrite
+@using ReadWrite;
 @using Microsoft.AspNetCore.Authorization
+
 @attribute [Authorize]
-@inject AdventureBotReadWriteService adventureBotReadWriteService
 @inject NavigationManager NavigationManager
-@inject NavigationManager UriHelper
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject AdventureBotReadWriteService adventureBotReadWriteService
 
 <h1>@Title UserProfile</h1>
 <hr />
-<AuthorizeView Roles="game.manage">
+<AuthorizeView>
     <Authorized Context="Auth">
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />
             <div class="mb-3">
-                <label for="FirstName" class="form-label">FirstName</label>
+                <label for="FirstName" class="form-label">First Name</label>
                 <div class="col-md-4">
                     <InputText class="form-control" @bind-Value="userProfile.FirstName" placeholder="FirstName" />
                 </div>
                 <ValidationMessage For="@(() => userProfile.FirstName)" />
             </div>
             <div class="mb-3">
-                <label for="LastName" class="form-label">LastName</label>
+                <label for="LastName" class="form-label">Last Name</label>
                 <div class="col-md-4">
                     <InputText class="form-control" @bind-Value="userProfile.LastName" placeholder="LastName" />
                 </div>
                 <ValidationMessage For="@(() => userProfile.LastName)" />
-            </div>
-            <div class="mb-3">
-                <label for="GameEntryState" class="form-label">Game State</label>
-                <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="userProfile.GameEntryState" placeholder="begin" />
-                </div>
-                <ValidationMessage For="@(() => userProfile.GameEntryState)" />
-            </div>
-            <div class="mb-3">
-                <label for="PreferredUsername" class="form-label">preferred username</label>
-                <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="userProfile.PreferredUsernameEntry" placeholder="user@contoso.onmicrosoft.com" />
-                </div>
-                <ValidationMessage For="@(() => userProfile.PreferredUsernameEntry)" />
             </div>
             <div class="mb-3">
                 <label for="Email" class="form-label">Email</label>
@@ -58,6 +44,7 @@
                 <ValidationMessage For="@(() => userProfile.ReceiveGameAdvanceEmail)" />
             </div>
             <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
+            <ValidationSummary />
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save</button>
                 <a class="btn btn-light" @onclick="Cancel">Cancel</a>
@@ -69,31 +56,36 @@
     </NotAuthorized>
 </AuthorizeView>
 @code {
-    [Parameter]
-    public string userProfileId { get; set; }
+
     private EditContext editContext;
-    protected string Title = "Add";
+    protected string Title = "Edit";
     protected UserProfileOverride userProfile = new();
     protected string ValidationErrorMessage = "";
+    protected string originalEmailAddress = "This will populate on OnParametersSetAsync";
     protected override async Task OnParametersSetAsync()
     {
-        if (!string.IsNullOrEmpty(userProfileId))
-        {
-            Title = "Edit";
-            var _userProfile = await adventureBotReadWriteService.UserProfileGetAsync(userProfileId);
-            userProfile.__T = _userProfile.__T;
-            userProfile.FirstName = _userProfile.FirstName;
-            userProfile.LastName = _userProfile.LastName;
-            userProfile.GameEntryState = _userProfile.GameEntryState;
-            userProfile.PreferredUsername = _userProfile.PreferredUsername;
-            userProfile.Email = _userProfile.Email;
-            userProfile.ReceiveGameAdvanceEmail = _userProfile.ReceiveGameAdvanceEmail;
-            userProfile.EmailIsVerified = _userProfile.EmailIsVerified;
-            userProfile.Id = _userProfile.Id;
-        }
-        else
-        {
-            userProfile.Id = Guid.Empty;
+        userProfile.Id = Guid.Empty;
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if(authState.User.Identity?.IsAuthenticated == true){
+            string userName = authState.User.Username();
+            if(!string.IsNullOrEmpty(userName))
+            {
+                var _userProfiles = await adventureBotReadWriteService.UserProfileSearchAsync(userName);
+                var _userProfile = _userProfiles.FirstOrDefault();
+                if(_userProfile != null)
+                {
+                    userProfile.__T = _userProfile.__T;
+                    userProfile.FirstName = _userProfile.FirstName;
+                    userProfile.LastName = _userProfile.LastName;
+                    userProfile.PreferredUsername = _userProfile.PreferredUsername;
+                    userProfile.Email = _userProfile.Email;
+                    originalEmailAddress = _userProfile.Email;
+                    userProfile.ReceiveGameAdvanceEmail = _userProfile.ReceiveGameAdvanceEmail;
+                    userProfile.EmailIsVerified = _userProfile.EmailIsVerified;
+                    userProfile.Id = _userProfile.Id;
+                    userProfile.GameEntryState = _userProfile.GameEntryState;
+                }
+            }
         }
     }
     protected override void OnInitialized()
@@ -102,8 +94,11 @@
     }
     protected async Task SaveUser()
     {
-        if (!editContext.Validate())
+        if (!editContext.Validate()){
+            ValidationErrorMessage = "The form is invalid";
             return;
+        }
+            
         if(userProfile.ReceiveGameAdvanceEmail && string.IsNullOrEmpty(userProfile.Email))
         {
             ValidationErrorMessage = "Email is required when Receive Email Notifications is checked";
@@ -111,21 +106,37 @@
         else{
             ValidationErrorMessage = "";
         }
-        if(!string.IsNullOrEmpty(ValidationErrorMessage)){
+        if(!string.IsNullOrEmpty(userProfile.Email) && !ConstantsLib.IsValidEmail(userProfile.Email))
+        {
+            ValidationErrorMessage = "Email address is invalid";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage))
+        {
             return;
+        }
+        if(userProfile.Email != originalEmailAddress)
+        {
+            userProfile.EmailIsVerified = false;
         }
         if (userProfile.Id != Guid.Empty)
         {
             await adventureBotReadWriteService.UserProfilePutAsync((UserProfile)userProfile);
         }
-        else
-        {
-            await adventureBotReadWriteService.UserProfilePostAsync((UserProfile)userProfile);
-        }
+        await VerifyEmailAddressIfChanged();
         Cancel();
+    }
+    protected async Task VerifyEmailAddressIfChanged()
+    {
+        if(
+            !string.IsNullOrEmpty(userProfile.Email) && 
+            !userProfile.EmailIsVerified
+        )
+        {
+            await adventureBotReadWriteService.UserRegistrationPostAsync((UserProfile)userProfile);
+        }
     }
     public void Cancel()
     {
-        NavigationManager.NavigateTo("userprofiles");
+        NavigationManager.NavigateTo("userprofile/view");
     }
 }

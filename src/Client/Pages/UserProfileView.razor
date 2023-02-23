@@ -1,0 +1,95 @@
+@page "/userprofile/view"
+@using Microsoft.AspNetCore.Components.Authorization
+@using AdventureBotUI.Client.Services
+@using ReadWrite;
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject AdventureBotReadWriteService adventureBotReadWriteService
+
+<h2>User Profile</h2>
+<br />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        @if (userProfile == null)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">loading...</div>
+                </div>
+            </div>
+        }
+        else
+        {
+        <div class="form-group">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>FirstName</td>
+                        <td>@userProfile.FirstName</td>
+                    </tr>
+                    <tr>
+                        <td>LastName</td>
+                        <td>@userProfile.LastName</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>@userProfile.Email</td>
+                    </tr>
+                    <tr>
+                        <td>Game State</td>
+                        <td>@userProfile.GameEntryState</td>
+                    </tr>
+                    <tr>
+                        <td>Receive Email Notifications</td>
+                        <td>@userProfile.ReceiveGameAdvanceEmail</td>
+                    </tr>
+                    <tr>
+                        <td>Email is Verified</td>
+                        <td>@userProfile.EmailIsVerified</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <a href='userprofile/edit' class="btn btn-outline-dark" role="button">
+                Edit
+            </a>
+        </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+
+    protected string Title = "View";
+    protected UserProfile userProfile = null;
+    protected override async Task OnParametersSetAsync()
+    {
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if(authState.User.Identity?.IsAuthenticated == true){
+            string userName = authState.User.Username();
+            if(!string.IsNullOrEmpty(userName))
+            {
+                var _userProfiles = await adventureBotReadWriteService.UserProfileSearchAsync(userName);
+                var _userProfile = _userProfiles.FirstOrDefault();
+                if(_userProfile != null){
+                    userProfile = new();
+                    userProfile.__T = _userProfile.__T;
+                    userProfile.FirstName = _userProfile.FirstName;
+                    userProfile.LastName = _userProfile.LastName;
+                    userProfile.PreferredUsername = _userProfile.PreferredUsername;
+                    userProfile.Email = _userProfile.Email;
+                    userProfile.ReceiveGameAdvanceEmail = _userProfile.ReceiveGameAdvanceEmail;
+                    userProfile.EmailIsVerified = _userProfile.EmailIsVerified;
+                    userProfile.Id = _userProfile.Id;
+                    userProfile.GameEntryState = _userProfile.GameEntryState;
+                }
+            }
+        }
+    }
+}

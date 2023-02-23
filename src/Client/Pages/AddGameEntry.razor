@@ -109,11 +109,11 @@
             return;
         if (gameEntry.Id != Guid.Empty)
         {
-            await adventureBotReadWriteService.GameEntryPutAsync(gameEntry);
+            await adventureBotReadWriteService.GameEntryPutAsync((GameEntry)gameEntry);
         }
         else
         {
-            await adventureBotReadWriteService.GameEntryPostAsync(gameEntry);
+            await adventureBotReadWriteService.GameEntryPostAsync((GameEntry)gameEntry);
         }
         Cancel();
     }

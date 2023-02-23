@@ -12,9 +12,10 @@ namespace AdventureBot.Models
         [Required]
         public string LastName { get; set; }
         [EmailAddress]
+        [JsonProperty(PropertyName = "email", Required = Required.AllowNull)]
         public string Email { get; set; }
-        [Required]
         [EmailAddress]
+        [JsonProperty(PropertyName = "preferredUsername", Required = Required.Always)]
         public string PreferredUsername { get; set; }
         [JsonProperty(PropertyName = "receiveGameAdvanceEmail", Required = Required.Always)]
         public bool ReceiveGameAdvanceEmail { get; set; }
