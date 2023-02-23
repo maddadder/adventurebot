@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AdventureBot.Models;
 using Microsoft.AspNetCore.Http;
@@ -80,10 +81,12 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                IAsyncCollector<dynamic> documentsOut)
+                IAsyncCollector<dynamic> documentsOut,
+                ClaimsPrincipal claimsPrincipal)
         {
+            
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic gameEntry = JsonConvert.DeserializeObject<dynamic>(requestBody);
+            dynamic gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             
             if(gameEntry.id == Guid.Empty)
             {
@@ -93,6 +96,10 @@ namespace AdventureBot.TriggerFunctions
             gameEntry.Created = DateTime.UtcNow;
             gameEntry.Modified = DateTime.UtcNow;
             gameEntry.__T = partitionKey;
+            if(claimsPrincipal?.Identity?.Name != null){
+                gameEntry.CreatedBy = claimsPrincipal?.Identity?.Name;
+                gameEntry.ModifiedBy = claimsPrincipal?.Identity?.Name;
+            }
             await documentsOut.AddAsync(gameEntry);
             return new CreatedResult($"/api/{Resource.Name}/get/{partitionKey}/{gameEntry.id}", gameEntry);
         }
@@ -112,17 +119,21 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                CosmosClient client)
+                CosmosClient client,
+                ClaimsPrincipal claimsPrincipal)
         {
             var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic gameEntryInput = JsonConvert.DeserializeObject(requestBody);
+            dynamic gameEntryInput = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             gameEntryInput.__T = partitionKey;
             gameEntryInput.id = GameEntryId;
             gameEntryInput.Modified = DateTime.UtcNow;
+            if(claimsPrincipal?.Identity?.Name != null){
+                gameEntryInput.ModifiedBy = claimsPrincipal?.Identity?.Name;
+            }
             _logger.LogInformation($"Put GameEntryId: {GameEntryId}");
-            await container.UpsertItemAsync<dynamic>(
+            await container.UpsertItemAsync<GameEntry>(
                 item: gameEntryInput,
                 partitionKey: new PartitionKey(partitionKey)
             );
