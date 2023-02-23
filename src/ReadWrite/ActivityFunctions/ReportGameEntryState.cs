@@ -26,7 +26,7 @@ namespace AdventureBot.ActivityFunctions
             var emailMessage = await _awsSesApiService.RenderUserProfileGameEntry(entry);
             if(!string.IsNullOrEmpty(emailMessage))
             {
-                await _awsSesApiService.SendEmail(entry.userProfile, "Adventure Bot", emailMessage);
+                await _awsSesApiService.SendEmail(entry.userProfile.Email, "Adventure Bot", emailMessage);
             }
         }
     }

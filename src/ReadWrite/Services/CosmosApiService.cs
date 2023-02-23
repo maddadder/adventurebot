@@ -86,5 +86,42 @@ namespace AdventureBot.Services
             }
             return results;
         }
+        public async Task SetUserEmailVerification(string emailAddress)
+        {
+            var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+            
+            // Build query definition
+            var parameterizedQuery = new QueryDefinition(
+                query: "SELECT * FROM userProfiles up WHERE up.email = @email and up.emailIsVerified = false and up.__T = @partitionKey"
+            )
+                .WithParameter("@email", emailAddress)
+                .WithParameter("@partitionKey", "up");
+
+            // Query multiple items from container
+            using FeedIterator<UserProfile> filteredFeed = container.GetItemQueryIterator<UserProfile>(
+                queryDefinition: parameterizedQuery
+            );
+
+            List<UserProfile> results = new List<UserProfile>();
+            // Iterate query result pages
+            while (filteredFeed.HasMoreResults)
+            {
+                FeedResponse<UserProfile> response = await filteredFeed.ReadNextAsync();
+
+                // Iterate query results
+                foreach (UserProfile item in response)
+                {
+                    results.Add(item);
+                }
+            }
+            foreach (UserProfile item in results)
+            {
+                item.EmailIsVerified = true;
+                await container.UpsertItemAsync<UserProfile>(
+                    item: item,
+                    partitionKey: new PartitionKey("up")
+                );
+            }
+        }
     }
 }

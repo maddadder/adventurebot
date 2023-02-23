@@ -9,6 +9,8 @@ https://medium.com/analytics-vidhya/a-practical-guide-to-azure-durable-functions
 
 https://github.com/Azure/azure-functions-openapi-extension/blob/main/docs/openapi-core.md
 
+https://github.com/fbeltrao/Samples/tree/master/serverless-user-email-confirmation
+
 ### Setup Database
 
 Create an Azure Cosmos DB and upload the json file in `adventure-bot-game-entries.zip`. Use the parameters found in src/AdventureBotLib/Models/Strings.cs. When you create the database you can choose serverless which only bills when the app is in use.

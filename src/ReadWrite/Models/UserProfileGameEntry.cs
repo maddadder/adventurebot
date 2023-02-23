@@ -1,5 +1,3 @@
-using AdventureBot.Models;
-
 namespace AdventureBot.Models
 {
     public class UserProfileGameEntry

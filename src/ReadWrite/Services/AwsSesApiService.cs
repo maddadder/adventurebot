@@ -66,23 +66,16 @@ You received the above message because you have 'Receive Game Advance Email' tur
 To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a>");
             return sb.ToString();
         }
-        public async Task SendEmail(UserProfile userProfile, string Subject, string Body)
+        public async Task SendEmail(string ToEmailAddress, string Subject, string Body)
         {
-            if(userProfile.ReceiveGameAdvanceEmail == false)
-            {
-                return;
-            }
-            if(string.IsNullOrEmpty(userProfile.Email))
-            {
-                return;
-            }
+
             int port = 25;
             int.TryParse(SmtpPort, out port);
             using (var client = new System.Net.Mail.SmtpClient(SmtpHost, port))
             {
                 client.Credentials = new System.Net.NetworkCredential(SmtpUserName, SmtpPassword);
                 client.EnableSsl = true;
-                var mailMessage = new System.Net.Mail.MailMessage(SmtpFromEmail, userProfile.Email);
+                var mailMessage = new System.Net.Mail.MailMessage(SmtpFromEmail, ToEmailAddress);
                 mailMessage.Subject = Subject;
                 mailMessage.Body = Body;
                 mailMessage.IsBodyHtml = true;
