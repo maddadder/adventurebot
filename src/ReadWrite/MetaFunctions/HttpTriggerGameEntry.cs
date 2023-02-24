@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using AdventureBot.Models;
@@ -69,6 +70,13 @@ namespace AdventureBot.TriggerFunctions
             private const string resource = Resource.Name;
             public const string Search = $"Search each {resource} by name";
             public const string Get = $"Retrieve one {resource}";
+        }
+        private static class Security
+        {
+            public static readonly List<string> Post = new List<string>(){
+                "game.manage"
+            };
+            public const string UnauthorizedAccessException = "You do not have access to this resource.";
         }
     }
 }

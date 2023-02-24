@@ -84,7 +84,15 @@ namespace AdventureBot.TriggerFunctions
                 IAsyncCollector<dynamic> documentsOut,
                 ClaimsPrincipal claimsPrincipal)
         {
-            
+            if(claimsPrincipal?.Identity?.Name != null)
+            {
+                var roles = claimsPrincipal.Claims.Where(e => e.Type == "roles").Select(e => e.Value);
+                var isMember = roles.Intersect(Security.Post).Count() > 0;
+                if (!isMember)
+                {
+                    return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
+                }
+            }
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             

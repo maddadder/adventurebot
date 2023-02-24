@@ -585,6 +585,12 @@
         "modified": {
           "format": "date-time",
           "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "modifiedBy": {
+          "type": "string"
         }
       }
     },
@@ -658,6 +664,12 @@
         },
         "modified": {
           "format": "date-time",
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "modifiedBy": {
           "type": "string"
         }
       }
