@@ -50,6 +50,7 @@ namespace AdventureBot.TriggerFunctions
         {
             public const HttpStatusCode StatusCode = HttpStatusCode.OK;
             public const string Json = "application/json";
+            public const string Text = "text/plain";
         }
     }
 }
