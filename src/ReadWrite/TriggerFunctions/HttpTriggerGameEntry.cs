@@ -90,7 +90,7 @@ namespace AdventureBot.TriggerFunctions
             var unique_name = AzureADHelper.GetUserName(req);
             
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
+            GameEntry gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             
             if(gameEntry.id == Guid.Empty)
             {
@@ -131,7 +131,7 @@ namespace AdventureBot.TriggerFunctions
 
             var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic gameEntryInput = JsonConvert.DeserializeObject<GameEntry>(requestBody);
+            GameEntry gameEntryInput = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             gameEntryInput.__T = partitionKey;
             gameEntryInput.id = GameEntryId;
             gameEntryInput.Modified = DateTime.UtcNow;
