@@ -258,12 +258,12 @@
         "summary": "Retrieve one StartGame",
         "operationId": "StartGame-Get",
         "responses": {
-          "200": {
-            "description": "The OK response",
+          "202": {
+            "description": "A Check Status Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/checkStatusResponse"
                 }
               }
             }
