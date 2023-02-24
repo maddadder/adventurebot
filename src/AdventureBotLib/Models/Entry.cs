@@ -12,9 +12,9 @@ namespace AdventureBot.Models
         public string __T {get;set;}
         public DateTime Created { get;set; }
         public DateTime Modified { get;set; }
-        [JsonProperty(PropertyName = "createdBy", Required = Required.AllowNull)]
+        [JsonProperty(PropertyName = "createdBy", Required = Required.Default)]
         public string CreatedBy { get;set; }
-        [JsonProperty(PropertyName = "modifiedBy", Required = Required.AllowNull)]
+        [JsonProperty(PropertyName = "modifiedBy", Required = Required.Default)]
         public string ModifiedBy { get;set; }
     }
 }
