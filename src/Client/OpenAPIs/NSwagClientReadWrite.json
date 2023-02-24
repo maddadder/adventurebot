@@ -1,14 +1,18 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Document on Azure Functions",
-    "description": "This is the OpenAPI Document on Azure Functions",
+    "title": "My API",
+    "description": "My API description",
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
     "version": "1.0.0"
   },
-  "host": "leenetadventurebot.azurewebsites.net",
-  "basePath": "/api",
-  "schemes": [
-    "https"
+  "servers": [
+    {
+      "url": "https://leenetadventurebot.azurewebsites.net/api"
+    }
   ],
   "paths": {
     "/GameEntry/search/{partitionKey}/{GameEntryName}": {
@@ -18,32 +22,37 @@
         ],
         "summary": "Search each GameEntry by name",
         "operationId": "GameEntry-Search",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "GameEntryName",
+            "in": "path",
             "description": "The **name** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Search each GameEntry by name",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/gameEntry"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/gameEntry"
+                  }
+                }
               }
             }
           }
@@ -57,30 +66,35 @@
         ],
         "summary": "Retrieve one GameEntry",
         "operationId": "GameEntry-Get",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "GameEntryId",
+            "in": "path",
             "description": "The **GameEntryId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "$ref": "#/definitions/gameEntry"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gameEntry"
+                }
+              }
             }
           }
         }
@@ -93,38 +107,47 @@
         ],
         "summary": "Create one GameEntry",
         "operationId": "GameEntry-Post",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The **GameEntry** parameter",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/gameEntry"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "The **GameEntry** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/gameEntry"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "201": {
             "description": "The Created response",
-            "schema": {
-              "$ref": "#/definitions/gameEntry"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gameEntry"
+                }
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/GameEntry/put/{partitionKey}/{GameEntryId}": {
@@ -134,45 +157,56 @@
         ],
         "summary": "Update one GameEntry",
         "operationId": "GameEntry-Put",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "GameEntryId",
+            "in": "path",
             "description": "The **GameEntryId** parameter",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The **GameEntry** parameter",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/gameEntry"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "The **GameEntry** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/gameEntry"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "$ref": "#/definitions/gameEntry"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gameEntry"
+                }
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/GameEntry/delete/{partitionKey}/{GameEntryId}": {
@@ -184,25 +218,36 @@
         "operationId": "GameEntry-Delete",
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "GameEntryId",
+            "in": "path",
             "description": "The **GameEntryId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response"
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/StartGame/get": {
@@ -212,17 +257,25 @@
         ],
         "summary": "Retrieve one StartGame",
         "operationId": "StartGame-Get",
-        "produces": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "type": "string"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/UserProfile/search/{partitionKey}/{PreferredUsername}": {
@@ -232,32 +285,37 @@
         ],
         "summary": "Search each UserProfile by name",
         "operationId": "UserProfile-Search",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "PreferredUsername",
+            "in": "path",
             "description": "The **PreferredUsername** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Search each UserProfile by name",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/userProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/userProfile"
+                  }
+                }
               }
             }
           }
@@ -271,25 +329,28 @@
         ],
         "summary": "Retrieve each UserProfile by name",
         "operationId": "UserProfile-List",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Retrieve each UserProfile by name",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/userProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/userProfile"
+                  }
+                }
               }
             }
           }
@@ -303,30 +364,35 @@
         ],
         "summary": "Retrieve one UserProfile",
         "operationId": "UserProfile-Get",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "UserProfileId",
+            "in": "path",
             "description": "The **UserProfileId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "$ref": "#/definitions/userProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userProfile"
+                }
+              }
             }
           }
         }
@@ -339,38 +405,47 @@
         ],
         "summary": "Create one UserProfile",
         "operationId": "UserProfile-Post",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The **UserProfile** parameter",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/userProfile"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "The **UserProfile** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userProfile"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "201": {
             "description": "The Created response",
-            "schema": {
-              "$ref": "#/definitions/userProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userProfile"
+                }
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/UserProfile/put/{partitionKey}/{UserProfileId}": {
@@ -380,45 +455,56 @@
         ],
         "summary": "Update one UserProfile",
         "operationId": "UserProfile-Put",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "UserProfileId",
+            "in": "path",
             "description": "The **UserProfileId** parameter",
             "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The **UserProfile** parameter",
-            "required": true,
             "schema": {
-              "$ref": "#/definitions/userProfile"
+              "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "description": "The **UserProfile** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userProfile"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "$ref": "#/definitions/userProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userProfile"
+                }
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/UserProfile/delete/{partitionKey}/{UserProfileId}": {
@@ -430,25 +516,36 @@
         "operationId": "UserProfile-Delete",
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "UserProfileId",
+            "in": "path",
             "description": "The **UserProfileId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response"
           }
-        }
+        },
+        "security": [
+          {
+            "oidc_auth": [
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation"
+            ]
+          }
+        ]
       }
     },
     "/UserRegistration/post": {
@@ -458,28 +555,26 @@
         ],
         "summary": "Create one UserRegistration",
         "operationId": "UserRegistration-Post",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The **UserRegistrationInput** parameter",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/userRegistrationInput"
+        "requestBody": {
+          "description": "The **UserRegistrationInput** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRegistrationInput"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "202": {
             "description": "A Check Status Response",
-            "schema": {
-              "$ref": "#/definitions/checkStatusResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/checkStatusResponse"
+                }
+              }
             }
           }
         }
@@ -492,202 +587,229 @@
         ],
         "summary": "Retrieve one UserRegistration",
         "operationId": "UserRegistration-Get",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "instanceId",
+            "in": "path",
             "description": "The **instanceId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "$ref": "#/definitions/userProfile"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userProfile"
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "definitions": {
-    "checkStatusResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "statusQueryGetUri": {
-          "type": "string"
-        },
-        "sendEventPostUri": {
-          "type": "string"
-        },
-        "terminatePostUri": {
-          "type": "string"
-        },
-        "purgeHistoryDeleteUri": {
-          "type": "string"
-        },
-        "restartPostUri": {
-          "type": "string"
-        },
-        "suspendPostUri": {
-          "type": "string"
-        },
-        "resumePostUri": {
-          "type": "string"
-        }
-      }
-    },
-    "gameEntry": {
-      "required": [
-        "name",
-        "description",
-        "options",
-        "id"
-      ],
-      "type": "object",
-      "properties": {
-        "name": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "description": {
-          "type": "array",
-          "items": {
+  "components": {
+    "schemas": {
+      "checkStatusResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "statusQueryGetUri": {
+            "type": "string"
+          },
+          "sendEventPostUri": {
+            "type": "string"
+          },
+          "terminatePostUri": {
+            "type": "string"
+          },
+          "purgeHistoryDeleteUri": {
+            "type": "string"
+          },
+          "restartPostUri": {
+            "type": "string"
+          },
+          "suspendPostUri": {
+            "type": "string"
+          },
+          "resumePostUri": {
             "type": "string"
           }
-        },
-        "options": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/gameOption"
+        }
+      },
+      "gameEntry": {
+        "required": [
+          "name",
+          "description",
+          "options",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/gameOption"
+            }
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
-        },
-        "id": {
-          "format": "uuid",
-          "minLength": 1,
-          "type": "string"
-        },
-        "__T": {
-          "type": "string"
-        },
-        "created": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "modified": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "createdBy": {
-          "type": "string"
-        },
-        "modifiedBy": {
-          "type": "string"
+        }
+      },
+      "gameOption": {
+        "required": [
+          "description",
+          "next"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "next": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      },
+      "userProfile": {
+        "required": [
+          "email",
+          "preferredUsername",
+          "receiveGameAdvanceEmail",
+          "emailIsVerified",
+          "firstName",
+          "lastName",
+          "gameEntryState",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "preferredUsername": {
+            "type": "string",
+            "format": "email"
+          },
+          "receiveGameAdvanceEmail": {
+            "type": "boolean"
+          },
+          "emailIsVerified": {
+            "type": "boolean"
+          },
+          "gameEntryState": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "userRegistrationInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "baseUri": {
+            "type": "string",
+            "nullable": true
+          },
+          "instanceId": {
+            "type": "string",
+            "nullable": true
+          }
         }
       }
     },
-    "gameOption": {
-      "required": [
-        "description",
-        "next"
-      ],
-      "type": "object",
-      "properties": {
-        "description": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "next": {
-          "minLength": 1,
-          "type": "string"
-        }
-      }
-    },
-    "userProfile": {
-      "required": [
-        "email",
-        "preferredUsername",
-        "receiveGameAdvanceEmail",
-        "emailIsVerified",
-        "firstName",
-        "lastName",
-        "gameEntryState",
-        "id"
-      ],
-      "type": "object",
-      "properties": {
-        "firstName": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "lastName": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "email": {
-          "format": "email",
-          "type": "string"
-        },
-        "preferredUsername": {
-          "format": "email",
-          "type": "string"
-        },
-        "receiveGameAdvanceEmail": {
-          "type": "boolean"
-        },
-        "emailIsVerified": {
-          "type": "boolean"
-        },
-        "gameEntryState": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "id": {
-          "format": "uuid",
-          "minLength": 1,
-          "type": "string"
-        },
-        "__T": {
-          "type": "string"
-        },
-        "created": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "modified": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "createdBy": {
-          "type": "string"
-        },
-        "modifiedBy": {
-          "type": "string"
-        }
-      }
-    },
-    "userRegistrationInput": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "baseUri": {
-          "type": "string"
-        },
-        "instanceId": {
-          "type": "string"
+    "securitySchemes": {
+      "oidc_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://login.microsoftonline.com/46f630ab-810d-4f10-b533-6532e8afe44a/oauth2/v2.0/authorize",
+            "scopes": {
+              "api://0cd119e5-2fad-4aba-a39f-d04e3b26f4ae/user_impersonation": "impersonate user"
+            }
+          }
         }
       }
     }
