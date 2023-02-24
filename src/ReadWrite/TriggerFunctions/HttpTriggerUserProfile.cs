@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AdventureBot.Models;
+using AdventureBot.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -90,6 +88,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Required = true, Description = "The **UserProfile** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Description = "The Created response")]
+        [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
@@ -98,9 +97,12 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                IAsyncCollector<dynamic> documentsOut,
-                ClaimsPrincipal claimsPrincipal)
+                IAsyncCollector<dynamic> documentsOut)
         {
+            if(!AzureADHelper.IsAuthorized(req)){
+                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
+            }
+            var unique_name = AzureADHelper.GetUserName(req);
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic userProfile = JsonConvert.DeserializeObject<UserProfile>(requestBody);
             
@@ -112,10 +114,8 @@ namespace AdventureBot.TriggerFunctions
             userProfile.Created = DateTime.UtcNow;
             userProfile.Modified = DateTime.UtcNow;
             userProfile.__T = partitionKey;
-            if(claimsPrincipal?.Identity?.Name != null){
-                userProfile.CreatedBy = claimsPrincipal?.Identity?.Name;
-                userProfile.ModifiedBy = claimsPrincipal?.Identity?.Name;
-            }
+            userProfile.CreatedBy = unique_name;
+            userProfile.ModifiedBy = unique_name;
             await documentsOut.AddAsync(userProfile);
             return new CreatedResult($"/api/{Resource.Name}/get/{partitionKey}/{userProfile.id}", userProfile);
         }
@@ -126,6 +126,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **UserProfileId** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Required = true, Description = "The **UserProfile** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(UserProfile), Description = "The OK response")]
+        [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Put
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Put, Route = Route.Put)] HttpRequest req,
@@ -135,9 +136,12 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                CosmosClient cosmosClient,
-                ClaimsPrincipal claimsPrincipal)
+                CosmosClient cosmosClient)
         {
+            if(!AzureADHelper.IsAuthorized(req)){
+                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
+            }
+            var unique_name = AzureADHelper.GetUserName(req);
             var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -145,9 +149,7 @@ namespace AdventureBot.TriggerFunctions
             userProfileInput.__T = partitionKey;
             userProfileInput.id = UserProfileId;
             userProfileInput.Modified = DateTime.UtcNow;
-            if(claimsPrincipal?.Identity?.Name != null){
-                userProfileInput.ModifiedBy = claimsPrincipal?.Identity?.Name;
-            }
+            userProfileInput.ModifiedBy = unique_name;
             _logger.LogInformation($"Put UserProfileId: {UserProfileId}");
             await container.UpsertItemAsync<UserProfile>(
                 item: userProfileInput,
@@ -162,6 +164,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **UserProfileId** parameter")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK, Description = "The OK response")]
+        [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Delete
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Delete, Route = Route.Delete)] HttpRequest req,
@@ -173,6 +176,9 @@ namespace AdventureBot.TriggerFunctions
                 Connection = DbStrings.CosmosDBConnection)] 
                 CosmosClient client)
         {
+            if(!AzureADHelper.IsAuthorized(req)){
+                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
+            }
             var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
             _logger.LogInformation($"Delete UserProfileId: {UserProfileId}");
             await container.DeleteItemAsync<dynamic>(

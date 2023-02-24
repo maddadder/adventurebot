@@ -74,6 +74,11 @@ namespace AdventureBot.TriggerFunctions
             public const string Search = $"Search each {resource} by name";
             public const string Get = $"Retrieve one {resource}";
         }
+
+        private static class Security
+        {
+            public const string UnauthorizedAccessException = "You do not have access to this resource.";
+        }
     }
 }
 

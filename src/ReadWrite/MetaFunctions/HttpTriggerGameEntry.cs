@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using AdventureBot.Models;
@@ -73,9 +72,6 @@ namespace AdventureBot.TriggerFunctions
         }
         private static class Security
         {
-            public static readonly List<string> Post = new List<string>(){
-                "game.manage"
-            };
             public const string UnauthorizedAccessException = "You do not have access to this resource.";
         }
     }

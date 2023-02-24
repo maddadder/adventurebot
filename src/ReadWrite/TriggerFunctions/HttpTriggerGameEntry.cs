@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AdventureBot.Models;
+using AdventureBot.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
@@ -73,6 +72,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, contentType: ResponseBody.Json, bodyType: typeof(GameEntry), Description = "The Created response")]
+        [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Post
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Post, Route = Route.Post)] HttpRequest req,
@@ -81,18 +81,14 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                IAsyncCollector<dynamic> documentsOut,
+                IAsyncCollector<dynamic> documentsOut, 
                 ClaimsPrincipal claimsPrincipal)
         {
-            if(claimsPrincipal?.Identity?.Name != null)
-            {
-                var roles = claimsPrincipal.Claims.Where(e => e.Type == "roles").Select(e => e.Value);
-                var isMember = roles.Intersect(Security.Post).Count() > 0;
-                if (!isMember)
-                {
-                    return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
-                }
+            if(!AzureADHelper.IsAuthorized(req)){
+                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
             }
+            var unique_name = AzureADHelper.GetUserName(req);
+            
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic gameEntry = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             
@@ -104,10 +100,8 @@ namespace AdventureBot.TriggerFunctions
             gameEntry.Created = DateTime.UtcNow;
             gameEntry.Modified = DateTime.UtcNow;
             gameEntry.__T = partitionKey;
-            if(claimsPrincipal?.Identity?.Name != null){
-                gameEntry.CreatedBy = claimsPrincipal?.Identity?.Name;
-                gameEntry.ModifiedBy = claimsPrincipal?.Identity?.Name;
-            }
+            gameEntry.CreatedBy = unique_name;
+            gameEntry.ModifiedBy = unique_name;
             await documentsOut.AddAsync(gameEntry);
             return new CreatedResult($"/api/{Resource.Name}/get/{partitionKey}/{gameEntry.id}", gameEntry);
         }
@@ -118,6 +112,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
         [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(GameEntry), Required = true, Description = "The **GameEntry** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(GameEntry), Description = "The OK response")]
+        [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Put
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Put, Route = Route.Put)] HttpRequest req,
@@ -127,19 +122,20 @@ namespace AdventureBot.TriggerFunctions
                 databaseName: DbStrings.CosmosDBDatabaseName, 
                 containerName: DbStrings.CosmosDBContainerName, 
                 Connection = DbStrings.CosmosDBConnection)] 
-                CosmosClient client,
-                ClaimsPrincipal claimsPrincipal)
+                CosmosClient client)
         {
-            var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+            if(!AzureADHelper.IsAuthorized(req)){
+                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
+            }
+            var unique_name = AzureADHelper.GetUserName(req);
 
+            var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic gameEntryInput = JsonConvert.DeserializeObject<GameEntry>(requestBody);
             gameEntryInput.__T = partitionKey;
             gameEntryInput.id = GameEntryId;
             gameEntryInput.Modified = DateTime.UtcNow;
-            if(claimsPrincipal?.Identity?.Name != null){
-                gameEntryInput.ModifiedBy = claimsPrincipal?.Identity?.Name;
-            }
+            gameEntryInput.ModifiedBy = unique_name;
             _logger.LogInformation($"Put GameEntryId: {GameEntryId}");
             await container.UpsertItemAsync<GameEntry>(
                 item: gameEntryInput,
@@ -154,6 +150,7 @@ namespace AdventureBot.TriggerFunctions
         [OpenApiParameter(name: Parameter.partitionKey, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **partitionKey** parameter")]
         [OpenApiParameter(name: Parameter.Id, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameEntryId** parameter")]
         [OpenApiResponseWithoutBody(statusCode: HttpStatusCode.OK, Description = "The OK response")]
+        [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Delete
         (
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Delete, Route = Route.Delete)] HttpRequest req,
@@ -165,6 +162,9 @@ namespace AdventureBot.TriggerFunctions
                 Connection = DbStrings.CosmosDBConnection)] 
                 CosmosClient client)
         {
+            if(!AzureADHelper.IsAuthorized(req)){
+                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
+            }
             var container = client.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
             _logger.LogInformation($"Delete GameEntryId: {GameEntryId}");
             await container.DeleteItemAsync<dynamic>(
