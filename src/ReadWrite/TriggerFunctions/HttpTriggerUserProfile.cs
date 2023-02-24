@@ -138,12 +138,7 @@ namespace AdventureBot.TriggerFunctions
                 Connection = DbStrings.CosmosDBConnection)] 
                 CosmosClient cosmosClient)
         {
-            if(!AzureADHelper.IsAuthorized(req)){
-                return new UnauthorizedObjectResult(Security.UnauthorizedAccessException);
-            }
             var unique_name = AzureADHelper.GetUserName(req);
-            var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             UserProfile userProfileInput = JsonConvert.DeserializeObject<UserProfile>(requestBody);
              if(!AzureADHelper.IsAuthorized(req))
@@ -156,6 +151,7 @@ namespace AdventureBot.TriggerFunctions
             userProfileInput.Modified = DateTime.UtcNow;
             userProfileInput.ModifiedBy = unique_name;
             _logger.LogInformation($"Put UserProfileId: {UserProfileId}");
+            var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
             await container.UpsertItemAsync<UserProfile>(
                 item: userProfileInput,
                 partitionKey: new PartitionKey(partitionKey)
