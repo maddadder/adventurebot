@@ -1,20 +1,27 @@
 ﻿@page "/"
+@using AdventureBotUI.Client.Services
+@using ReadWrite
+@using Microsoft.AspNetCore.Authorization
 @inject AuthenticationStateProvider authenticationStateProvider
-
+@inject AdventureBotReadWriteService adventureBotReadWriteService
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
-@if(currentUser != null)
-{
-    foreach(var claim in currentUser.Claims)
-    {
-        <div>@claim.Value</div>
-        <div>@claim.Type</div>
-    }
-}
-
+<AuthorizeView Roles="game.manage">
+    <Authorized Context="Auth">
+        @if(currentUser != null)
+        {
+            foreach(var claim in currentUser.Claims)
+            {
+                <div>@claim.Value</div>
+                <div>@claim.Type</div>
+            }
+        }
+        <input type="button" value="Start Game" @onclick="(() => StartGame())" class="btn btn-warning" />
+    </Authorized>
+</AuthorizeView>
 @code{
 
     System.Security.Claims.ClaimsPrincipal currentUser;
@@ -26,5 +33,9 @@ Welcome to your new app.
         {
             currentUser = authState.User;
         }*/
+    }
+    protected async Task StartGame()
+    {
+        await adventureBotReadWriteService.StartGameGetAsync();
     }
 }

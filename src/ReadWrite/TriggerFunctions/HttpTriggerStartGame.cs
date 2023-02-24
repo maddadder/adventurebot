@@ -1,4 +1,5 @@
-﻿using AdventureBot.Orchestrators;
+﻿using AdventureBot.Models;
+using AdventureBot.Orchestrators;
 using AdventureBot.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace AdventureBot.TriggerFunctions
 
         [FunctionName(Name.Get)]
         [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(string), Description = "The OK response")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Accepted, contentType: ResponseBody.Json, bodyType: typeof(CheckStatusResponse), Description = "A Check Status Response")]
         [OpenApiSecurity("oidc_auth", SecuritySchemeType.OAuth2, Flows = typeof(AzureADAuth))]
         public async Task<IActionResult> Get
         (

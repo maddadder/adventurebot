@@ -88,4 +88,8 @@ public class AdventureBotReadWriteService
         input.Name = userProfile.FirstName + " " + userProfile.LastName;
         return await client.UserRegistrationPostAsync(input);
     }
+    public async Task StartGameGetAsync()
+    {
+        await client.StartGameGetAsync();
+    }
 }
