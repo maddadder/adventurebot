@@ -14,7 +14,7 @@
 <h1>Verify Email</h1>
 <AuthorizeView>
     <Authorized Context="Auth">
-@if (userProfile == null)
+@if (verificationResponse == null)
 {
     <div class="container">
         <div class="row">
@@ -26,7 +26,7 @@ else
 {
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-12">Your email is verified.</div>
+            <div class="col-xs-12 col-md-12">@verificationResponse</div>
         </div>
     </div>
 }
@@ -40,7 +40,7 @@ else
 
     [Parameter]
     public string token { get; set; }
-    protected UserProfile userProfile = null;
+    protected string verificationResponse = null;
     
     protected override async Task OnParametersSetAsync()
     {
@@ -48,6 +48,6 @@ else
         {
             return;
         }
-        userProfile = await adventureBotReadWriteService.UserRegistrationGetAsync(token);
+        verificationResponse = await adventureBotReadWriteService.UserRegistrationGetAsync(token);
     }
 }

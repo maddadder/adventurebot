@@ -602,9 +602,9 @@
           "200": {
             "description": "The OK response",
             "content": {
-              "application/json": {
+              "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/userProfile"
+                  "type": "string"
                 }
               }
             }
