@@ -1,0 +1,53 @@
+﻿@page "/verifyemail/{token?}"
+@using AdventureBotUI.Client.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using ReadWrite
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject AdventureBotReadWriteService adventureBotReadWriteService
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Verify Email</h1>
+<AuthorizeView>
+    <Authorized Context="Auth">
+@if (userProfile == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">loading...</div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">Your email is verified.</div>
+        </div>
+    </div>
+}
+</Authorized>
+    <NotAuthorized>
+        <div>The [Authorize] attribute should prevent this from loading</div>
+    </NotAuthorized>
+</AuthorizeView>
+@code 
+{
+
+    [Parameter]
+    public string token { get; set; }
+    protected UserProfile userProfile = null;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if(string.IsNullOrEmpty(token))
+        {
+            return;
+        }
+        userProfile = await adventureBotReadWriteService.UserRegistrationGetAsync(token);
+    }
+}

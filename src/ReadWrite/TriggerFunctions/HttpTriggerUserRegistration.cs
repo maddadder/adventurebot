@@ -16,6 +16,7 @@ using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
@@ -24,9 +25,14 @@ namespace AdventureBot.TriggerFunctions
     public partial class HttpTriggerUserRegistration
     {
         private readonly ILogger<HttpTriggerUserRegistration> _logger;
+        private readonly string BaseUrl;
 
-        public HttpTriggerUserRegistration(ILogger<HttpTriggerUserRegistration> log)
+        public HttpTriggerUserRegistration(
+            IOptions<ApplicationConfig> applicationConfig,
+            ILogger<HttpTriggerUserRegistration> log)
         {
+            var applicationConfigValue = applicationConfig.Value;
+            BaseUrl = applicationConfigValue.BaseUrl;
             _logger = log;
         }
         
@@ -50,16 +56,8 @@ namespace AdventureBot.TriggerFunctions
                     return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { Content = new StringContent("Invalid request payload") };
                 }
 
-                var baseUri = new StringBuilder()
-                    .Append(req.RequestUri.Scheme)
-                    .Append("://")
-                    .Append(req.RequestUri.Host);
-
-                if (!req.RequestUri.IsDefaultPort)
-                    baseUri.Append(':').Append(req.RequestUri.Port);
-                baseUri.Append("/api");
-
-                input.BaseUri = baseUri.ToString();
+                
+                input.BaseUri = BaseUrl;
                 input.InstanceId = $"{input.Email}-{DateTime.UtcNow.Ticks}";
 
                 // Instance Id will be <email address>-<current ticks>
