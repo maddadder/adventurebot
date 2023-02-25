@@ -1,0 +1,48 @@
+﻿@page "/verifyaccount/{token}"
+@using AdventureBotUI.Client.Services
+@using Read
+@inject AdventureBotReadService adventureBotReadService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Verify Account</h1>
+<AuthorizeView>
+    <Authorized Context="Auth">
+        You already have an account
+    </Authorized>
+    <NotAuthorized>
+        @if (verificationResponse == null)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">loading...</div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">@verificationResponse</div>
+                </div>
+            </div>
+        }
+    </NotAuthorized>
+</AuthorizeView>
+@code 
+{
+
+    [Parameter]
+    public string token { get; set; }
+    protected string verificationResponse = null;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if(string.IsNullOrEmpty(token))
+        {
+            return;
+        }
+        verificationResponse = await adventureBotReadService.UserRegistrationGetAsync(token);
+    }
+}

@@ -19,4 +19,8 @@ public class AdventureBotReadService
     {
         return await client.UserRegistrationPostAsync(input);
     }
+    public async Task<string> UserRegistrationGetAsync(string token)
+    {
+        return await client.UserRegistrationGetAsync(token);
+    }
 }
