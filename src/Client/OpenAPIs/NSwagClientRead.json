@@ -1,14 +1,18 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.1",
   "info": {
-    "title": "OpenAPI Document on Azure Functions",
-    "description": "This is the OpenAPI Document on Azure Functions",
+    "title": "My API",
+    "description": "My API description",
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
     "version": "1.0.0"
   },
-  "host": "playleenetadventurebot.azurewebsites.net",
-  "basePath": "/api",
-  "schemes": [
-    "https"
+  "servers": [
+    {
+      "url": "https://playleenetadventurebot.azurewebsites.net/api"
+    }
   ],
   "paths": {
     "/GameEntry/search/{partitionKey}/{GameEntryName}": {
@@ -18,32 +22,37 @@
         ],
         "summary": "Search each GameEntry by name",
         "operationId": "GameEntry-Search",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "GameEntryName",
+            "in": "path",
             "description": "The **name** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Search each GameEntry by name",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/gameEntry"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/gameEntry"
+                  }
+                }
               }
             }
           }
@@ -57,30 +66,35 @@
         ],
         "summary": "Retrieve one GameEntry",
         "operationId": "GameEntry-Get",
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "partitionKey",
+            "in": "path",
             "description": "The **partitionKey** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
-            "in": "path",
             "name": "GameEntryId",
+            "in": "path",
             "description": "The **GameEntryId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "$ref": "#/definitions/gameEntry"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/gameEntry"
+                }
+              }
             }
           }
         }
@@ -93,28 +107,26 @@
         ],
         "summary": "Create one UserRegistration",
         "operationId": "UserRegistration-Post",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "The **UserRegistrationInput** parameter",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/userRegistrationInput"
+        "requestBody": {
+          "description": "The **UserRegistrationInput** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userRegistrationInput"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "202": {
             "description": "A Check Status Response",
-            "schema": {
-              "$ref": "#/definitions/checkStatusResponse"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/checkStatusResponse"
+                }
+              }
             }
           }
         }
@@ -127,142 +139,154 @@
         ],
         "summary": "Retrieve one UserRegistration",
         "operationId": "UserRegistration-Get",
-        "produces": [
-          "text/plain"
-        ],
         "parameters": [
           {
-            "in": "path",
             "name": "instanceId",
+            "in": "path",
             "description": "The **instanceId** parameter",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The OK response",
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "definitions": {
-    "checkStatusResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "statusQueryGetUri": {
-          "type": "string"
-        },
-        "sendEventPostUri": {
-          "type": "string"
-        },
-        "terminatePostUri": {
-          "type": "string"
-        },
-        "purgeHistoryDeleteUri": {
-          "type": "string"
-        },
-        "restartPostUri": {
-          "type": "string"
-        },
-        "suspendPostUri": {
-          "type": "string"
-        },
-        "resumePostUri": {
-          "type": "string"
-        }
-      }
-    },
-    "gameEntry": {
-      "required": [
-        "name",
-        "description",
-        "options",
-        "id"
-      ],
-      "type": "object",
-      "properties": {
-        "name": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "description": {
-          "type": "array",
-          "items": {
+  "components": {
+    "schemas": {
+      "checkStatusResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "statusQueryGetUri": {
+            "type": "string"
+          },
+          "sendEventPostUri": {
+            "type": "string"
+          },
+          "terminatePostUri": {
+            "type": "string"
+          },
+          "purgeHistoryDeleteUri": {
+            "type": "string"
+          },
+          "restartPostUri": {
+            "type": "string"
+          },
+          "suspendPostUri": {
+            "type": "string"
+          },
+          "resumePostUri": {
             "type": "string"
           }
-        },
-        "options": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/gameOption"
+        }
+      },
+      "gameEntry": {
+        "required": [
+          "name",
+          "description",
+          "options",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/gameOption"
+            }
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "__T": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "string",
+            "nullable": true
           }
-        },
-        "id": {
-          "format": "uuid",
-          "minLength": 1,
-          "type": "string"
-        },
-        "__T": {
-          "type": "string"
-        },
-        "created": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "modified": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "createdBy": {
-          "type": "string"
-        },
-        "modifiedBy": {
-          "type": "string"
         }
-      }
-    },
-    "gameOption": {
-      "required": [
-        "description",
-        "next"
-      ],
-      "type": "object",
-      "properties": {
-        "description": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "next": {
-          "minLength": 1,
-          "type": "string"
+      },
+      "gameOption": {
+        "required": [
+          "description",
+          "next"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "next": {
+            "minLength": 1,
+            "type": "string"
+          }
         }
-      }
-    },
-    "userRegistrationInput": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "baseUri": {
-          "type": "string"
-        },
-        "instanceId": {
-          "type": "string"
+      },
+      "userRegistrationInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "baseUri": {
+            "type": "string",
+            "nullable": true
+          },
+          "instanceId": {
+            "type": "string",
+            "nullable": true
+          }
         }
       }
     }

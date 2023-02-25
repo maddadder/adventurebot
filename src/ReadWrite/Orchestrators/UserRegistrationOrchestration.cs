@@ -25,7 +25,7 @@ namespace AdventureBot.Orchestrators
             // 1. Send confirmation email
             var sendConfirmationEmailInput = new SendConfirmationEmailInput
             {
-                RegistrationConfirmationURL = $"{input.BaseUri}/verifyemail/{input.InstanceId}",
+                RegistrationConfirmationURL = $"{input.BaseUri}/verifyemail/{input.InstanceId}/",
                 Email = input.Email,
                 Name = input.Name
             };
