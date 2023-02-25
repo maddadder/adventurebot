@@ -14,11 +14,17 @@
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />
             <div class="mb-3">
-                <label for="Name" class="form-label">Name</label>
+                <label for="Name" class="form-label">Your Name</label>
                 <div class="col-md-4">
                     <InputText class="form-control" @bind-Value="userRegistrationInput.Name" placeholder="Name" />
                 </div>
                 <ValidationMessage For="@(() => userRegistrationInput.Name)" />
+            </div>
+            <div class="mb-3">
+                <label for="UserName" class="form-label">UserName</label>
+                <div class="col-md-4">
+                    <div style="color:red"><b>@userRegistrationInput.UserName</b></div>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="EmailEntry" class="form-label">Email</label>
@@ -39,7 +45,6 @@
             <ValidationSummary />
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-light" @onclick="Cancel">Cancel</a>
             </div>
         </EditForm>
     </NotAuthorized>
@@ -74,8 +79,4 @@
         ValidationErrorMessage = "You account is pending. Check your email to verify your email address.";
     }
 
-    public void Cancel()
-    {
-        NavigationManager.NavigateTo("userprofile/view");
-    }
 }

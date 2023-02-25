@@ -22,7 +22,8 @@ namespace AdventureBot.ActivityFunctions
         public async Task Run(          
             [ActivityTrigger] SendConfirmationEmailInput input, ILogger log)
         {
-            
+            var userPrefix = input.Email.Split("@")[0];
+            var azureAdUserName = $"{userPrefix}@{AzureAd.TennantName}";
             var htmlContent = new StringBuilder();
             htmlContent
                 .AppendLine("<html>")
@@ -30,6 +31,7 @@ namespace AdventureBot.ActivityFunctions
                 .AppendLine("<body>")
                 .AppendLine($"<p>Hello {input.Name}</p>")
                 .AppendLine($"<p>To activate your account open this page: <a href=\"{input.RegistrationConfirmationURL}\">{input.RegistrationConfirmationURL}</a></p>")
+                .AppendLine($"<p>Remember that your username to login is {azureAdUserName}</p>")
                 .AppendLine("</body></html>");
 
             await _awsSesApiService.SendEmail(input.Email, "AdventureBot Email Confirmation", htmlContent.ToString());

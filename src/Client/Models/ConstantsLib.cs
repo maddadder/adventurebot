@@ -16,4 +16,5 @@ public static class ConstantsLib
             return false;
         }
     }
+    public const string TenantName = "leenet.link";
 }

@@ -15,15 +15,19 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="userprofile/register">
-                <span class="oi oi-plus" aria-hidden="true"></span> Register
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
             <NavLink class="nav-link" href="gameview/begin">
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Play Game
             </NavLink>
         </div>
+        <AuthorizeView>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="userprofile/register">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Register
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
         <AuthorizeView>
             <Authorized>
                 <div class="nav-item px-3">
