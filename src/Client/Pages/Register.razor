@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject AdventureBotReadService adventureBotReadService
 
-<h1>@Title Register</h1>
+<h1>Account Registration</h1>
 <hr />
 <AuthorizeView>
     <Authorized Context="Auth">
@@ -21,15 +21,15 @@
                 <ValidationMessage For="@(() => userRegistrationInput.Name)" />
             </div>
             <div class="mb-3">
-                <label for="UserName" class="form-label">UserName</label>
+                <label for="UserName" class="form-label">Login UserName</label>
                 <div class="col-md-4">
-                    <div style="color:red"><b>@userRegistrationInput.UserName</b></div>
+                    <div style="color:red"><b>@UserName</b></div>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="EmailEntry" class="form-label">Email</label>
                 <div class="col-md-4">
-                    <InputText class="form-control" @bind-Value="userRegistrationInput.EmailEntry" placeholder="user@gmail.com" />
+                    <InputText class="form-control" @onblur="@(async (args) => await OnEmailBlur(args))" @oninput="@OnEmailChange" @bind-Value="userRegistrationInput.EmailEntry" placeholder="user@gmail.com" />
                 </div>
                 <ValidationMessage For="@(() => userRegistrationInput.EmailEntry)" />
             </div>
@@ -37,14 +37,23 @@
                 <label for="Password" class="form-label">Password</label>
                 <div class="col-md-4">
                     <InputText type="password" class="form-control" @bind-Value="userRegistrationInput.Password" placeholder="A strong password is required" />
+                    <div style="color:gray;">Password must be at least 12 characters, contain at least 1 uppercase, one number, and one special character.</div>
                 </div>
                 <ValidationMessage For="@(() => userRegistrationInput.Password)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="PasswordConfirm" class="form-label">Confirm Password</label>
+                <div class="col-md-4">
+                    <InputText type="password" class="form-control" @bind-Value="PasswordConfirm" placeholder="A strong password is required" />
+                </div>
+                <ValidationMessage For="@(() => PasswordConfirm)" />
             </div>
 
             <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
             <ValidationSummary />
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" disabled="@HasSubmitted" class="btn btn-primary">Save</button>
             </div>
         </EditForm>
     </NotAuthorized>
@@ -52,13 +61,43 @@
 @code {
 
     private EditContext editContext;
-    protected string Title = "Edit";
+    protected string Title = "Register";
     protected UserRegistrationInputOverride userRegistrationInput = new();
     protected string ValidationErrorMessage = "";
-    
+    private string UserName { get; set; } = $"@{ConstantsLib.TenantName}";
+    private string PasswordConfirm {get;set;}
+    private bool HasSubmitted = false;
     protected override void OnInitialized()
     {
         editContext = new EditContext(userRegistrationInput);
+    }
+    private void OnEmailChange(ChangeEventArgs args)
+    {
+        string emailPrefix = args.Value?.ToString();
+        if(string.IsNullOrEmpty(emailPrefix))
+        {
+            UserName = $"@{ConstantsLib.TenantName}";
+            return;
+        }
+        else if(emailPrefix.Contains("@"))
+        {
+            emailPrefix = emailPrefix.Split("@")[0];
+        }
+        UserName = emailPrefix + $"@{ConstantsLib.TenantName}";
+    }
+    private async Task OnEmailBlur(FocusEventArgs args)
+    {
+        string emailPrefix = userRegistrationInput.EmailEntry;
+        if(string.IsNullOrEmpty(emailPrefix))
+        {
+            UserName = $"@{ConstantsLib.TenantName}";
+            return;
+        }
+        if(emailPrefix.Contains("@"))
+        {
+            emailPrefix = emailPrefix.Split("@")[0];
+        }
+        UserName = emailPrefix + $"@{ConstantsLib.TenantName}";
     }
     protected async Task SaveUser()
     {
@@ -66,7 +105,32 @@
             ValidationErrorMessage = "The form is invalid";
             return;
         }
-            
+        if(string.IsNullOrEmpty(userRegistrationInput.Password)){
+            ValidationErrorMessage = "Password is a required field.";
+            return;
+        }
+        if(userRegistrationInput.Password != PasswordConfirm){
+            ValidationErrorMessage = "Confirm Password does not match";
+        }
+        if(userRegistrationInput.Password.Length < 12){
+            ValidationErrorMessage = "Password must be at least 12 characters.";
+        }
+        var specialChars = "`~!@#$%^&*()-_=+[]{}\\|;:'".ToCharArray();
+        if(!userRegistrationInput.Password.ToCharArray().Intersect(specialChars).Any()){
+            ValidationErrorMessage = "Password needs a least one special character.";
+        }
+        var upperCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if(!userRegistrationInput.Password.ToCharArray().Intersect(upperCharacters).Any()){
+            ValidationErrorMessage = "Password needs a least one upper case letter.";
+        }
+        var lowercase = upperCharacters.ToLower();
+        if(!userRegistrationInput.Password.ToCharArray().Intersect(lowercase).Any()){
+            ValidationErrorMessage = "Password needs a least one lower case letter.";
+        }
+        var numbers = "1234567890";
+        if(!userRegistrationInput.Password.ToCharArray().Intersect(numbers).Any()){
+            ValidationErrorMessage = "Password needs a least one number.";
+        }
         if(string.IsNullOrEmpty(userRegistrationInput.Email) || !ConstantsLib.IsValidEmail(userRegistrationInput.Email))
         {
             ValidationErrorMessage = "Email address is invalid";
@@ -75,6 +139,7 @@
         {
             return;
         }
+        HasSubmitted = true;
         CheckStatusResponse response = await adventureBotReadService.UserRegistrationPostAsync(userRegistrationInput);
         ValidationErrorMessage = "You account is pending. Check your email to verify your email address.";
     }
