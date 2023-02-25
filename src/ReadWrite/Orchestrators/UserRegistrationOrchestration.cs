@@ -51,9 +51,20 @@ namespace AdventureBot.Orchestrators
 
                 if (winner == confirmationButtonClicked)
                 {
-                    await context.CallActivityAsync(nameof(SetUserEmailVerification), sendConfirmationEmailInput.Email);
-                    context.SetCustomStatus(new UserRegistrationOrchestatorStatus { Text = "Email activation succeeded" });                    
-                    return true;
+                    if(string.IsNullOrEmpty(input.Password))
+                    {
+                        //then we are only verifying the user's email
+                        await context.CallActivityAsync(nameof(SetUserEmailVerification), sendConfirmationEmailInput.Email);
+                        context.SetCustomStatus(new UserRegistrationOrchestatorStatus { Text = "Email activation succeeded" });                    
+                        return true;
+                    }
+                    else
+                    {
+                        //else we are registering the user
+                        await context.CallActivityAsync(nameof(RegisterUser), input);
+                        context.SetCustomStatus(new UserRegistrationOrchestatorStatus { Text = "User Account Provisioned" });                    
+                        return true;
+                    }
                 }
                 else
                 {

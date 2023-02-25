@@ -123,5 +123,64 @@ namespace AdventureBot.Services
                 );
             }
         }
+
+        public async Task RegisterUser(UserRegistrationInput input)
+        {
+            var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+            var userPrefix = input.Email.Split("@")[0];
+            var azureAdUserName = $"{userPrefix}@{AzureAd.TennantName}";
+            
+            // Build query definition
+            var parameterizedQuery = new QueryDefinition(
+                query: "SELECT * FROM userProfiles up WHERE up.preferredUsername = @preferredUsername and up.__T = @partitionKey"
+            )
+                .WithParameter("@preferredUsername", azureAdUserName)
+                .WithParameter("@partitionKey", "up");
+
+            // Query multiple items from container
+            using FeedIterator<UserProfile> filteredFeed = container.GetItemQueryIterator<UserProfile>(
+                queryDefinition: parameterizedQuery
+            );
+
+            List<UserProfile> results = new List<UserProfile>();
+            // Iterate query result pages
+            while (filteredFeed.HasMoreResults)
+            {
+                FeedResponse<UserProfile> response = await filteredFeed.ReadNextAsync();
+
+                // Iterate query results
+                foreach (UserProfile item in response)
+                {
+                    results.Add(item);
+                }
+            }
+            if(!results.Any())
+            {
+                var names = input.Name.Split(" ");
+                var firstName = names.Count() >= 2 ? names[0] : input.Name;
+                var lastname = names.Count() >= 2 ? names[1] : input.Name;
+                
+                var newUser = new UserProfile(){
+                    __T = "up",
+                    Created = DateTime.UtcNow,
+                    Modified = DateTime.UtcNow,
+                    Email = input.Email,
+                    EmailIsVerified = true,
+                    FirstName = firstName,
+                    LastName = lastname,
+                    GameEntryState = "begin",
+                    id = Guid.NewGuid(),
+                    PreferredUsername = azureAdUserName,
+                    ReceiveGameAdvanceEmail = true,
+                    CreatedBy = azureAdUserName,
+                    ModifiedBy = azureAdUserName
+                };
+
+                await container.UpsertItemAsync<UserProfile>(
+                        item: newUser,
+                        partitionKey: new PartitionKey("up")
+                    );
+            }
+        }
     }
 }

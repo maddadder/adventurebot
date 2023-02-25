@@ -11,5 +11,6 @@ namespace AdventureBot.Models
     {
         public const string TenantId = "46f630ab-810d-4f10-b533-6532e8afe44a";
         public const string ClientId = "0cd119e5-2fad-4aba-a39f-d04e3b26f4ae";
+        public const string TennantName = "leenet.link"; //e.g. contoso.onmicrosoft.com
     }
 }

@@ -11,5 +11,6 @@ namespace AdventureBot.Services
         Task<List<UserProfile>> GetActiveUserProfileList();
         Task<UserProfileGameEntry> GetGameStateFromUser(UserProfile userProfile);
         Task SetUserEmailVerification(string emailAddress);
+        Task RegisterUser(UserRegistrationInput input);
     }
 }

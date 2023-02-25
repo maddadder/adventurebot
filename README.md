@@ -24,6 +24,10 @@ AwsSes:SmtpPort=587
 AwsSes:SmtpPassword=Your Gmail app-specific password
 AwsSes:SmtpToEmail=youremail@gmail.com
 AwsSes:SmtpUserName=youremail@gmail.com
+
+GraphApiApp:TenantId=your_tenant_id 
+GraphApiApp:ClientId=your_webhook_client_id
+GraphApiApp:ClientSecret=your_webhook_client_secret
 ```
 
 ### local.settings.json
@@ -31,6 +35,30 @@ AwsSes:SmtpUserName=youremail@gmail.com
 `local.settings.json` contains a required field: `AppConfigurationConnectionString` with the value `Endpoint=https://redacted.azconfig.io;Id=redacted;Secret=redacted"`. This value comes from `App Configuration` in azure. You will need to create this resource, populate it with the values below. The medium article from analytics-vidhya above has instructions on how to do this in part-3. Once complete, in `App Configuration` navigate to the `Access Keys` tab, copy the `Connection string`, and paste it into the `AppConfigurationConnectionString` in `local.settings.json`.
 
 `local.settings.json` contains a required field: `CosmosDbConnectionString` with the value `AccountEndpoint=https://redacted.documents.azure.com:443/;AccountKey=redacted`. Go to the `Function App`, `Configuration` tab. Add a new setting with property `CosmosDbConnectionString` and value `@Microsoft.KeyVault(SecretUri=https://redacted.vault.azure.net/secrets/CosmosDbConnectionString)`. Create an entry in the azure vault called `CosmosDbConnectionString`
+
+### Register an app for the Azure Function webhook
+
+0. Doc found here: https://github.com/microsoftgraph/msgraph-sample-azurefunction-csharp/blob/main/README.md#register-an-app-for-the-azure-function-webhook
+
+1. Return to **App Registrations**, and select **New registration**. On the **Register an application** page, set the values as follows.
+
+    - Set **Name** to `Graph Azure Function Webhook`.
+    - Set **Supported account types** to **Accounts in this organizational directory only**.
+    - Leave **Redirect URI** blank.
+
+1. Select **Register**. On the **Graph Azure Function webhook** page, copy the value of the **Application (client) ID** and save it, you will need it in the next step.
+
+1. Select **Certificates & secrets** under **Manage**. Select the **New client secret** button. Enter a value in **Description** and select one of the options for **Expires** and select **Add**.
+
+1. Copy the client secret value before you leave this page. You will need it in the next step.
+
+1. Select **API Permissions** under **Manage**. Choose **Add a permission**.
+
+1. Select **Microsoft Graph**, then **Application Permissions**. Add **User.ReadWrite.All** then select **Add permissions**.
+
+1. In the **Configured permissions**, remove the delegated **User.Read** permission under **Microsoft Graph** by selecting the **...** to the right of the permission and selecting **Remove permission**. Select **Yes, remove** to confirm.
+
+1. Select the **Grant admin consent for...** button, then select **Yes** to grant admin consent for the configured application permissions. The **Status** column in the **Configured permissions** table changes to **Granted for ...**.
 
 
 ### Debugging Azure Functions:

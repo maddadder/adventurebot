@@ -9,6 +9,9 @@ namespace AdventureBot.Models
 
         [JsonProperty("email")]
         public string Email { get; set; }
+        
+        [JsonProperty("password")]
+        public string Password { get; set; }  
 
         [JsonProperty("baseUri")]
         public string BaseUri { get; set; }
