@@ -1,0 +1,81 @@
+﻿@page "/userprofile/register"
+@using AdventureBotUI.Client.Services
+@using ReadWrite;
+@inject NavigationManager NavigationManager
+@inject AdventureBotReadWriteService adventureBotReadWriteService
+
+<h1>@Title Register</h1>
+<hr />
+<AuthorizeView>
+    <Authorized Context="Auth">
+        You are already registered
+    </Authorized>
+    <NotAuthorized Context="UnAuth">
+        <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label for="Name" class="form-label">Name</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="userRegistrationInput.Name" placeholder="Name" />
+                </div>
+                <ValidationMessage For="@(() => userRegistrationInput.Name)" />
+            </div>
+            <div class="mb-3">
+                <label for="EmailEntry" class="form-label">Email</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @bind-Value="userRegistrationInput.EmailEntry" placeholder="user@gmail.com" />
+                </div>
+                <ValidationMessage For="@(() => userRegistrationInput.EmailEntry)" />
+            </div>
+            <div class="mb-3">
+                <label for="Password" class="form-label">Password</label>
+                <div class="col-md-4">
+                    <InputText type="password" class="form-control" @bind-Value="userRegistrationInput.Password" placeholder="A strong password is required" />
+                </div>
+                <ValidationMessage For="@(() => userRegistrationInput.Password)" />
+            </div>
+
+            <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
+            <ValidationSummary />
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-light" @onclick="Cancel">Cancel</a>
+            </div>
+        </EditForm>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+
+    private EditContext editContext;
+    protected string Title = "Edit";
+    protected UserRegistrationInputOverride userRegistrationInput = new();
+    protected string ValidationErrorMessage = "";
+    
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(userRegistrationInput);
+    }
+    protected async Task SaveUser()
+    {
+        if (!editContext.Validate()){
+            ValidationErrorMessage = "The form is invalid";
+            return;
+        }
+            
+        if(string.IsNullOrEmpty(userRegistrationInput.Email) || !ConstantsLib.IsValidEmail(userRegistrationInput.Email))
+        {
+            ValidationErrorMessage = "Email address is invalid";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage))
+        {
+            return;
+        }
+        CheckStatusResponse response = await adventureBotReadWriteService.UserRegistrationPostAsync(userRegistrationInput);
+        Cancel();
+    }
+
+    public void Cancel()
+    {
+        NavigationManager.NavigateTo("userprofile/view");
+    }
+}

@@ -132,7 +132,7 @@
             !userProfile.EmailIsVerified
         )
         {
-            return await adventureBotReadWriteService.UserRegistrationPostAsync((UserProfile)userProfile);
+            return await adventureBotReadWriteService.EmailConfirmationAsync((UserProfile)userProfile);
         }
         return null;
     }
