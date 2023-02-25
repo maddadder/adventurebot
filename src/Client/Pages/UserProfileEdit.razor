@@ -132,7 +132,10 @@
             !userProfile.EmailIsVerified
         )
         {
-            return await adventureBotReadWriteService.EmailConfirmationAsync((UserProfile)userProfile);
+            EmailConfirmationInput input = new EmailConfirmationInput();
+            input.Email = userProfile.Email;
+            input.Name = userProfile.FirstName + " " + userProfile.LastName;
+            return await adventureBotReadWriteService.EmailConfirmationPostAsync(input);
         }
         return null;
     }

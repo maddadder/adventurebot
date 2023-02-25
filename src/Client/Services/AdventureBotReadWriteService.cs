@@ -82,16 +82,13 @@ public class AdventureBotReadWriteService
         await client.UserProfileDeleteAsync("up", userProfileId);
     }
     
-    public async Task<CheckStatusResponse> EmailConfirmationAsync(UserProfile userProfile)
+    public async Task<CheckStatusResponse> EmailConfirmationPostAsync(EmailConfirmationInput input)
     {
-        UserRegistrationInput input = new UserRegistrationInput();
-        input.Email = userProfile.Email;
-        input.Name = userProfile.FirstName + " " + userProfile.LastName;
-        return await client.UserRegistrationPostAsync(input);
+        return await client.EmailConfirmationPostAsync(input);
     }
-    public async Task<string> UserRegistrationGetAsync(string token)
+    public async Task<string> EmailConfirmationGetAsync(string token)
     {
-        return await client.UserRegistrationGetAsync(token);
+        return await client.EmailConfirmationGetAsync(token);
     }
     public async Task StartGameGetAsync()
     {

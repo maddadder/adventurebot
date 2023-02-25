@@ -548,19 +548,19 @@
         ]
       }
     },
-    "/UserRegistration/post": {
+    "/EmailConfirmation/post": {
       "post": {
         "tags": [
-          "UserRegistration"
+          "EmailConfirmation"
         ],
-        "summary": "Create one UserRegistration",
-        "operationId": "UserRegistration-Post",
+        "summary": "Create one EmailConfirmation",
+        "operationId": "EmailConfirmation-Post",
         "requestBody": {
-          "description": "The **UserRegistrationInput** parameter",
+          "description": "The **EmailConfirmationInput** parameter",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/userRegistrationInput"
+                "$ref": "#/components/schemas/emailConfirmationInput"
               }
             }
           },
@@ -580,13 +580,13 @@
         }
       }
     },
-    "/UserRegistration/get/{instanceId}": {
+    "/EmailConfirmation/get/{instanceId}": {
       "get": {
         "tags": [
-          "UserRegistration"
+          "EmailConfirmation"
         ],
-        "summary": "Retrieve one UserRegistration",
-        "operationId": "UserRegistration-Get",
+        "summary": "Retrieve one EmailConfirmation",
+        "operationId": "EmailConfirmation-Get",
         "parameters": [
           {
             "name": "instanceId",
@@ -641,6 +641,27 @@
           },
           "resumePostUri": {
             "type": "string"
+          }
+        }
+      },
+      "emailConfirmationInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "baseUri": {
+            "type": "string",
+            "nullable": true
+          },
+          "instanceId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -773,31 +794,6 @@
             "nullable": true
           },
           "modifiedBy": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "userRegistrationInput": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "password": {
-            "type": "string",
-            "nullable": true
-          },
-          "baseUri": {
-            "type": "string",
-            "nullable": true
-          },
-          "instanceId": {
             "type": "string",
             "nullable": true
           }
