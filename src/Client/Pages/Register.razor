@@ -3,9 +3,18 @@
 @using Read;
 @inject NavigationManager NavigationManager
 @inject AdventureBotReadService adventureBotReadService
+@inject IJSRuntime JSRuntime
 
 <h1>Account Registration</h1>
 <hr />
+<h6>
+    Your login username will be the first part of your email @UserName
+</h6>
+<h6 style="color:gray;margin-bottom:30px;">
+    If you loose access to your account you can reset your password by 
+    replying to one of the emails generated in the game, and indicate that
+    you need your password reset. 
+</h6>
 <AuthorizeView>
     <Authorized Context="Auth">
         You are already registered
@@ -21,17 +30,10 @@
                 <ValidationMessage For="@(() => userRegistrationInput.Name)" />
             </div>
             <div class="mb-3">
-                <label for="UserName" class="form-label">Login UserName</label>
+                <label for="UserName" class="form-label">Login Username</label>
                 <div class="col-md-4">
                     <div style="color:red"><b>@UserName</b></div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="EmailEntry" class="form-label">Email</label>
-                <div class="col-md-4">
-                    <InputText class="form-control" @onblur="@(async (args) => await OnEmailBlur(args))" @oninput="@OnEmailChange" @bind-Value="userRegistrationInput.EmailEntry" placeholder="user@gmail.com" />
-                </div>
-                <ValidationMessage For="@(() => userRegistrationInput.EmailEntry)" />
             </div>
             <div class="mb-3">
                 <label for="Password" class="form-label">Password</label>
@@ -49,22 +51,29 @@
                 </div>
                 <ValidationMessage For="@(() => PasswordConfirm)" />
             </div>
-
+            <div class="mb-3">
+                <label for="EmailEntry" class="form-label">Your Email</label>
+                <div class="col-md-4">
+                    <InputText class="form-control" @onblur="@(async (args) => await OnEmailBlur(args))" @oninput="@OnEmailChange" @bind-Value="userRegistrationInput.EmailEntry" placeholder="user@gmail.com" />
+                </div>
+                <ValidationMessage For="@(() => userRegistrationInput.EmailEntry)" />
+            </div>
             <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
             <ValidationSummary />
             <div class="form-group">
-                <button type="submit" disabled="@HasSubmitted" class="btn btn-primary">Save</button>
+                <button type="button" @onclick="ValidateForm" disabled="@HasSubmitted" class="btn btn-primary">Submit</button>
+                <button style="display:none" @ref="SubmitButton" type="submit"></button>
             </div>
         </EditForm>
     </NotAuthorized>
 </AuthorizeView>
 @code {
-
+    private ElementReference SubmitButton;
     private EditContext editContext;
     protected string Title = "Register";
     protected UserRegistrationInputOverride userRegistrationInput = new();
     protected string ValidationErrorMessage = "";
-    private string UserName { get; set; } = $"@{ConstantsLib.TenantName}";
+    private string UserName { get; set; } = $"guest@{ConstantsLib.TenantName}";
     private string PasswordConfirm {get;set;}
     private bool HasSubmitted = false;
     protected override void OnInitialized()
@@ -76,7 +85,7 @@
         string emailPrefix = args.Value?.ToString();
         if(string.IsNullOrEmpty(emailPrefix))
         {
-            UserName = $"@{ConstantsLib.TenantName}";
+            UserName = $"guest@{ConstantsLib.TenantName}";
             return;
         }
         else if(emailPrefix.Contains("@"))
@@ -90,7 +99,7 @@
         string emailPrefix = userRegistrationInput.EmailEntry;
         if(string.IsNullOrEmpty(emailPrefix))
         {
-            UserName = $"@{ConstantsLib.TenantName}";
+            UserName = $"guest@{ConstantsLib.TenantName}";
             return;
         }
         if(emailPrefix.Contains("@"))
@@ -99,10 +108,15 @@
         }
         UserName = emailPrefix + $"@{ConstantsLib.TenantName}";
     }
-    protected async Task SaveUser()
+    protected async Task ValidateForm()
     {
+        ValidationErrorMessage = "";
         if (!editContext.Validate()){
             ValidationErrorMessage = "The form is invalid";
+            return;
+        }
+        if(string.IsNullOrEmpty(userRegistrationInput.Name)){
+            ValidationErrorMessage = "Your Name is required.";
             return;
         }
         if(string.IsNullOrEmpty(userRegistrationInput.Password)){
@@ -134,6 +148,18 @@
         if(string.IsNullOrEmpty(userRegistrationInput.Email) || !ConstantsLib.IsValidEmail(userRegistrationInput.Email))
         {
             ValidationErrorMessage = "Email address is invalid";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage))
+        {
+            return;
+        }
+        await JSRuntime.InvokeVoidAsync("triggerClick", SubmitButton);
+    }
+    protected async Task SaveUser()
+    {
+        if (!editContext.Validate()){
+            ValidationErrorMessage = "The form is invalid";
+            return;
         }
         if(!string.IsNullOrEmpty(ValidationErrorMessage))
         {
