@@ -18,10 +18,13 @@
 <h4>
     You will need to login to advance the quest, unsubscribe, or change your email address.
 </h4>
-<h5>
-    Click <a href="userprofile/register">here</a> to get started.
-</h5>
-
+<AuthorizeView Roles="game.manage">
+    <NotAuthorized Context="Auth">
+        <h5>
+            Click <a href="userprofile/register">here</a> to get started.
+        </h5>
+    </NotAuthorized>
+</AuthorizeView>
 <AuthorizeView Roles="game.manage">
     <Authorized Context="Auth">
         @if(currentUser != null)
