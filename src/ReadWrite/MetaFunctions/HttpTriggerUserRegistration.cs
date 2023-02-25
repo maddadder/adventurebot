@@ -6,11 +6,11 @@ using Microsoft.OpenApi.Models;
 
 namespace AdventureBot.TriggerFunctions
 {
-    public partial class HttpTriggerUserRegistration
+    public partial class HttpTriggerEmailConfirmation
     {
         private static class Resource
         {
-            public const string Name = "UserRegistration";
+            public const string Name = "EmailConfirmation";
         }
 
         private static class Summary
@@ -28,7 +28,7 @@ namespace AdventureBot.TriggerFunctions
 
         private static class Name
         {
-            private const string prefix = nameof(UserRegistrationInput);
+            private const string prefix = nameof(EmailConfirmationInput);
             public const string Post = prefix + nameof(Post);
             public const string Get = prefix + nameof(Get);
         }

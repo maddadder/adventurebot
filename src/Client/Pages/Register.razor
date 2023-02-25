@@ -73,7 +73,7 @@
     protected string Title = "Register";
     protected UserRegistrationInputOverride userRegistrationInput = new();
     protected string ValidationErrorMessage = "";
-    private string UserName { get; set; } = $"guest@{ConstantsLib.TenantName}";
+    private string UserName { get; set; } = $"@{ConstantsLib.TenantName}";
     private string PasswordConfirm {get;set;}
     private bool HasSubmitted = false;
     protected override void OnInitialized()
@@ -85,7 +85,7 @@
         string emailPrefix = args.Value?.ToString();
         if(string.IsNullOrEmpty(emailPrefix))
         {
-            UserName = $"guest@{ConstantsLib.TenantName}";
+            UserName = $"@{ConstantsLib.TenantName}";
             return;
         }
         else if(emailPrefix.Contains("@"))
@@ -99,7 +99,7 @@
         string emailPrefix = userRegistrationInput.EmailEntry;
         if(string.IsNullOrEmpty(emailPrefix))
         {
-            UserName = $"guest@{ConstantsLib.TenantName}";
+            UserName = $"@{ConstantsLib.TenantName}";
             return;
         }
         if(emailPrefix.Contains("@"))

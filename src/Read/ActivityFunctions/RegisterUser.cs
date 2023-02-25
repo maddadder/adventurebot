@@ -30,42 +30,45 @@ namespace AdventureBot.ActivityFunctions
         {
             var graphapiClient = _graphClientService.GetAppGraphClient();
             var input = context.GetInput<UserRegistrationInput>();
-            var userPrefix = input.Email.Split("@")[0];
-            var azureAdUserName = $"{userPrefix}@{AzureAd.TennantName}";
-            
-            var queryOptions = new List<QueryOption>()
+            if(!string.IsNullOrEmpty(input.Email) && input.Email.Contains("@"))
             {
-                new QueryOption("$count", "true")
-            };
-
-            log.LogInformation("Attempting to search the graph api for user");
-            var users = await graphapiClient.Users
-                .Request( queryOptions )
-                .Header("ConsistencyLevel","eventual")
-                .Filter($"startswith(userPrincipalName,'{azureAdUserName}')")
-                .OrderBy("userPrincipalName")
-                .GetAsync();
-            
-            if(users.Count == 0)
-            {
-                log.LogInformation($"User account doesn't exist. Creating new user {azureAdUserName}");
-                var user = new User
+                var userPrefix = input.Email.Split("@")[0];
+                var azureAdUserName = $"{userPrefix}@{AzureAd.TennantName}";
+                
+                var queryOptions = new List<QueryOption>()
                 {
-                    AccountEnabled = true,
-                    DisplayName = input.Name,
-                    MailNickname = userPrefix,
-                    UserPrincipalName = azureAdUserName,
-                    PasswordProfile = new PasswordProfile
-                    {
-                        ForceChangePasswordNextSignIn = false,
-                        Password = input.Password
-                    }
+                    new QueryOption("$count", "true")
                 };
-                await graphapiClient.Users
-                    .Request()
-                    .AddAsync(user);
+
+                log.LogInformation("Attempting to search the graph api for user");
+                var users = await graphapiClient.Users
+                    .Request( queryOptions )
+                    .Header("ConsistencyLevel","eventual")
+                    .Filter($"startswith(userPrincipalName,'{azureAdUserName}')")
+                    .OrderBy("userPrincipalName")
+                    .GetAsync();
+                
+                if(users.Count == 0)
+                {
+                    log.LogInformation($"User account doesn't exist. Creating new user {azureAdUserName}");
+                    var user = new User
+                    {
+                        AccountEnabled = true,
+                        DisplayName = input.Name,
+                        MailNickname = userPrefix,
+                        UserPrincipalName = azureAdUserName,
+                        PasswordProfile = new PasswordProfile
+                        {
+                            ForceChangePasswordNextSignIn = false,
+                            Password = input.Password
+                        }
+                    };
+                    await graphapiClient.Users
+                        .Request()
+                        .AddAsync(user);
+                }
+                await _cosmosApiService.RegisterUser(input);
             }
-            await _cosmosApiService.RegisterUser(input);
         }
     }
 }

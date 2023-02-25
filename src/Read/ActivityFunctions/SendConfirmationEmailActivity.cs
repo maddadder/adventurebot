@@ -22,20 +22,23 @@ namespace AdventureBot.ActivityFunctions
         public async Task Run(          
             [ActivityTrigger] SendConfirmationEmailInput input, ILogger log)
         {
-            var userPrefix = input.Email.Split("@")[0];
-            var azureAdUserName = $"{userPrefix}@{AzureAd.TennantName}";
-            var htmlContent = new StringBuilder();
-            htmlContent
-                .AppendLine("<html>")
-                .AppendLine($"<head><meta name=\"viewport\" content=\"width=device-width\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>AdventureBot Email confirmation</title>")
-                .AppendLine("<body>")
-                .AppendLine($"<p>Hello {input.Name}</p>")
-                .AppendLine($"<p>To activate your account open this page: <a href=\"{input.RegistrationConfirmationURL}\">{input.RegistrationConfirmationURL}</a></p>")
-                .AppendLine($"<p>Remember that your username to login is {azureAdUserName}</p>")
-                .AppendLine("</body></html>");
+            if(!string.IsNullOrEmpty(input.Email) && input.Email.Contains("@"))
+            {
+                var userPrefix = input.Email.Split("@")[0];
+                var azureAdUserName = $"{userPrefix}@{AzureAd.TennantName}";
+                var htmlContent = new StringBuilder();
+                htmlContent
+                    .AppendLine("<html>")
+                    .AppendLine($"<head><meta name=\"viewport\" content=\"width=device-width\" /><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>AdventureBot Email confirmation</title>")
+                    .AppendLine("<body>")
+                    .AppendLine($"<p>Hello {input.Name}</p>")
+                    .AppendLine($"<p>To activate your account open this page: <a href=\"{input.RegistrationConfirmationURL}\">{input.RegistrationConfirmationURL}</a></p>")
+                    .AppendLine($"<p>Remember that your username to login is {azureAdUserName}</p>")
+                    .AppendLine("</body></html>");
 
-            await _awsSesApiService.SendEmail(input.Email, "AdventureBot Email Confirmation", htmlContent.ToString());
-            log.LogInformation($"Email sent to {input.Email} with confirmation URL {input.RegistrationConfirmationURL}");
+                await _awsSesApiService.SendEmail(input.Email, "AdventureBot Email Confirmation", htmlContent.ToString());
+                log.LogInformation($"Email sent to {input.Email} with confirmation URL {input.RegistrationConfirmationURL}");
+            }
         }
 
     }

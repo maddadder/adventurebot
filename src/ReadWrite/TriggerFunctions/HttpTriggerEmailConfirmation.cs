@@ -22,14 +22,14 @@ using Newtonsoft.Json;
 
 namespace AdventureBot.TriggerFunctions
 {
-    public partial class HttpTriggerUserRegistration
+    public partial class HttpTriggerEmailConfirmation
     {
-        private readonly ILogger<HttpTriggerUserRegistration> _logger;
+        private readonly ILogger<HttpTriggerEmailConfirmation> _logger;
         private readonly string BaseUrl;
 
-        public HttpTriggerUserRegistration(
+        public HttpTriggerEmailConfirmation(
             IOptions<ApplicationConfig> applicationConfig,
-            ILogger<HttpTriggerUserRegistration> log)
+            ILogger<HttpTriggerEmailConfirmation> log)
         {
             var applicationConfigValue = applicationConfig.Value;
             BaseUrl = applicationConfigValue.BaseUrl;
@@ -38,7 +38,7 @@ namespace AdventureBot.TriggerFunctions
         
         [FunctionName(Name.Post)]
         [OpenApiOperation($"{Resource.Name}-Post", tags: new[] { Resource.Name }, Summary = Summary.Post)]
-        [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(UserRegistrationInput), Required = true, Description = "The **UserRegistrationInput** parameter")]
+        [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(EmailConfirmationInput), Required = true, Description = "The **EmailConfirmationInput** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.Accepted, contentType: ResponseBody.Json, bodyType: typeof(CheckStatusResponse), Description = "A Check Status Response")]
         public async Task<HttpResponseMessage> Post
         (
@@ -47,10 +47,11 @@ namespace AdventureBot.TriggerFunctions
         {
             try
             {
-                var input = JsonConvert.DeserializeObject<UserRegistrationInput>(await req.Content.ReadAsStringAsync());
+                var input = JsonConvert.DeserializeObject<EmailConfirmationInput>(await req.Content.ReadAsStringAsync());
                 if (input == null ||
                     string.IsNullOrEmpty(input.Name) ||
-                    string.IsNullOrEmpty(input.Email)
+                    string.IsNullOrEmpty(input.Email) ||
+                    !input.Email.Contains("@")
                     )
                 {
                     return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { Content = new StringContent("Invalid request payload") };
@@ -61,7 +62,7 @@ namespace AdventureBot.TriggerFunctions
                 input.InstanceId = $"{input.Email}-{DateTime.UtcNow.Ticks}";
 
                 // Instance Id will be <email address>-<current ticks>
-                await starter.StartNewAsync(nameof(UserRegistrationOrchestration), input.InstanceId, input);
+                await starter.StartNewAsync(nameof(EmailConfirmationOrchestration), input.InstanceId, input);
 
                 _logger.LogInformation($"Started orchestration with ID = '{input.InstanceId}'.");
 
@@ -69,7 +70,7 @@ namespace AdventureBot.TriggerFunctions
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error starting registration process", ex);
+                _logger.LogError($"Error starting email confirmation process", ex);
                 return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError) { Content = new StringContent("Internal error") };
             }
         }
@@ -89,21 +90,21 @@ namespace AdventureBot.TriggerFunctions
             {
                 if (instanceStatus.CustomStatus != null)
                 {
-                    var status = instanceStatus.CustomStatus.ToObject<UserRegistrationOrchestatorStatus>();
+                    var status = instanceStatus.CustomStatus.ToObject<EmailConfirmationOrchestratorStatus>();
                     if (status.ExpireAt.HasValue &&
                         status.ExpireAt.Value < DateTime.UtcNow)
                     {
-                        return new OkObjectResult($"Registration confirmation expired {DateTime.UtcNow.Subtract(status.ExpireAt.Value).TotalSeconds} seconds ago");
+                        return new OkObjectResult($"Your email confirmation request expired {DateTime.UtcNow.Subtract(status.ExpireAt.Value).TotalSeconds} seconds ago");
                     }
                 }
 
                 await client.RaiseEventAsync(instanceId, "EmailConfirmationReceived", true);
 
-                return new OkObjectResult("Your user registration has been received");
+                return new OkObjectResult("Your email confirmation request has been received");
             }
             else
             {
-                return new OkObjectResult("Registration confirmation is not valid");
+                return new OkObjectResult("Your email confirmation request is no longer valid");
             }
         }
 

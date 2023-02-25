@@ -50,7 +50,9 @@ namespace AdventureBot.TriggerFunctions
                 var input = JsonConvert.DeserializeObject<UserRegistrationInput>(await req.Content.ReadAsStringAsync());
                 if (input == null ||
                     string.IsNullOrEmpty(input.Name) ||
-                    string.IsNullOrEmpty(input.Email)
+                    string.IsNullOrEmpty(input.Email) ||
+                    string.IsNullOrEmpty(input.Password) ||
+                    !input.Email.Contains("@")
                     )
                 {
                     return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { Content = new StringContent("Invalid request payload") };

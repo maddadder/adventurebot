@@ -12,15 +12,15 @@ using System.Threading;
 
 namespace AdventureBot.Orchestrators
 {
-    public class UserRegistrationOrchestration
+    public class EmailConfirmationOrchestration
     {
         
-        [FunctionName(nameof(UserRegistrationOrchestration))]
+        [FunctionName(nameof(EmailConfirmationOrchestration))]
         public async Task<bool> RunOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context,
             ILogger log)
         {
-            var input = context.GetInput<UserRegistrationInput>();
+            var input = context.GetInput<EmailConfirmationInput>();
 
             // 1. Send confirmation email
             var sendConfirmationEmailInput = new SendConfirmationEmailInput
@@ -36,7 +36,7 @@ namespace AdventureBot.Orchestrators
             using (var cts = new CancellationTokenSource())
             {
                 var expiredAt = context.CurrentUtcDateTime.Add(TimeSpan.FromDays(7));
-                var customStatus = new UserRegistrationOrchestatorStatus { Text = "Waiting for email confirmation", ExpireAt = expiredAt };
+                var customStatus = new EmailConfirmationOrchestratorStatus { Text = "Waiting for email confirmation", ExpireAt = expiredAt };
 
                 context.SetCustomStatus(customStatus);
 
@@ -53,12 +53,12 @@ namespace AdventureBot.Orchestrators
                 {
                     //then we are only verifying the user's email
                     await context.CallActivityAsync(nameof(SetUserEmailVerification), sendConfirmationEmailInput.Email);
-                    context.SetCustomStatus(new UserRegistrationOrchestatorStatus { Text = "Email activation succeeded" });                    
+                    context.SetCustomStatus(new EmailConfirmationOrchestratorStatus { Text = "Email activation succeeded" });                    
                     return true;
                 }
                 else
                 {
-                    context.SetCustomStatus(new UserRegistrationOrchestatorStatus { Text = "Email activation timed out" });
+                    context.SetCustomStatus(new EmailConfirmationOrchestratorStatus { Text = "Email activation timed out" });
                     return false;
                 }
             }                         
