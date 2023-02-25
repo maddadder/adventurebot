@@ -1,8 +1,8 @@
 ﻿@page "/userprofile/register"
 @using AdventureBotUI.Client.Services
-@using ReadWrite;
+@using Read;
 @inject NavigationManager NavigationManager
-@inject AdventureBotReadWriteService adventureBotReadWriteService
+@inject AdventureBotReadService adventureBotReadService
 
 <h1>@Title Register</h1>
 <hr />
@@ -70,8 +70,8 @@
         {
             return;
         }
-        CheckStatusResponse response = await adventureBotReadWriteService.UserRegistrationPostAsync(userRegistrationInput);
-        Cancel();
+        CheckStatusResponse response = await adventureBotReadService.UserRegistrationPostAsync(userRegistrationInput);
+        ValidationErrorMessage = "You account is pending. Check your email to verify your email address.";
     }
 
     public void Cancel()

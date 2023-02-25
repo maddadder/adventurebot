@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 
-namespace ReadWrite;
+namespace Read;
 public partial class UserRegistrationInputOverride : UserRegistrationInput
 {
 

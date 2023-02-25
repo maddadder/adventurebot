@@ -15,4 +15,8 @@ public class AdventureBotReadService
     {
         return await client.GameEntrySearchAsync("ge",name);
     }
+    public async Task<CheckStatusResponse> UserRegistrationPostAsync(UserRegistrationInput input)
+    {
+        return await client.UserRegistrationPostAsync(input);
+    }
 }

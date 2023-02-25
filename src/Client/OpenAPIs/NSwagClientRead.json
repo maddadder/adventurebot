@@ -85,9 +85,101 @@
           }
         }
       }
+    },
+    "/UserRegistration/post": {
+      "post": {
+        "tags": [
+          "UserRegistration"
+        ],
+        "summary": "Create one UserRegistration",
+        "operationId": "UserRegistration-Post",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The **UserRegistrationInput** parameter",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userRegistrationInput"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "A Check Status Response",
+            "schema": {
+              "$ref": "#/definitions/checkStatusResponse"
+            }
+          }
+        }
+      }
+    },
+    "/UserRegistration/get/{instanceId}": {
+      "get": {
+        "tags": [
+          "UserRegistration"
+        ],
+        "summary": "Retrieve one UserRegistration",
+        "operationId": "UserRegistration-Get",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "instanceId",
+            "description": "The **instanceId** parameter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "checkStatusResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "statusQueryGetUri": {
+          "type": "string"
+        },
+        "sendEventPostUri": {
+          "type": "string"
+        },
+        "terminatePostUri": {
+          "type": "string"
+        },
+        "purgeHistoryDeleteUri": {
+          "type": "string"
+        },
+        "restartPostUri": {
+          "type": "string"
+        },
+        "suspendPostUri": {
+          "type": "string"
+        },
+        "resumePostUri": {
+          "type": "string"
+        }
+      }
+    },
     "gameEntry": {
       "required": [
         "name",
@@ -150,6 +242,26 @@
         },
         "next": {
           "minLength": 1,
+          "type": "string"
+        }
+      }
+    },
+    "userRegistrationInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "baseUri": {
+          "type": "string"
+        },
+        "instanceId": {
           "type": "string"
         }
       }
