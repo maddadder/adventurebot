@@ -4,11 +4,24 @@
 @using Microsoft.AspNetCore.Authorization
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject AdventureBotReadWriteService adventureBotReadWriteService
-<PageTitle>Index</PageTitle>
+<PageTitle>Adventure Bot</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Adventure Bot</h1>
 
-Welcome to your new app.
+<h2>
+    A workflow application that posts a daily email message for interactive 
+    choose-your-own-adventure stories. 
+</h2>
+<h3>
+    Account registration is required in order for the bot to send you a message. 
+</h3>
+<h4>
+    You will need to login to advance the quest, unsubscribe, or change your email address.
+</h4>
+<h5>
+    Click <a href="userprofile/register">here</a> to get started.
+</h5>
+
 <AuthorizeView Roles="game.manage">
     <Authorized Context="Auth">
         @if(currentUser != null)
