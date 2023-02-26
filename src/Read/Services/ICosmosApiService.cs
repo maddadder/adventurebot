@@ -9,5 +9,6 @@ namespace AdventureBot.Services
     public interface ICosmosApiService
     {
         Task RegisterUser(UserRegistrationInput input);
+        Task<List<GameEntry>> GetGameStatesFromOption(string option);
     }
 }

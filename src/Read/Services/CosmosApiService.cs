@@ -22,6 +22,37 @@ namespace AdventureBot.Services
             this.cosmosClient = cosmosClient;
         }
 
+        public async Task<List<GameEntry>> GetGameStatesFromOption(string option)
+        {
+            var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
+            
+            // Build query definition
+            var parameterizedQuery = new QueryDefinition(
+                query: "SELECT * FROM gameEntry ge WHERE ge.__T = @partitionKey and ge.name = @GameEntryState"
+            )
+                .WithParameter("@partitionKey", "ge")
+                .WithParameter("@GameEntryState", option);
+
+            // Query multiple items from container
+            using FeedIterator<GameEntry> filteredFeed = container.GetItemQueryIterator<GameEntry>(
+                queryDefinition: parameterizedQuery
+            );
+
+            List<GameEntry> queryResults = new List<GameEntry>();
+            // Iterate query result pages
+            while (filteredFeed.HasMoreResults)
+            {
+                FeedResponse<GameEntry> response = await filteredFeed.ReadNextAsync();
+
+                // Iterate query results
+                foreach (GameEntry item in response)
+                {
+                    queryResults.Add(item);
+                }
+            }
+            return queryResults;
+        }
+
         public async Task RegisterUser(UserRegistrationInput input)
         {
             var container = cosmosClient.GetContainer(DbStrings.CosmosDBDatabaseName, DbStrings.CosmosDBContainerName);
