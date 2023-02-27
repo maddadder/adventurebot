@@ -18,9 +18,17 @@ public partial class UserProfileOverride : UserProfile
         }
         set
         {
-            if(!string.IsNullOrEmpty(value)){
-                var address = new MailAddress(value); 
-                this.Email = value;
+            if(!string.IsNullOrEmpty(value))
+            {
+                try
+                {
+                    var address = new MailAddress(value); 
+                    this.Email = value.Trim();
+                }
+                catch
+                {
+                    
+                }
             }
             else
             {
@@ -37,8 +45,21 @@ public partial class UserProfileOverride : UserProfile
         }
         set
         {
-            var address = new MailAddress(value); 
-            this.PreferredUsername = value;
+            if(!string.IsNullOrEmpty(value)){
+                try
+                {
+                    var address = new MailAddress(value); 
+                    this.PreferredUsername = value.Trim();
+                }
+                catch
+                {
+                    
+                }
+            }
+            else
+            {
+                this.PreferredUsername = value;
+            }
         }
     }
 }

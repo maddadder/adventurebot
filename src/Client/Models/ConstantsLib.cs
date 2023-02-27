@@ -3,6 +3,10 @@ public static class ConstantsLib
 {
     public static bool IsValidEmail(string email)
     {
+        if(string.IsNullOrEmpty(email))
+        {
+            return false;
+        }
         var trimmedEmail = email.Trim();
 
         if (trimmedEmail.EndsWith(".")) {
