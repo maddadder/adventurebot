@@ -40,35 +40,46 @@ namespace AdventureBot.Orchestrators
                 await context.CallActivityAsync(nameof(GameStateLoopActivity), sendReceiveGameStateInput);
             }
             // 2. Setup timer and wait for external event to be executed. Whatever comes first continues            
-            using (var cts = new CancellationTokenSource())
+            using (var ctsGameTimeout = new CancellationTokenSource())
             {
                 var expiredAt = context.CurrentUtcDateTime.Add(TimeSpan.FromDays(1));
-                var timeout = context.CreateTimer(expiredAt, cts.Token);
+                var gameTimeout = context.CreateTimer(expiredAt, ctsGameTimeout.Token);
 
                 var customStatus = new GameLoopOrchestatorStatus { Text = $"Waiting for user response, prior states: {string.Join(",",input.PriorState)}", ExpireAt = expiredAt };
                 context.SetCustomStatus(customStatus);
 
-                var confirmationButtonClicked = context.WaitForExternalEvent<string>("GameStateAdvanced");
+                var gameAdvanceButtonClicked = context.WaitForExternalEvent<string>("GameStateAdvanced");
                 
-                var winner = await Task.WhenAny(confirmationButtonClicked, timeout);
+                var winner = await Task.WhenAny(gameAdvanceButtonClicked, gameTimeout);
                 
-                if (winner == confirmationButtonClicked)
+                if (winner == gameAdvanceButtonClicked)
                 {
-                    // advance the game state
-                    input.InitialGameState = confirmationButtonClicked.Result;
-                    log.LogInformation(confirmationButtonClicked.Result);
-                    // restart the workflow with new input
-                    context.ContinueAsNew(input, false);
+                    input.InitialGameState = gameAdvanceButtonClicked.Result;
+                    using (var ctsGameDelayTimeout = new CancellationTokenSource())
+                    {
+                        var gameDelayExpiredAt = context.CurrentUtcDateTime.Add(input.GameDelay);
+                        var gameDelayTimeout = context.CreateTimer(gameDelayExpiredAt, ctsGameDelayTimeout.Token);
+                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<string>("GameStateAdvanced");
+                        while(await Task.WhenAny(gameAdvanceButtonClickedBeforeTimeout, gameDelayTimeout) != gameDelayTimeout)
+                        {
+                            input.InitialGameState = gameAdvanceButtonClickedBeforeTimeout.Result;
+                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<string>("GameStateAdvanced");
+                        }
+                        
+                        log.LogInformation($"New Game State: {input.InitialGameState}");
+                        // restart the workflow with new input
+                        context.ContinueAsNew(input, false);
+                    }
                 }
                 else
                 {
                     context.SetCustomStatus(new GameLoopOrchestatorStatus { Text = "Game timed out" });
                 }
                 
-                if (!timeout.IsCompleted)
+                if (!gameTimeout.IsCompleted)
                 {
                     // All pending timers must be complete or canceled before the function exits.
-                    cts.Cancel();
+                    ctsGameTimeout.Cancel();
                 }
                 return true;
             }

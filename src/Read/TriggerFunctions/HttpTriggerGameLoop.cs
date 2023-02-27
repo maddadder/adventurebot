@@ -52,7 +52,7 @@ namespace AdventureBot.TriggerFunctions
                     string.IsNullOrEmpty(input.Name) ||
                     string.IsNullOrEmpty(input.Email) ||
                     string.IsNullOrEmpty(input.InitialGameState) ||
-                    !input.Email.Contains("@")
+                    !ConstantsLib.IsValidEmail(input.Email)
                     )
                 {
                     return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { Content = new StringContent("Invalid request payload") };

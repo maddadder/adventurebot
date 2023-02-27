@@ -19,6 +19,9 @@ namespace AdventureBot.Models
         [JsonProperty("instanceId")]
         public string InstanceId { get; set; }
         
+        [JsonProperty("gameDelay")]
+        public TimeSpan GameDelay { get; set; }
+
         public Queue<string> PriorState { get; set; } = new Queue<string>();
     }
 }
