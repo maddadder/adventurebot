@@ -14,22 +14,7 @@ public partial class InitializeGameLoopInputOverride : InitializeGameLoopInput
         }
         set
         {
-            if(!string.IsNullOrEmpty(value))
-            {
-                try
-                {
-                    var address = new MailAddress(value); 
-                    this.Email = value.Trim();
-                }
-                catch
-                {
-
-                }
-            }
-            else
-            {
-                this.Email = value;
-            }
+            this.Email = ConstantsLib.SetEmail(value);
         }
     }
 }

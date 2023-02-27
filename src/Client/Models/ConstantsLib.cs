@@ -1,3 +1,5 @@
+using System.Net.Mail;
+
 namespace AdventureBotUI.Client.Services;
 public static class ConstantsLib
 {
@@ -12,13 +14,38 @@ public static class ConstantsLib
         if (trimmedEmail.EndsWith(".")) {
             return false; // suggested by @TK-421
         }
+        if(!trimmedEmail.Contains("@"))
+            return false;
+        var domain = trimmedEmail.Split("@")[1];
+        if(!domain.Contains("."))
+            return false;
         try {
-            var addr = new System.Net.Mail.MailAddress(email);
+            var addr = new MailAddress(email);
             return addr.Address == trimmedEmail;
         }
         catch {
             return false;
         }
+    }
+    public static string SetEmail(string value)
+    {
+        if(!IsValidEmail(value))
+        {
+            return "";
+        }
+        if(!string.IsNullOrEmpty(value))
+        {
+            try
+            {
+                var address = new MailAddress(value); 
+                value = address.Address;
+            }
+            catch
+            {
+
+            }
+        }
+        return value;
     }
     public const string TenantName = "leenet.link";
 }

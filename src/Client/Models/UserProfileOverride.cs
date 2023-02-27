@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
+using AdventureBotUI.Client.Services;
 using Newtonsoft.Json;
 
 namespace ReadWrite;
@@ -18,22 +19,7 @@ public partial class UserProfileOverride : UserProfile
         }
         set
         {
-            if(!string.IsNullOrEmpty(value))
-            {
-                try
-                {
-                    var address = new MailAddress(value); 
-                    this.Email = value.Trim();
-                }
-                catch
-                {
-                    
-                }
-            }
-            else
-            {
-                this.Email = value;
-            }
+            this.Email = ConstantsLib.SetEmail(value);
         }
     }
     [JsonProperty(Required = Required.Always)]
@@ -45,21 +31,7 @@ public partial class UserProfileOverride : UserProfile
         }
         set
         {
-            if(!string.IsNullOrEmpty(value)){
-                try
-                {
-                    var address = new MailAddress(value); 
-                    this.PreferredUsername = value.Trim();
-                }
-                catch
-                {
-                    
-                }
-            }
-            else
-            {
-                this.PreferredUsername = value;
-            }
+            this.PreferredUsername = ConstantsLib.SetEmail(value);
         }
     }
 }
