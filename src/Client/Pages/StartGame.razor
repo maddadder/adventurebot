@@ -17,6 +17,13 @@
         </div>
         <ValidationMessage For="@(() => initializeGameLoopInput.EmailEntry)" />
     </div>
+    <div class="mb-3">
+        <label for="Wait24HoursToFinalizeDecision" class="form-label">Delay game response for 24 hours</label>
+        <div class="col-md-4">
+            <InputCheckbox @bind-Value="Wait24HoursToFinalizeDecision" />
+        </div>
+        <ValidationMessage For="@(() => Wait24HoursToFinalizeDecision)" />
+    </div>
     <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
     <ValidationSummary />
     <div class="form-group">
@@ -28,6 +35,7 @@
     protected string Title = "Start Game";
     protected InitializeGameLoopInputOverride initializeGameLoopInput = new();
     protected string ValidationErrorMessage = "";
+    private bool Wait24HoursToFinalizeDecision = true;
     private bool HasSubmitted = false;
     protected override void OnInitialized()
     {
@@ -52,6 +60,14 @@
         }
         initializeGameLoopInput.Name = initializeGameLoopInput.Email;
         initializeGameLoopInput.InitialGameState = "begin";
+        if(Wait24HoursToFinalizeDecision)
+        {
+            initializeGameLoopInput.GameDelay = "1.00:00:00.000";
+        }
+        else
+        {
+            initializeGameLoopInput.GameDelay = "0.00:05:00.000";
+        }
         HasSubmitted = true;
         ValidationErrorMessage = "loading...";
         CheckStatusResponse response = await adventureBotReadService.GameLoopPostAsync(initializeGameLoopInput);

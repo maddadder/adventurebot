@@ -359,6 +359,17 @@
           "instanceId": {
             "type": "string",
             "nullable": true
+          },
+          "gameDelay": {
+            "type": "string",
+            "format": "timespan",
+            "nullable": true
+          },
+          "priorState": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
