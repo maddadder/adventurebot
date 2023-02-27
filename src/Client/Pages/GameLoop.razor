@@ -1,0 +1,39 @@
+﻿@page "/gameloop/{InstanceId}/{GameState}"
+@using AdventureBotUI.Client.Services
+@using Read
+@inject AdventureBotReadService adventureBotReadService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Adventure Bot</h1>
+@if (response == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">loading...</div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">@response</div>
+        </div>
+    </div>
+}
+@code 
+{
+
+    [Parameter]
+    public string InstanceId { get; set; }
+    [Parameter]
+    public string GameState { get; set; }
+    protected string response = null;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        response = await adventureBotReadService.GameLoopGetAsync(InstanceId, GameState);
+    }
+}

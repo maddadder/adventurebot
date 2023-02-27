@@ -8,21 +8,19 @@
 
 <h1>Adventure Bot</h1>
 
-<h2>
-    A workflow application that posts a daily email message for interactive 
-    choose-your-own-adventure stories. 
-</h2>
 <h3>
-    Account registration is required in order for the bot to send you a message. 
+    A workflow that sends you an email for interactive 
+    choose-your-own-adventure stories. 
 </h3>
 <h4>
-    You will need to login to advance the quest, unsubscribe, or change your email address.
+    Click <a href="startgame">here</a> to get started
 </h4>
+
 <AuthorizeView Roles="game.manage">
     <NotAuthorized Context="Auth">
-        <h5>
-            Click <a href="userprofile/register">here</a> to get started.
-        </h5>
+        <h6>
+            You can <a href="userprofile/register">register</a> for advanced features.
+        </h6>
     </NotAuthorized>
 </AuthorizeView>
 <AuthorizeView Roles="game.manage">

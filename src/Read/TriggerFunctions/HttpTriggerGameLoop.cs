@@ -51,6 +51,7 @@ namespace AdventureBot.TriggerFunctions
                 if (input == null ||
                     string.IsNullOrEmpty(input.Name) ||
                     string.IsNullOrEmpty(input.Email) ||
+                    string.IsNullOrEmpty(input.InitialGameState) ||
                     !input.Email.Contains("@")
                     )
                 {

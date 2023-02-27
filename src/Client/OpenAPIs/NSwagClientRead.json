@@ -100,6 +100,79 @@
         }
       }
     },
+    "/GameLoop/post": {
+      "post": {
+        "tags": [
+          "GameLoop"
+        ],
+        "summary": "Create one GameLoop",
+        "operationId": "GameLoop-Post",
+        "requestBody": {
+          "description": "The **InitializeGameLoopInput** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/initializeGameLoopInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "A Check Status Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/checkStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GameLoop/get/{instanceId}/{GameState}": {
+      "get": {
+        "tags": [
+          "GameLoop"
+        ],
+        "summary": "Retrieve one GameLoop",
+        "operationId": "GameLoop-Get",
+        "parameters": [
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The **instanceId** parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "GameState",
+            "in": "path",
+            "description": "The **GameState** parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/UserRegistration/post": {
       "post": {
         "tags": [
@@ -261,6 +334,31 @@
           "next": {
             "minLength": 1,
             "type": "string"
+          }
+        }
+      },
+      "initializeGameLoopInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "initialGameState": {
+            "type": "string",
+            "nullable": true
+          },
+          "baseUri": {
+            "type": "string",
+            "nullable": true
+          },
+          "instanceId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

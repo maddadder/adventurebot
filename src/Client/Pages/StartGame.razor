@@ -1,0 +1,60 @@
+﻿@page "/startgame"
+@using AdventureBotUI.Client.Services
+@using Read;
+@inject NavigationManager NavigationManager
+@inject AdventureBotReadService adventureBotReadService
+@inject IJSRuntime JSRuntime
+
+<h1>@Title</h1>
+<hr />
+
+<EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="EmailEntry" class="form-label">Your Email</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="initializeGameLoopInput.EmailEntry" placeholder="user@gmail.com" />
+        </div>
+        <ValidationMessage For="@(() => initializeGameLoopInput.EmailEntry)" />
+    </div>
+    <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
+    <ValidationSummary />
+    <div class="form-group">
+        <button type="submit" disabled="@HasSubmitted" class="btn btn-primary">Submit</button>
+    </div>
+</EditForm>
+@code {
+    private EditContext editContext;
+    protected string Title = "Start Game";
+    protected InitializeGameLoopInputOverride initializeGameLoopInput = new();
+    protected string ValidationErrorMessage = "";
+    private bool HasSubmitted = false;
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(initializeGameLoopInput);
+    }
+    
+    protected async Task SaveUser()
+    {
+        ValidationErrorMessage = "";
+        if (!editContext.Validate()){
+            ValidationErrorMessage = "The form is invalid";
+            return;
+        }
+        
+        if(string.IsNullOrEmpty(initializeGameLoopInput.Email) || !ConstantsLib.IsValidEmail(initializeGameLoopInput.Email))
+        {
+            ValidationErrorMessage = "Email address is invalid";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage))
+        {
+            return;
+        }
+        initializeGameLoopInput.Name = initializeGameLoopInput.Email;
+        initializeGameLoopInput.InitialGameState = "begin";
+        HasSubmitted = true;
+        ValidationErrorMessage = "loading...";
+        CheckStatusResponse response = await adventureBotReadService.GameLoopPostAsync(initializeGameLoopInput);
+        ValidationErrorMessage = "You game is active. Check your email to start playing.";
+    }
+}
