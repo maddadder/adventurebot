@@ -55,6 +55,6 @@
         HasSubmitted = true;
         ValidationErrorMessage = "loading...";
         CheckStatusResponse response = await adventureBotReadService.GameLoopPostAsync(initializeGameLoopInput);
-        ValidationErrorMessage = "You game is active. Check your email to start playing.";
+        ValidationErrorMessage = "You game is active. Please wait up to 20 minutes for your game to start.";
     }
 }

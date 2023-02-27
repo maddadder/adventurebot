@@ -21,25 +21,31 @@ namespace AdventureBot.Orchestrators
             ILogger log)
         {
             var input = context.GetInput<InitializeGameLoopInput>();
-
+            
             // 1. Send confirmation email
             var sendReceiveGameStateInput = new SendReceiveGameStateInput
             {
                 RegistrationConfirmationURL = $"{input.BaseUri}/gameloop/{input.InstanceId}",
                 Email = input.Email,
                 Name = input.Name,
-                GameState = input.InitialGameState
+                GameState = input.InitialGameState,
             };
-
-            await context.CallActivityAsync(nameof(GameStateLoopActivity), sendReceiveGameStateInput);
-
+            input.PriorState.Enqueue(input.InitialGameState);
+            if(input.PriorState.Count >= 3)
+            {
+                input.PriorState.Dequeue();
+            }
+            if(input.PriorState.Where(x => x == input.InitialGameState).Count() <= 1)
+            {
+                await context.CallActivityAsync(nameof(GameStateLoopActivity), sendReceiveGameStateInput);
+            }
             // 2. Setup timer and wait for external event to be executed. Whatever comes first continues            
             using (var cts = new CancellationTokenSource())
             {
                 var expiredAt = context.CurrentUtcDateTime.Add(TimeSpan.FromDays(1));
                 var timeout = context.CreateTimer(expiredAt, cts.Token);
 
-                var customStatus = new GameLoopOrchestatorStatus { Text = "Waiting for user response", ExpireAt = expiredAt };
+                var customStatus = new GameLoopOrchestatorStatus { Text = $"Waiting for user response, prior states: {string.Join(",",input.PriorState)}", ExpireAt = expiredAt };
                 context.SetCustomStatus(customStatus);
 
                 var confirmationButtonClicked = context.WaitForExternalEvent<string>("GameStateAdvanced");
@@ -48,10 +54,11 @@ namespace AdventureBot.Orchestrators
                 
                 if (winner == confirmationButtonClicked)
                 {
+                    // advance the game state
                     input.InitialGameState = confirmationButtonClicked.Result;
-                    log.LogInformation(input.InitialGameState);
-                    
-                    context.ContinueAsNew(input);
+                    log.LogInformation(confirmationButtonClicked.Result);
+                    // restart the workflow with new input
+                    context.ContinueAsNew(input, false);
                 }
                 else
                 {
