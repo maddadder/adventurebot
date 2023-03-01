@@ -10,13 +10,18 @@
 
 <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
     <DataAnnotationsValidator />
-    <div class="mb-3">
-        <label for="EmailEntry" class="form-label">Your Email</label>
-        <div class="col-md-4">
-            <InputText class="form-control" @bind-Value="initializeGameLoopInput.EmailEntry" placeholder="user@gmail.com" />
+    @foreach (var sub in initializeGameLoopInput.Subscriptions) 
+    {
+        <div class="mb-3">
+            <label for="sub.Value" class="form-label">Subscriber @(initializeGameLoopInput.Subscriptions.IndexOf(sub) + 1)</label>
+            <div class="col-md-4">
+                <InputText  class="form-control" @bind-Value="sub.Value" placeholder="user@domain.com" />
+            </div>
+            <ValidationMessage For="@(() => sub.Value)" />
         </div>
-        <ValidationMessage For="@(() => initializeGameLoopInput.EmailEntry)" />
-    </div>
+    }
+    <span @onclick="AddSubscription" style="text-decoration:underline;cursor:pointer">Add</span> | <span @onclick="DeleteSubscription" style="text-decoration:underline;cursor:pointer">Remove</span>
+    <div>&#160;</div>
     <div class="mb-3">
         <label for="Wait24HoursToFinalizeDecision" class="form-label">Delay game response for 24 hours</label>
         <div class="col-md-4">
@@ -40,6 +45,11 @@
     protected override void OnInitialized()
     {
         editContext = new EditContext(initializeGameLoopInput);
+        initializeGameLoopInput.Subscriptions = new List<GameLoopSubscription>(){
+                    new GameLoopSubscription{
+                        Value = ""
+                    }
+                };
     }
     
     protected async Task SaveUser()
@@ -49,16 +59,22 @@
             ValidationErrorMessage = "The form is invalid";
             return;
         }
-        
-        if(string.IsNullOrEmpty(initializeGameLoopInput.Email) || !ConstantsLib.IsValidEmail(initializeGameLoopInput.Email))
+        if(initializeGameLoopInput.Subscriptions == null || !initializeGameLoopInput.Subscriptions.Any())
         {
-            ValidationErrorMessage = "Email address is invalid";
+            ValidationErrorMessage = "Missing email address";
+        }
+        foreach(var sub in initializeGameLoopInput.Subscriptions)
+        {
+            if(string.IsNullOrEmpty(sub.Value) || !ConstantsLib.IsValidEmail(sub.Value))
+            {
+                ValidationErrorMessage = "Email address is invalid";
+            }
         }
         if(!string.IsNullOrEmpty(ValidationErrorMessage))
         {
             return;
         }
-        initializeGameLoopInput.Name = initializeGameLoopInput.Email;
+
         initializeGameLoopInput.InitialGameState = "begin";
         if(Wait24HoursToFinalizeDecision)
         {
@@ -70,7 +86,22 @@
         }
         HasSubmitted = true;
         ValidationErrorMessage = "loading...";
+        initializeGameLoopInput.Subscribers = initializeGameLoopInput.Subscriptions.Select(x => x.Value).ToList();
         CheckStatusResponse response = await adventureBotReadService.GameLoopPostAsync(initializeGameLoopInput);
         ValidationErrorMessage = "You game is active. Please wait up to 20 minutes for your game to start.";
+    }
+    private void AddSubscription()
+    {
+        initializeGameLoopInput.Subscriptions.Add(new GameLoopSubscription()
+        {
+            Value=""
+        });
+    }
+    private void DeleteSubscription()
+    {
+        if(initializeGameLoopInput.Subscriptions.Any())
+        {
+            initializeGameLoopInput.Subscriptions.RemoveAt(initializeGameLoopInput.Subscriptions.Count - 1);
+        }
     }
 }

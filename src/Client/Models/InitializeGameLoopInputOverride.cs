@@ -6,15 +6,10 @@ namespace Read;
 public partial class InitializeGameLoopInputOverride : InitializeGameLoopInput
 {
 
-    public string EmailEntry
-    { 
-        get
-        {
-            return this.Email;
-        }
-        set
-        {
-            this.Email = ConstantsLib.SetEmail(value);
-        }
-    }
+    public List<GameLoopSubscription> Subscriptions {get;set;} = new List<GameLoopSubscription>();
+}
+public class GameLoopSubscription
+{
+    [Required]
+    public string Value{get;set;}
 }

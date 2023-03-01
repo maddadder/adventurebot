@@ -132,7 +132,7 @@
         }
       }
     },
-    "/GameLoop/get/{instanceId}/{GameState}": {
+    "/GameLoop/get/{instanceId}/{Subscriber}/{GameState}": {
       "get": {
         "tags": [
           "GameLoop"
@@ -144,6 +144,15 @@
             "name": "instanceId",
             "in": "path",
             "description": "The **instanceId** parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Subscriber",
+            "in": "path",
+            "description": "The **Subscriber** parameter",
             "required": true,
             "schema": {
               "type": "string"
@@ -340,12 +349,11 @@
       "initializeGameLoopInput": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
+          "subscribers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           },
           "initialGameState": {
@@ -364,12 +372,6 @@
             "type": "string",
             "format": "timespan",
             "nullable": true
-          },
-          "priorState": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         }
       },

@@ -27,8 +27,8 @@ public class AdventureBotReadService
     {
         return await client.GameLoopPostAsync(input);
     }
-    public async Task<string> GameLoopGetAsync(string token, string gameState)
+    public async Task<string> GameLoopGetAsync(string token, string subscriber, string gameState)
     {
-        return await client.GameLoopGetAsync(token, gameState);
+        return await client.GameLoopGetAsync(token, subscriber, gameState);
     }
 }

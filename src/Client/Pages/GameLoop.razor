@@ -1,4 +1,4 @@
-﻿@page "/gameloop/{InstanceId}/{GameState}"
+﻿@page "/gameloop/{InstanceId}/{Subscriber}/{GameState}"
 @using AdventureBotUI.Client.Services
 @using Read
 @inject AdventureBotReadService adventureBotReadService
@@ -29,11 +29,13 @@ else
     [Parameter]
     public string InstanceId { get; set; }
     [Parameter]
+    public string Subscriber { get; set; }
+    [Parameter]
     public string GameState { get; set; }
     protected string response = null;
     
     protected override async Task OnParametersSetAsync()
     {
-        response = await adventureBotReadService.GameLoopGetAsync(InstanceId, GameState);
+        response = await adventureBotReadService.GameLoopGetAsync(InstanceId, Subscriber, GameState);
     }
 }
