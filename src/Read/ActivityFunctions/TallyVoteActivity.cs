@@ -9,7 +9,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
-using AdventureBot.Operations;
 
 namespace AdventureBot.ActivityFunctions
 {
@@ -25,30 +24,39 @@ namespace AdventureBot.ActivityFunctions
         public async Task<string> Run(          
             [ActivityTrigger] Dictionary<string, int> votes, ILogger log)
         {
-            List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-            foreach(var entry in votes){
-                list.Add(new Tuple<string, int>(entry.Key, entry.Value));
-            }
+            var list =  from entry in votes 
+                        orderby entry.Value descending 
+                        select entry;
             
             if(!list.Any())
             {
                 log.LogWarning("There are not votes to tally. This should not happen.");
                 return await Task.FromResult<string>(null);
             }
-            //VoteCompare uses a - b to compare
-            list.Sort(new VoteCompare());
 
             var winner = list.First();
 
-            var runnerUp = list.Skip(1).FirstOrDefault();
-            if (runnerUp != null && winner.Item2 == runnerUp.Item2)
+            var hasRunnerUp = list.Skip(1).Any();
+            
+            if (hasRunnerUp)
             {
-                log.LogInformation("The top two are tied, there is no consensus.");
-                return await Task.FromResult<string>(null);
+                var runnerUp = list.Skip(1).First();
+                if(winner.Value == runnerUp.Value)
+                {
+                    log.LogInformation("The top two are tied, there is no consensus.");
+                    return await Task.FromResult<string>(null);
+                }
+                else
+                {
+                    log.LogInformation($"found winner: {winner.Key}");
+                    return await Task.FromResult<string>(winner.Key);
+                }
             }
-            log.LogInformation($"found winner:{winner.Item1}");
-            return await Task.FromResult<string>(winner.Item1);
+            else
+            {
+                log.LogInformation($"found winner by default: {winner.Key}");
+                return await Task.FromResult<string>(winner.Key);
+            }
         }
-
     }
 }
