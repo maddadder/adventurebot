@@ -38,47 +38,7 @@ namespace AdventureBot.Services
             SmtpFromEmail = awsSesApiConfigValue.SmtpFromEmail;
             BaseUrl = applicationConfigValue.BaseUrl;
         }
-        public async Task<string> RenderUserProfileGameEntry(UserProfileGameEntry userProfileGameEntry){
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            if(userProfileGameEntry.userProfile == null)
-                return "";
-            if(userProfileGameEntry.gameEntry == null)
-            {
-                string UserName = $"{userProfileGameEntry.userProfile.FirstName} {userProfileGameEntry.userProfile.LastName}";
-                sb.Append($@"Dear {UserName},<br/><br/>");
-                sb.Append($@"This part of the game is still under construction or has no ending.<br/><br/>");
-                sb.Append($"<a href='{BaseUrl}/gameadvance/begin'>Start Over</a><br/><br/>");
-                sb.Append($@"<br/>
-<br/>
-You received the above message because you have 'Receive Game Advance Email' turned on. <br/>
-To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a>");
-                return sb.ToString();
-            }
-            else
-            {
-                string UserName = $"{userProfileGameEntry.userProfile.FirstName} {userProfileGameEntry.userProfile.LastName}";
-                sb.Append($@"Dear {UserName},<br/><br/>");
-                foreach(var desc in userProfileGameEntry.gameEntry.description){
-                    sb.Append($"{desc}<br/>");
-                }
-                sb.Append($"<br/>Options:<br/><br/>");
-                if(!userProfileGameEntry.gameEntry.options.Any())
-                {
-                    sb.Append($"<a href='{BaseUrl}/gameadvance/begin'>Start Over</a><br/><br/>");
-                }
-                else
-                {
-                    foreach(var option in userProfileGameEntry.gameEntry.options){
-                        sb.Append($"<a href='{BaseUrl}/gameadvance/{option.next}'>{option.description}</a><br/><br/>");
-                    }
-                }
-                sb.Append($@"<br/>
-<br/>
-You received the above message because you have 'Receive Game Advance Email' turned on. <br/>
-To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a>");
-                return sb.ToString();
-            }
-        }
+        
         public async Task<string> RenderGameStateGameEntry(SendReceiveGameStateInput gameState, GameEntry gameEntry){
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             if(gameState == null || string.IsNullOrEmpty(gameState.Email))
@@ -107,8 +67,12 @@ To unsubscribe from these messages do not respond for 24 hours and the game will
                 string UserName = $"{gameState.Name}";
                 sb.Append($@"Dear {UserName},<br/><br/>");
                 sb.Append($@"The adventurers in your party are: {string.Join(", ",adventurers)}<br/><br/>");
-                foreach(var desc in gameEntry.description){
-                    sb.Append($"{desc}<br/>");
+                foreach(var desc in gameEntry.description)
+                {
+                    var paragraphs = desc.Split("\n");
+                    foreach(var paragraph in paragraphs){
+                        sb.Append($"{paragraph}<br/><br/>");
+                    }
                 }
                 sb.Append($"<br/>Options:<br/><br/>");
                 if(!gameEntry.options.Any())

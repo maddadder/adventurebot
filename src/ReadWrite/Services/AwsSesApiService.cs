@@ -59,7 +59,10 @@ To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a
                 string UserName = $"{userProfileGameEntry.userProfile.FirstName} {userProfileGameEntry.userProfile.LastName}";
                 sb.Append($@"Dear {UserName},<br/><br/>");
                 foreach(var desc in userProfileGameEntry.gameEntry.description){
-                    sb.Append($"{desc}<br/>");
+                    var paragraphs = desc.Split("\n");
+                    foreach(var paragraph in paragraphs){
+                        sb.Append($"{paragraph}<br/><br/>");
+                    }
                 }
                 sb.Append($"<br/>Options:<br/><br/>");
                 if(!userProfileGameEntry.gameEntry.options.Any())

@@ -8,7 +8,6 @@ namespace AdventureBot.Services
 {
     public interface IAwsSesApiService
     {
-        Task<string> RenderUserProfileGameEntry(UserProfileGameEntry userProfileGameEntry);
         Task<string> RenderGameStateGameEntry(SendReceiveGameStateInput gameState, GameEntry entry);
         Task SendEmail(string ToEmailAddress, string Subject, string Body);
     }
