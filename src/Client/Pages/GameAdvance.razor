@@ -18,7 +18,9 @@
 {
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-12">loading...</div>
+            <div class="col-xs-12 col-md-12">
+                <button class="btn btn-primary" disabled="@HasSubmitted" @onclick="SaveState">Save State</button>
+            </div>
         </div>
     </div>
 }
@@ -32,8 +34,8 @@ else
 }
 </Authorized>
     <NotAuthorized>
-        <div>Click save to continue</div>
-        <button class="btn btn-primary" @onclick="StartLogin">Save</button>
+        <div>Click Login to continue</div>
+        <button class="btn btn-primary" @onclick="StartLogin">Login</button>
     </NotAuthorized>
 </AuthorizeView>
 @code 
@@ -43,7 +45,7 @@ else
     public string Name { get; set; }
     private string PageName {get; set; }
     protected List<GameEntry> gameEntries = null;
-    
+    private bool HasSubmitted = false;
     private void StartLogin()
     {
         InteractiveRequestOptions requestOptions = new()
@@ -57,10 +59,15 @@ else
     }
     protected override async Task OnParametersSetAsync()
     {
+        
+    }
+    private async Task SaveState()
+    {
         if(string.IsNullOrEmpty(Name))
         {
             return;
         }
+        HasSubmitted = true;
         var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
         if(authState.User.Identity?.IsAuthenticated == true)
         {

@@ -11,7 +11,9 @@
 {
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-12">loading...</div>
+            <div class="col-xs-12 col-md-12">
+                <button class="btn btn-primary" disabled="@HasSubmitted" @onclick="SaveState">Save State</button>
+            </div>
         </div>
     </div>
 }
@@ -33,9 +35,14 @@ else
     [Parameter]
     public string GameState { get; set; }
     protected string response = null;
-    
+    private bool HasSubmitted = false;
     protected override async Task OnParametersSetAsync()
     {
+        
+    }
+    private async Task SaveState()
+    {
+        HasSubmitted = true;
         response = await adventureBotReadService.GameLoopGetAsync(InstanceId, Subscriber, GameState);
     }
 }
