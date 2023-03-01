@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Threading;
+using AdventureBot.EntityTriggers;
 
 namespace AdventureBot.Orchestrators
 {
@@ -21,22 +22,21 @@ namespace AdventureBot.Orchestrators
             ILogger log)
         {
             var input = context.GetInput<InitializeGameLoopInput>();
-            
-            // 1. Send confirmation email
-            var sendReceiveGameStateInput = new SendReceiveGameStateInput
+            if(input.Subscribers == null || !input.Subscribers.Any())
             {
-                RegistrationConfirmationURL = $"{input.BaseUri}/gameloop/{input.InstanceId}",
-                Email = input.Email,
-                Name = input.Name,
-                GameState = input.InitialGameState,
-            };
-            input.PriorState.Enqueue(input.InitialGameState);
-            if(input.PriorState.Count >= 3)
-            {
-                input.PriorState.Dequeue();
+                return false;
             }
-            if(input.PriorState.Where(x => x == input.InitialGameState).Count() <= 1)
+            // 1. Send confirmation email
+            foreach(var subscriber in input.Subscribers)
             {
+                var sendReceiveGameStateInput = new SendReceiveGameStateInput
+                {
+                    RegistrationConfirmationURL = $"{input.BaseUri}/gameloop/{input.InstanceId}",
+                    Email = subscriber,
+                    Name = subscriber,
+                    GameState = input.InitialGameState,
+                };
+                
                 await context.CallActivityAsync(nameof(GameStateLoopActivity), sendReceiveGameStateInput);
             }
             // 2. Setup timer and wait for external event to be executed. Whatever comes first continues            
@@ -45,27 +45,43 @@ namespace AdventureBot.Orchestrators
                 var expiredAt = context.CurrentUtcDateTime.Add(TimeSpan.FromDays(1));
                 var gameTimeout = context.CreateTimer(expiredAt, ctsGameTimeout.Token);
 
-                var customStatus = new GameLoopOrchestatorStatus { Text = $"Waiting for user response, prior states: {string.Join(",",input.PriorState)}", ExpireAt = expiredAt };
+                var customStatus = new GameLoopOrchestatorStatus { Text = $"Waiting for user response", ExpireAt = expiredAt };
                 context.SetCustomStatus(customStatus);
 
-                var gameAdvanceButtonClicked = context.WaitForExternalEvent<string>("GameStateAdvanced");
+                var gameAdvanceButtonClicked = context.WaitForExternalEvent<GameLoopInput>("GameStateAdvanced");
                 
                 var winner = await Task.WhenAny(gameAdvanceButtonClicked, gameTimeout);
                 
                 if (winner == gameAdvanceButtonClicked)
                 {
-                    input.InitialGameState = gameAdvanceButtonClicked.Result;
+                    var gameLoopInput = gameAdvanceButtonClicked.Result;
                     using (var ctsGameDelayTimeout = new CancellationTokenSource())
                     {
+                        var entityId = new EntityId(EntityTriggerVotingCounter.Name.Vote, $"{EntityTriggerVotingCounter.Name.Vote},{input.InstanceId}");
+                        if(input.Subscribers.Contains(gameLoopInput.Subscriber))
+                        {
+                            context.SignalEntity(entityId, "add", gameLoopInput);
+                        }
                         var gameDelayExpiredAt = context.CurrentUtcDateTime.Add(input.GameDelay);
                         var gameDelayTimeout = context.CreateTimer(gameDelayExpiredAt, ctsGameDelayTimeout.Token);
-                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<string>("GameStateAdvanced");
+                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>("GameStateAdvanced");
                         while(await Task.WhenAny(gameAdvanceButtonClickedBeforeTimeout, gameDelayTimeout) != gameDelayTimeout)
                         {
-                            input.InitialGameState = gameAdvanceButtonClickedBeforeTimeout.Result;
-                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<string>("GameStateAdvanced");
+                            gameLoopInput = gameAdvanceButtonClickedBeforeTimeout.Result;
+                            if(input.Subscribers.Contains(gameLoopInput.Subscriber))
+                            {
+                                context.SignalEntity(entityId, "add", gameLoopInput);
+                            }
+                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>("GameStateAdvanced");
                         }
-                        
+                        VotingCounter votingCounter = await context.CallEntityAsync<VotingCounter>(entityId, "get");
+                        Dictionary<string, int> votes = votingCounter.Get();
+                        var newGameState = await context.CallActivityAsync<string>(nameof(TallyVoteActivity), votes);
+                        if(!string.IsNullOrEmpty(newGameState)) // a null newGameState is a tie 
+                        {
+                            input.InitialGameState = newGameState;
+                        }
+                        context.SignalEntity(entityId, "delete");
                         log.LogInformation($"New Game State: {input.InitialGameState}");
                         // restart the workflow with new input
                         context.ContinueAsNew(input, false);

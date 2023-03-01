@@ -4,11 +4,9 @@ namespace AdventureBot.Models
 {
     public class InitializeGameLoopInput
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
 
-        [JsonProperty("email")]
-        public string Email { get; set; }
+        [JsonProperty("subscribers")]
+        public List<string> Subscribers { get; set; } = new List<string>();
 
         [JsonProperty("initialGameState")]
         public string InitialGameState { get; set; }
@@ -22,6 +20,5 @@ namespace AdventureBot.Models
         [JsonProperty("gameDelay")]
         public TimeSpan GameDelay { get; set; }
 
-        public Queue<string> PriorState { get; set; } = new Queue<string>();
     }
 }

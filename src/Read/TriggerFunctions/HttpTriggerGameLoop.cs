@@ -49,18 +49,21 @@ namespace AdventureBot.TriggerFunctions
             {
                 var input = JsonConvert.DeserializeObject<InitializeGameLoopInput>(await req.Content.ReadAsStringAsync());
                 if (input == null ||
-                    string.IsNullOrEmpty(input.Name) ||
-                    string.IsNullOrEmpty(input.Email) ||
-                    string.IsNullOrEmpty(input.InitialGameState) ||
-                    !ConstantsLib.IsValidEmail(input.Email)
+                    input.Subscribers == null ||
+                    string.IsNullOrEmpty(input.InitialGameState)
                     )
                 {
                     return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { Content = new StringContent("Invalid request payload") };
                 }
-
+                foreach(var subscriber in input.Subscribers){
+                    if(!ConstantsLib.IsValidEmail(subscriber))
+                    {
+                        return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { Content = new StringContent("Invalid request payload") };
+                    }
+                }
                 
                 input.BaseUri = BaseUrl;
-                input.InstanceId = $"{input.Email}-{DateTime.UtcNow.Ticks}";
+                input.InstanceId = $"{Guid.NewGuid()}";
 
                 // Instance Id will be <email address>-<current ticks>
                 await starter.StartNewAsync(nameof(GameLoopOrchestration), input.InstanceId, input);
@@ -80,12 +83,14 @@ namespace AdventureBot.TriggerFunctions
         [FunctionName(Name.Get)]
         [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
         [OpenApiParameter(name: Parameter.instanceId, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **instanceId** parameter")]
+        [OpenApiParameter(name: Parameter.Subscriber, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **Subscriber** parameter")]
         [OpenApiParameter(name: Parameter.GameState, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameState** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Text, bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Get(
             [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
             [DurableClient] IDurableClient client, 
             string instanceId,
+            string Subscriber,
             string GameState)
         {
             var instanceStatus = await client.GetStatusAsync(instanceId);
@@ -101,7 +106,7 @@ namespace AdventureBot.TriggerFunctions
                     }
                 }
 
-                await client.RaiseEventAsync(instanceId, "GameStateAdvanced", GameState);
+                await client.RaiseEventAsync(instanceId, "GameStateAdvanced", new GameLoopInput(Subscriber,GameState));
 
                 return new OkObjectResult("A new game state has been received");
             }

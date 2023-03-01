@@ -60,7 +60,7 @@ namespace AdventureBot.TriggerFunctions
 
                 
                 input.BaseUri = BaseUrl;
-                input.InstanceId = $"{input.Email}-{DateTime.UtcNow.Ticks}";
+                input.InstanceId = $"{Guid.NewGuid()}";
 
                 // Instance Id will be <email address>-<current ticks>
                 await starter.StartNewAsync(nameof(UserRegistrationOrchestration), input.InstanceId, input);
