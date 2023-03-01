@@ -83,11 +83,17 @@ To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             if(gameState == null || string.IsNullOrEmpty(gameState.Email))
                 return "";
+            foreach(var sub in gameState.Subscribers){
+                if(!ConstantsLib.IsValidEmail(sub)){
+                    return "";
+                }
+            }
+            var adventurers = gameState.Subscribers.Select(x => x.Split("@")[0]).ToList();
             if(gameEntry == null)
             {
                 string UserName = $"{gameState.Name}";
                 sb.Append($@"Dear {UserName},<br/><br/>");
-                sb.Append($@"The adventurers in your party are: {string.Join(",",gameState.Subscribers)}<br/><br/>");
+                sb.Append($@"The adventurers in your party are: {string.Join(", ",adventurers)}<br/><br/>");
                 sb.Append($@"This part of the game is still under construction or has no ending.<br/><br/>");
                 sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/{gameState.Email}/begin/'>Start Over</a><br/><br/>");
                 sb.Append($@"<br/>
@@ -100,7 +106,7 @@ To unsubscribe from these messages do not respond for 24 hours and the game will
             {
                 string UserName = $"{gameState.Name}";
                 sb.Append($@"Dear {UserName},<br/><br/>");
-                sb.Append($@"The adventurers in your party are: {string.Join(",",gameState.Subscribers)}<br/><br/>");
+                sb.Append($@"The adventurers in your party are: {string.Join(", ",adventurers)}<br/><br/>");
                 foreach(var desc in gameEntry.description){
                     sb.Append($"{desc}<br/>");
                 }
