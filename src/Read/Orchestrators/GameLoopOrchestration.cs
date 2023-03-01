@@ -35,6 +35,7 @@ namespace AdventureBot.Orchestrators
                     Email = subscriber,
                     Name = subscriber,
                     GameState = input.InitialGameState,
+                    Subscribers = input.Subscribers
                 };
                 
                 await context.CallActivityAsync(nameof(GameStateLoopActivity), sendReceiveGameStateInput);

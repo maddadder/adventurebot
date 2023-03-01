@@ -87,6 +87,7 @@ To unsubscribe from these messages click <a href='{BaseUrl}/unsubscribe'>here</a
             {
                 string UserName = $"{gameState.Name}";
                 sb.Append($@"Dear {UserName},<br/><br/>");
+                sb.Append($@"The adventurers in your party are: {string.Join(",",gameState.Subscribers)}<br/><br/>");
                 sb.Append($@"This part of the game is still under construction or has no ending.<br/><br/>");
                 sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/{gameState.Email}/begin/'>Start Over</a><br/><br/>");
                 sb.Append($@"<br/>
@@ -99,6 +100,7 @@ To unsubscribe from these messages do not respond for 24 hours and the game will
             {
                 string UserName = $"{gameState.Name}";
                 sb.Append($@"Dear {UserName},<br/><br/>");
+                sb.Append($@"The adventurers in your party are: {string.Join(",",gameState.Subscribers)}<br/><br/>");
                 foreach(var desc in gameEntry.description){
                     sb.Append($"{desc}<br/>");
                 }

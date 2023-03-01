@@ -26,7 +26,7 @@ namespace AdventureBot.ActivityFunctions
         public async Task Run(          
             [ActivityTrigger] SendReceiveGameStateInput input, ILogger log)
         {
-            if(!string.IsNullOrEmpty(input.Email) && input.Email.Contains("@") && !string.IsNullOrEmpty(input.GameState))
+            if(ConstantsLib.IsValidEmail(input.Email) && !string.IsNullOrEmpty(input.GameState))
             {
                 var gameEntry = await _cosmosApiService.GetGameStatesFromOption(input.GameState);
                 string emailMessage = await _awsSesApiService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
