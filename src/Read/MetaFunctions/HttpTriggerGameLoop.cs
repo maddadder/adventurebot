@@ -17,35 +17,33 @@ namespace AdventureBot.TriggerFunctions
         {
             private const string resource = Resource.Name;
             public const string Post = $"Create one {resource}";
-            public const string Get = $"Retrieve one {resource}";
+            public const string Put = $"Put one {resource}";
         }
         private static class Parameter
         {
             public const ParameterLocation In = ParameterLocation.Path;
             public const bool IsRequired = true;
             public const string instanceId = nameof(instanceId);
-            public const string GameState = nameof(GameState);
-            public const string Subscriber = nameof(Subscriber);
         }
 
         private static class Name
         {
             private const string prefix = nameof(InitializeGameLoopInput);
             public const string Post = prefix + nameof(Post);
-            public const string Get = prefix + nameof(Get);
+            public const string Put = prefix + nameof(Put);
         }
 
         private static class Route
         {
             private const string prefix = Resource.Name;
             public const string Post = prefix + "/post/";
-            public const string Get = prefix + "/get/{" + Parameter.instanceId + ":required}/{" + Parameter.Subscriber + ":required}/{" + Parameter.GameState + ":required}";
+            public const string Put = prefix + "/put/{" + Parameter.instanceId + ":required}";
 
         }
 
         private static class Method
         {
-            public const string Get = nameof(HttpMethod.Get);
+            public const string Put = nameof(HttpMethod.Put);
             public const string Post = nameof(HttpMethod.Post);
         }
         private static class ResponseBody

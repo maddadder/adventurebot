@@ -80,19 +80,26 @@ namespace AdventureBot.TriggerFunctions
         }
         
 
-        [FunctionName(Name.Get)]
-        [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
+        [FunctionName(Name.Put)]
+        [OpenApiOperation($"{Resource.Name}-Put", tags: new[] { Resource.Name }, Summary = Summary.Put)]
         [OpenApiParameter(name: Parameter.instanceId, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **instanceId** parameter")]
-        [OpenApiParameter(name: Parameter.Subscriber, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **Subscriber** parameter")]
-        [OpenApiParameter(name: Parameter.GameState, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **GameState** parameter")]
+        [OpenApiRequestBody(contentType: ResponseBody.Json, bodyType: typeof(GameLoopInput), Required = true, Description = "The **GameLoopInput** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Text, bodyType: typeof(string), Description = "The OK response")]
-        public async Task<IActionResult> Get(
-            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
+        public async Task<IActionResult> Put(
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Put, Route = Route.Put)] HttpRequest req,
             [DurableClient] IDurableClient client, 
-            string instanceId,
-            string Subscriber,
-            string GameState)
+            string instanceId)
         {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            GameLoopInput input = JsonConvert.DeserializeObject<GameLoopInput>(requestBody);
+            if (input == null ||
+                string.IsNullOrEmpty(input.Subscriber) ||
+                string.IsNullOrEmpty(input.GameState) ||
+                !ConstantsLib.IsValidEmail(input.Subscriber)
+                )
+            {
+                return new BadRequestObjectResult("Invalid request payload");
+            }
             var instanceStatus = await client.GetStatusAsync(instanceId);
             if (instanceStatus?.RuntimeStatus == OrchestrationRuntimeStatus.Running)
             {
@@ -106,7 +113,7 @@ namespace AdventureBot.TriggerFunctions
                     }
                 }
 
-                await client.RaiseEventAsync(instanceId, "GameStateAdvanced", new GameLoopInput(Subscriber,GameState));
+                await client.RaiseEventAsync(instanceId, "GameStateAdvanced", input);
 
                 return new OkObjectResult("A new game state has been received");
             }
