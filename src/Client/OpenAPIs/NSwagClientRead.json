@@ -132,13 +132,13 @@
         }
       }
     },
-    "/GameLoop/get/{instanceId}/{Subscriber}/{GameState}": {
-      "get": {
+    "/GameLoop/put/{instanceId}": {
+      "put": {
         "tags": [
           "GameLoop"
         ],
-        "summary": "Retrieve one GameLoop",
-        "operationId": "GameLoop-Get",
+        "summary": "Put one GameLoop",
+        "operationId": "GameLoop-Put",
         "parameters": [
           {
             "name": "instanceId",
@@ -148,26 +148,19 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "Subscriber",
-            "in": "path",
-            "description": "The **Subscriber** parameter",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "GameState",
-            "in": "path",
-            "description": "The **GameState** parameter",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "description": "The **GameLoopInput** parameter",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/gameLoopInput"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "The OK response",
@@ -324,6 +317,19 @@
             "nullable": true
           },
           "modifiedBy": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "gameLoopInput": {
+        "type": "object",
+        "properties": {
+          "subscriber": {
+            "type": "string",
+            "nullable": true
+          },
+          "gameState": {
             "type": "string",
             "nullable": true
           }
