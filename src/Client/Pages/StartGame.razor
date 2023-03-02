@@ -7,34 +7,36 @@
 
 <h1>@Title</h1>
 <hr />
-
-<EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
-    <DataAnnotationsValidator />
-    @foreach (var sub in initializeGameLoopInput.Subscriptions) 
-    {
-        <div class="mb-3">
-            <label for="sub.Value" class="form-label">Subscriber @(initializeGameLoopInput.Subscriptions.IndexOf(sub) + 1)</label>
-            <div class="col-md-4">
-                <InputText  class="form-control" @bind-Value="sub.Value" placeholder="user@domain.com" />
+@if(!HasSubmitted)
+{
+    <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+        <DataAnnotationsValidator />
+        @foreach (var sub in initializeGameLoopInput.Subscriptions) 
+        {
+            <div class="mb-3">
+                <label for="sub.Value" class="form-label">Party Member @(initializeGameLoopInput.Subscriptions.IndexOf(sub) + 1)</label>
+                <div class="col-md-4">
+                    <InputText  class="form-control" @bind-Value="sub.Value" placeholder="user@domain.com" />
+                </div>
+                <ValidationMessage For="@(() => sub.Value)" />
             </div>
-            <ValidationMessage For="@(() => sub.Value)" />
+        }
+        <span @onclick="AddSubscription" style="text-decoration:underline;cursor:pointer">Add</span> | <span @onclick="DeleteSubscription" style="text-decoration:underline;cursor:pointer">Remove</span>
+        <div>&#160;</div>
+        <div class="mb-3">
+            <label for="Wait24HoursToFinalizeDecision" class="form-label">Delay game response for 24 hours</label>
+            <div class="col-md-4">
+                <InputCheckbox @bind-Value="Wait24HoursToFinalizeDecision" />
+            </div>
+            <ValidationMessage For="@(() => Wait24HoursToFinalizeDecision)" />
         </div>
-    }
-    <span @onclick="AddSubscription" style="text-decoration:underline;cursor:pointer">Add</span> | <span @onclick="DeleteSubscription" style="text-decoration:underline;cursor:pointer">Remove</span>
-    <div>&#160;</div>
-    <div class="mb-3">
-        <label for="Wait24HoursToFinalizeDecision" class="form-label">Delay game response for 24 hours</label>
-        <div class="col-md-4">
-            <InputCheckbox @bind-Value="Wait24HoursToFinalizeDecision" />
+        <ValidationSummary />
+        <div class="form-group">
+            <button type="submit" disabled="@HasSubmitted" class="btn btn-primary">Submit</button>
         </div>
-        <ValidationMessage For="@(() => Wait24HoursToFinalizeDecision)" />
-    </div>
-    <div class="mb-3" style="color:red">@ValidationErrorMessage</div>
-    <ValidationSummary />
-    <div class="form-group">
-        <button type="submit" disabled="@HasSubmitted" class="btn btn-primary">Submit</button>
-    </div>
-</EditForm>
+    </EditForm>
+}
+<div class="mb-3" style="color:red">@ValidationErrorMessage</div>
 @code {
     private EditContext editContext;
     protected string Title = "Start Game";
@@ -88,7 +90,7 @@
         ValidationErrorMessage = "loading...";
         initializeGameLoopInput.Subscribers = initializeGameLoopInput.Subscriptions.Select(x => x.Value).ToList();
         CheckStatusResponse response = await adventureBotReadService.GameLoopPostAsync(initializeGameLoopInput);
-        ValidationErrorMessage = "You game is active. Please wait up to 20 minutes for your game to start.";
+        ValidationErrorMessage = "Your game is active. Please wait up to 20 minutes for your game to start.";
     }
     private void AddSubscription()
     {
