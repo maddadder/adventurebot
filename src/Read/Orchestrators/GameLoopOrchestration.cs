@@ -31,7 +31,8 @@ namespace AdventureBot.Orchestrators
             {
                 var sendReceiveGameStateInput = new SendReceiveGameStateInput
                 {
-                    RegistrationConfirmationURL = $"{input.BaseUri}/gameloop/{input.InstanceId}",
+                    RegistrationConfirmationURL = $"{input.BaseUri}",
+                    InstanceId = input.InstanceId,
                     Email = subscriber,
                     Name = subscriber,
                     GameState = input.InitialGameState,

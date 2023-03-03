@@ -175,6 +175,38 @@
         }
       }
     },
+    "/GameLoop/get/{instanceId}": {
+      "get": {
+        "tags": [
+          "GameLoop"
+        ],
+        "summary": "Get one GameLoop",
+        "operationId": "GameLoop-Get",
+        "parameters": [
+          {
+            "name": "instanceId",
+            "in": "path",
+            "description": "The **instanceId** parameter",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The OK response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/votingCounter"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/UserRegistration/post": {
       "post": {
         "tags": [
@@ -402,6 +434,26 @@
           },
           "instanceId": {
             "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "votingCounter": {
+        "type": "object",
+        "properties": {
+          "voteCount": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "voterList": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
             "nullable": true
           }
         }

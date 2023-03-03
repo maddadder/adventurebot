@@ -16,6 +16,9 @@ namespace AdventureBot.Models
         [JsonProperty("gameState")]
         public string GameState { get; set; }
 
+        [JsonProperty("instanceId")]
+        public string InstanceId { get; set; }
+
         [JsonProperty("confirmationURL")]
         public string RegistrationConfirmationURL { get; set; }
     }

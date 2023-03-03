@@ -1,0 +1,60 @@
+﻿@page "/gameloopstatus/{InstanceId}"
+@using AdventureBotUI.Client.Services
+@using Read
+@inject AdventureBotReadService adventureBotReadService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Adventure Bot</h1>
+@if (votingCounter == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <button class="btn btn-primary" disabled="@HasSubmitted" @onclick="GetStatus">Get Status</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <th>Member</th>
+                        <th>Vote</th>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in votingCounter.VoterList)
+                        {
+                        <tr>
+                            <td>@item.Key</td>
+                            <td>@item.Value</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@code 
+{
+
+    [Parameter]
+    public string InstanceId { get; set; }
+    protected VotingCounter votingCounter = null;
+    private bool HasSubmitted = false;
+    protected override async Task OnParametersSetAsync()
+    {
+        
+    }
+    private async Task GetStatus()
+    {
+        HasSubmitted = true;
+        votingCounter = await adventureBotReadService.GameLoopGetAsync(InstanceId);
+    }
+}

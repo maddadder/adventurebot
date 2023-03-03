@@ -31,4 +31,8 @@ public class AdventureBotReadService
     {
         return await client.GameLoopPutAsync(token,input);
     }
+    public async Task<VotingCounter> GameLoopGetAsync(string token)
+    {
+        return await client.GameLoopGetAsync(token);
+    }
 }
