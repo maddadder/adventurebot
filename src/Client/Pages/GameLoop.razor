@@ -64,6 +64,51 @@ else
                         }
                     </tbody>
                 </table>
+
+                @if (gameEntries == null)
+                {
+                    <div>loading...</div>
+                }
+                else
+                {
+                    <div>&#160;</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>@votingCounter.PriorVote</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var gameEntry in gameEntries.OrderBy(x => x.Created))
+                            {
+                            <tr>
+                                <td>
+                                    <ul style="margin:0px;padding:0px;">
+                                    @foreach (var desc in gameEntry.Description)
+                                    {
+                                        <li>@desc</li>
+                                    }
+                                    </ul>
+                                    <br/>
+                                    <b>Option(s):</b>
+                                    <ul>
+                                    @if(gameEntry.Options != null)
+                                    {
+                                        @foreach (var gameOption in gameEntry.Options)
+                                        {
+                                            <li>@gameOption.Description</li>
+                                        }
+                                        if(!gameEntry.Options.Any()){
+                                            <li>Game over. Start over.</li>
+                                        }
+                                    }
+                                    </ul>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
     </div>
@@ -80,6 +125,7 @@ else
     protected string response = null;
     private bool SaveStateClicked = false;
     protected VotingCounter votingCounter = null;
+    protected List<GameEntry> gameEntries = null;
     private bool VoteCountClicked = false;
     protected override async Task OnParametersSetAsync()
     {
@@ -97,5 +143,6 @@ else
     {
         VoteCountClicked = true;
         votingCounter = await adventureBotReadService.GameLoopGetAsync(InstanceId);
+        gameEntries = (await adventureBotReadService.GameEntrySearchAsync(votingCounter.PriorVote)).ToList();
     }
 }

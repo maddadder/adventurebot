@@ -441,6 +441,10 @@
       "votingCounter": {
         "type": "object",
         "properties": {
+          "priorVote": {
+            "type": "string",
+            "nullable": true
+          },
           "voteCount": {
             "type": "object",
             "additionalProperties": {
