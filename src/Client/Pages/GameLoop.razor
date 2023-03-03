@@ -12,7 +12,14 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-12">
-                <button class="btn btn-primary" disabled="@HasSubmitted" @onclick="SaveState">Save State</button>
+                <div class="mb-3">
+                    <label for="Body" class="form-label">Your choice:</label>
+                    <div class="col-md-4">
+                        <input disabled="true" class="form-control" value="@GameState" placeholder="game state" />
+                    </div>
+                </div>
+                <div>Click Save State to continue</div>
+                <button class="btn btn-primary" disabled="@SaveStateClicked" @onclick="SaveState">Save State</button>
             </div>
         </div>
     </div>
@@ -22,6 +29,42 @@ else
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-12">@response</div>
+        </div>
+    </div>
+}
+<div>&#160;</div>
+@if (votingCounter == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div>Click Get Status to view the current votes</div>
+                <button class="btn btn-primary" disabled="@VoteCountClicked" @onclick="GetStatus">Get Status</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <th>Member</th>
+                        <th>Vote</th>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in votingCounter.VoterList)
+                        {
+                            <tr>
+                                <td>@item.Key</td>
+                                <td>@item.Value</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 }
@@ -35,17 +78,24 @@ else
     [Parameter]
     public string GameState { get; set; }
     protected string response = null;
-    private bool HasSubmitted = false;
+    private bool SaveStateClicked = false;
+    protected VotingCounter votingCounter = null;
+    private bool VoteCountClicked = false;
     protected override async Task OnParametersSetAsync()
     {
         
     }
     private async Task SaveState()
     {
-        HasSubmitted = true;
+        SaveStateClicked = true;
         GameLoopInput input = new GameLoopInput();
         input.Subscriber = Subscriber;
         input.GameState = GameState;
         response = await adventureBotReadService.GameLoopPutAsync(InstanceId, input);
+    }
+    private async Task GetStatus()
+    {
+        VoteCountClicked = true;
+        votingCounter = await adventureBotReadService.GameLoopGetAsync(InstanceId);
     }
 }
