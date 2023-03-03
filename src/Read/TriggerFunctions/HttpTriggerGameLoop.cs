@@ -113,7 +113,7 @@ namespace AdventureBot.TriggerFunctions
                     }
                 }
 
-                await client.RaiseEventAsync(instanceId, "GameStateAdvanced", input);
+                await client.RaiseEventAsync(instanceId, EventNames.GameStateAdvanced, input);
 
                 return new OkObjectResult("A new game state has been received");
             }
@@ -123,7 +123,31 @@ namespace AdventureBot.TriggerFunctions
             }
         }
 
-        
+        [FunctionName(Name.Get)]
+        [OpenApiOperation($"{Resource.Name}-Get", tags: new[] { Resource.Name }, Summary = Summary.Get)]
+        [OpenApiParameter(name: Parameter.instanceId, In = Parameter.In, Required = true, Type = typeof(string), Description = "The **instanceId** parameter")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: ResponseBody.Json, bodyType: typeof(VotingCounter), Description = "The OK response")]
+        public async Task<IActionResult> Get(
+            [HttpTrigger(AuthorizationLevel.Anonymous, Method.Get, Route = Route.Get)] HttpRequest req,
+            [DurableClient] IDurableClient client, 
+            string instanceId)
+        {
+            var input = instanceId;
+            var GetOrchestatorStatusInstanceId = Guid.NewGuid().ToString();
+            await client.StartNewAsync(nameof(GetGameLoopOrchestrationStatus), GetOrchestatorStatusInstanceId, input);
+            await client.WaitForCompletionOrCreateCheckStatusResponseAsync(req, GetOrchestatorStatusInstanceId, System.TimeSpan.FromMinutes(10));
+            var data = await client.GetStatusAsync(GetOrchestatorStatusInstanceId);
+ 
+            // timeout
+            if(data.RuntimeStatus != OrchestrationRuntimeStatus.Completed)
+            {
+                await client.TerminateAsync(GetOrchestatorStatusInstanceId, "Timeout something took too long");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+            var output = data.Output.ToObject<VotingCounter>();
+ 
+            return new OkObjectResult(output);
+        }
     }
 }
 

@@ -15,7 +15,7 @@ namespace AdventureBot.Orchestrators
 {
     public class GameLoopOrchestration
     {
-        
+
         [FunctionName(nameof(GameLoopOrchestration))]
         public async Task<bool> RunOrchestrator(
             [OrchestrationTrigger] IDurableOrchestrationContext context,
@@ -49,7 +49,7 @@ namespace AdventureBot.Orchestrators
                 var customStatus = new GameLoopOrchestatorStatus { Text = $"Waiting for user response", ExpireAt = expiredAt };
                 context.SetCustomStatus(customStatus);
 
-                var gameAdvanceButtonClicked = context.WaitForExternalEvent<GameLoopInput>("GameStateAdvanced");
+                var gameAdvanceButtonClicked = context.WaitForExternalEvent<GameLoopInput>(EventNames.GameStateAdvanced);
                 
                 var winner = await Task.WhenAny(gameAdvanceButtonClicked, gameTimeout);
                 
@@ -65,7 +65,7 @@ namespace AdventureBot.Orchestrators
                         }
                         var gameDelayExpiredAt = context.CurrentUtcDateTime.Add(input.GameDelay);
                         var gameDelayTimeout = context.CreateTimer(gameDelayExpiredAt, ctsGameDelayTimeout.Token);
-                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>("GameStateAdvanced");
+                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>(EventNames.GameStateAdvanced);
                         while(await Task.WhenAny(gameAdvanceButtonClickedBeforeTimeout, gameDelayTimeout) != gameDelayTimeout)
                         {
                             gameLoopInput = gameAdvanceButtonClickedBeforeTimeout.Result;
@@ -73,7 +73,7 @@ namespace AdventureBot.Orchestrators
                             {
                                 context.SignalEntity(entityId, "add", gameLoopInput);
                             }
-                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>("GameStateAdvanced");
+                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>(EventNames.GameStateAdvanced);
                         }
                         VotingCounter votingCounter = await context.CallEntityAsync<VotingCounter>(entityId, "get");
                         Dictionary<string, int> votes = votingCounter.Get();

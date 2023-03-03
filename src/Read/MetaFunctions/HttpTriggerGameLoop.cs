@@ -18,6 +18,7 @@ namespace AdventureBot.TriggerFunctions
             private const string resource = Resource.Name;
             public const string Post = $"Create one {resource}";
             public const string Put = $"Put one {resource}";
+            public const string Get = $"Get one {resource}";
         }
         private static class Parameter
         {
@@ -31,6 +32,7 @@ namespace AdventureBot.TriggerFunctions
             private const string prefix = nameof(InitializeGameLoopInput);
             public const string Post = prefix + nameof(Post);
             public const string Put = prefix + nameof(Put);
+            public const string Get = prefix + nameof(Get);
         }
 
         private static class Route
@@ -38,6 +40,7 @@ namespace AdventureBot.TriggerFunctions
             private const string prefix = Resource.Name;
             public const string Post = prefix + "/post/";
             public const string Put = prefix + "/put/{" + Parameter.instanceId + ":required}";
+            public const string Get = prefix + "/get/{" + Parameter.instanceId + ":required}";
 
         }
 
@@ -45,6 +48,7 @@ namespace AdventureBot.TriggerFunctions
         {
             public const string Put = nameof(HttpMethod.Put);
             public const string Post = nameof(HttpMethod.Post);
+            public const string Get = nameof(HttpMethod.Get);
         }
         private static class ResponseBody
         {

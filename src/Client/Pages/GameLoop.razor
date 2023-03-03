@@ -43,6 +43,9 @@ else
     private async Task SaveState()
     {
         HasSubmitted = true;
-        response = await adventureBotReadService.GameLoopGetAsync(InstanceId, Subscriber, GameState);
+        GameLoopInput input = new GameLoopInput();
+        input.Subscriber = Subscriber;
+        input.GameState = GameState;
+        response = await adventureBotReadService.GameLoopPutAsync(InstanceId, input);
     }
 }
