@@ -17,13 +17,6 @@
 </h4>
 
 <AuthorizeView Roles="game.manage">
-    <NotAuthorized Context="Auth">
-        <h6>
-            You can <a href="userprofile/register">register</a> for advanced features.
-        </h6>
-    </NotAuthorized>
-</AuthorizeView>
-<AuthorizeView Roles="game.manage">
     <Authorized Context="Auth">
         @if(currentUser != null)
         {

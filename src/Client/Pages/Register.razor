@@ -1,6 +1,8 @@
 ﻿@page "/userprofile/register"
 @using AdventureBotUI.Client.Services
 @using Read;
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inject NavigationManager NavigationManager
 @inject AdventureBotReadService adventureBotReadService
 @inject IJSRuntime JSRuntime
@@ -15,11 +17,8 @@
     replying to one of the emails generated in the game, and indicate that
     you need your password reset. 
 </h6>
-<AuthorizeView>
+<AuthorizeView Roles="game.manage">
     <Authorized Context="Auth">
-        You are already registered
-    </Authorized>
-    <NotAuthorized Context="UnAuth">
         <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
             <DataAnnotationsValidator />
             <div class="mb-3">
@@ -65,7 +64,7 @@
                 <button style="display:none" @ref="SubmitButton" type="submit"></button>
             </div>
         </EditForm>
-    </NotAuthorized>
+    </Authorized>
 </AuthorizeView>
 @code {
     private ElementReference SubmitButton;
@@ -169,5 +168,4 @@
         CheckStatusResponse response = await adventureBotReadService.UserRegistrationPostAsync(userRegistrationInput);
         ValidationErrorMessage = "You account is pending. Check your email to verify your email address.";
     }
-
 }

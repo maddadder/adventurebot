@@ -1,6 +1,8 @@
 ﻿@page "/gameview/{Name?}"
 @using AdventureBotUI.Client.Services
 @using Read
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @inject AdventureBotReadService adventureBotReadService
 
 <PageTitle>Adventure Bot</PageTitle>
