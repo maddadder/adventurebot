@@ -13,15 +13,20 @@ public partial class EntityTriggerVotingCounter
         var vote = ctx.GetState<VotingCounter>() ?? new VotingCounter();
         switch (ctx.OperationName.ToLowerInvariant())
         {
-            case "add":
-                var candidateToAdd = ctx.GetInput<GameLoopInput>();
-                vote.Add(candidateToAdd);
+            case VotingCounterOperationNames.SetPriorVote:
+                var priorVote = ctx.GetInput<string>();
+                vote.SetPriorVote(priorVote);
                 ctx.SetState(vote);
                 break;
-            case "get":
+            case VotingCounterOperationNames.Vote:
+                var candidateToAdd = ctx.GetInput<GameLoopInput>();
+                vote.Vote(candidateToAdd);
+                ctx.SetState(vote);
+                break;
+            case VotingCounterOperationNames.Get:
                 ctx.Return(vote);
                 break;
-            case "delete":
+            case VotingCounterOperationNames.Delete:
                 ctx.DeleteState();
                 break;
         }

@@ -17,4 +17,11 @@ namespace AdventureBot.Models
     {
         public const string GameStateAdvanced = nameof(GameStateAdvanced);
     }
+    public static class VotingCounterOperationNames
+    {
+        public const string SetPriorVote = nameof(SetPriorVote);
+        public const string Vote = nameof(Vote);
+        public const string Get = nameof(Get);
+        public const string Delete = nameof(Delete);
+    }
 }

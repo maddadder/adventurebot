@@ -41,7 +41,11 @@ namespace AdventureBot.Orchestrators
                 
                 await context.CallActivityAsync(nameof(GameStateLoopActivity), sendReceiveGameStateInput);
             }
-            // 2. Setup timer and wait for external event to be executed. Whatever comes first continues            
+            // 2. Initialize an entity and set the prior vote
+            var entityId = new EntityId(EntityTriggerVotingCounter.Name.Vote, $"{EntityTriggerVotingCounter.Name.Vote},{input.InstanceId}");
+            context.SignalEntity(entityId, VotingCounterOperationNames.SetPriorVote, input.InitialGameState);
+
+            // 3. Setup timer for 1 day and wait for external event to be executed. Whatever comes first is the winner (timer vs input)
             using (var ctsGameTimeout = new CancellationTokenSource())
             {
                 var expiredAt = context.CurrentUtcDateTime.Add(TimeSpan.FromDays(1));
@@ -52,18 +56,22 @@ namespace AdventureBot.Orchestrators
 
                 var gameAdvanceButtonClicked = context.WaitForExternalEvent<GameLoopInput>(EventNames.GameStateAdvanced);
                 
+                // Whatever comes first is the winner (timer vs input)
                 var winner = await Task.WhenAny(gameAdvanceButtonClicked, gameTimeout);
                 
                 if (winner == gameAdvanceButtonClicked)
                 {
                     var gameLoopInput = gameAdvanceButtonClicked.Result;
+                    // 3. Setup another timer based on the input.GameDelay. Wait until the timeout expires
                     using (var ctsGameDelayTimeout = new CancellationTokenSource())
                     {
-                        var entityId = new EntityId(EntityTriggerVotingCounter.Name.Vote, $"{EntityTriggerVotingCounter.Name.Vote},{input.InstanceId}");
                         if(input.Subscribers.Contains(gameLoopInput.Subscriber))
                         {
-                            context.SignalEntity(entityId, "add", gameLoopInput);
+                            // 4. Add the vote to the Tally
+                            context.SignalEntity(entityId, VotingCounterOperationNames.Vote, gameLoopInput);
                         }
+                        // 5. Initialize the WaitForExternalEvent and then loop on the await.
+                        //    Only break out when the timeout expires
                         var gameDelayExpiredAt = context.CurrentUtcDateTime.Add(input.GameDelay);
                         var gameDelayTimeout = context.CreateTimer(gameDelayExpiredAt, ctsGameDelayTimeout.Token);
                         var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>(EventNames.GameStateAdvanced);
@@ -72,20 +80,23 @@ namespace AdventureBot.Orchestrators
                             gameLoopInput = gameAdvanceButtonClickedBeforeTimeout.Result;
                             if(input.Subscribers.Contains(gameLoopInput.Subscriber))
                             {
-                                context.SignalEntity(entityId, "add", gameLoopInput);
+                                context.SignalEntity(entityId, VotingCounterOperationNames.Vote, gameLoopInput);
                             }
                             gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<GameLoopInput>(EventNames.GameStateAdvanced);
                         }
-                        VotingCounter votingCounter = await context.CallEntityAsync<VotingCounter>(entityId, "get");
-                        Dictionary<string, int> votes = votingCounter.Get();
+                        // 6. Get the current state of the votingCounter
+                        VotingCounter votingCounter = await context.CallEntityAsync<VotingCounter>(entityId, VotingCounterOperationNames.Get);
+                        Dictionary<string, int> votes = votingCounter.VoteCount;
+                        // 7. Tally up the votes, and get the new game state
                         var newGameState = await context.CallActivityAsync<string>(nameof(TallyVoteActivity), votes);
                         if(!string.IsNullOrEmpty(newGameState)) // a null newGameState is a tie 
                         {
                             input.InitialGameState = newGameState;
                         }
-                        context.SignalEntity(entityId, "delete");
+                        // 8. Delete the entity because we are done with it
+                        context.SignalEntity(entityId, VotingCounterOperationNames.Delete);
                         log.LogInformation($"New Game State: {input.InitialGameState}");
-                        // restart the workflow with new input
+                        // 9. restart the workflow with new input
                         context.ContinueAsNew(input, false);
                     }
                 }

@@ -2,11 +2,12 @@ namespace AdventureBot.Models;
 
 public interface IVotingCounter
 {
+    string PriorVote { get; set; }
     Dictionary<string, int> VoteCount { get; set; }
 
     Dictionary<string, string> VoterList { get; set; }
 
-    void Add(GameLoopInput voter_candidate);
+    void SetPriorVote(string priorVote);
 
-    Dictionary<string, int> Get();
+    void Vote(GameLoopInput voter_candidate);
 }

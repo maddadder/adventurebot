@@ -5,13 +5,20 @@ namespace AdventureBot.Models;
 [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
 public class VotingCounter : IVotingCounter
 {
+    [JsonProperty("priorVote")]
+    public string PriorVote { get; set; }
+
     [JsonProperty("voteCount")]
     public Dictionary<string, int> VoteCount { get; set; } = new();
 
     [JsonProperty("voterList")]
     public Dictionary<string, string> VoterList { get; set; } = new();
 
-    public void Add(GameLoopInput voter_candidate)
+    public void SetPriorVote(string priorVote)
+    {
+        PriorVote = priorVote;
+    }
+    public void Vote(GameLoopInput voter_candidate)
     {
         string voter = voter_candidate.Subscriber;
         string candidate = voter_candidate.GameState;
@@ -31,6 +38,4 @@ public class VotingCounter : IVotingCounter
             VoteCount[candidate]++;
         }
     }
-
-    public Dictionary<string, int> Get() => this.VoteCount;
 }
