@@ -93,9 +93,7 @@ namespace AdventureBot.TriggerFunctions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             GameLoopInput input = JsonConvert.DeserializeObject<GameLoopInput>(requestBody);
             if (input == null ||
-                string.IsNullOrEmpty(input.Subscriber) ||
-                string.IsNullOrEmpty(input.GameState) ||
-                !ConstantsLib.IsValidEmail(input.Subscriber)
+                string.IsNullOrEmpty(input.GameState)
                 )
             {
                 return new BadRequestObjectResult("Invalid request payload");

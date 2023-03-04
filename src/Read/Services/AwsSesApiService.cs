@@ -55,7 +55,7 @@ namespace AdventureBot.Services
                 sb.Append($@"Dear {UserName},<br/><br/>");
                 sb.Append($@"The adventurers in your party are: {string.Join(", ",adventurers)}<br/><br/>");
                 sb.Append($@"This part of the game is still under construction or has no ending.<br/><br/>");
-                sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/gameloop/{gameState.InstanceId}/{gameState.Email}/begin/'>Start Over</a><br/><br/>");
+                sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/gameloop/{gameState.InstanceId}/{gameState.SubscriberId}/begin/'>Start Over</a><br/><br/>");
                 sb.Append($@"<br/>
 <br/>
 You received the above message because you responded to the game within 24 hours. <br/>
@@ -77,12 +77,12 @@ To unsubscribe from these messages do not respond for 24 hours and the game will
                 sb.Append($"<br/>Options:<br/><br/>");
                 if(!gameEntry.options.Any())
                 {
-                    sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/gameloop/{gameState.InstanceId}/{gameState.Email}/begin/'>Start Over</a><br/><br/>");
+                    sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/gameloop/{gameState.InstanceId}/{gameState.SubscriberId}/begin/'>Start Over</a><br/><br/>");
                 }
                 else
                 {
                     foreach(var option in gameEntry.options){
-                        sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/gameloop/{gameState.InstanceId}/{gameState.Email}/{option.next}/'>{option.description}</a><br/><br/>");
+                        sb.Append($"<a href='{gameState.RegistrationConfirmationURL}/gameloop/{gameState.InstanceId}/{gameState.SubscriberId}/{option.next}/'>{option.description}</a><br/><br/>");
                     }
                 }
                 sb.Append($@"<br/>

@@ -20,7 +20,7 @@ public class VotingCounter : IVotingCounter
     }
     public void Vote(GameLoopInput voter_candidate)
     {
-        string voter = voter_candidate.Subscriber;
+        string voter = voter_candidate.SubscriberEmail;
         string candidate = voter_candidate.GameState;
         if (!VoteCount.ContainsKey(candidate)) {
             VoteCount[candidate] = 0;

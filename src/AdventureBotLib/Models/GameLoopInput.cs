@@ -4,12 +4,18 @@ namespace AdventureBot.Models
 {
     public class GameLoopInput
     {
-        public GameLoopInput(string subscriber, string gameState){
-            this.Subscriber = subscriber;
+        public GameLoopInput(Guid subscriberId, string subscriberEmail, string gameState)
+        {
+            this.SubscriberId = subscriberId;
+            this.SubscriberEmail = subscriberEmail;
             this.GameState = gameState;
         }
-        [JsonProperty("subscriber")]
-        public string Subscriber { get; set; }
+        
+        [JsonProperty("subscriberId")]
+        public Guid SubscriberId { get; set; }
+
+        [JsonProperty("subscriberEmail")]
+        public string SubscriberEmail { get; set; }
 
         [JsonProperty("gameState")]
         public string GameState { get; set; }

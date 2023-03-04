@@ -8,7 +8,8 @@
 <PageTitle>Adventure Bot</PageTitle>
 
 <h1>Adventure Bot</h1>
-
+<AuthorizeView Roles="game.manage">
+    <Authorized Context="Auth">
 @if (gameEntries == null)
 {
     <div class="container">
@@ -62,7 +63,11 @@ else
         </div>
     </div>
 }
-
+</Authorized>
+    <NotAuthorized>
+        You are not authorized to view this page
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     [Parameter]
     public string Name { get; set; }
