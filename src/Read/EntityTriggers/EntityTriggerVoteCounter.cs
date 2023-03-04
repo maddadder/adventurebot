@@ -11,7 +11,7 @@ public partial class EntityTriggerVotingCounter
     public void Vote([EntityTrigger] IDurableEntityContext ctx)
     {
         var vote = ctx.GetState<VotingCounter>() ?? new VotingCounter();
-        switch (ctx.OperationName.ToLowerInvariant())
+        switch (ctx.OperationName)
         {
             case VotingCounterOperationNames.SetPriorVote:
                 var priorVote = ctx.GetInput<string>();

@@ -32,7 +32,7 @@ namespace AdventureBot.ActivityFunctions
                 string emailMessage = await _awsSesApiService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
                 if(!string.IsNullOrEmpty(emailMessage)){
                     await _awsSesApiService.SendEmail(input.Email, $"AdventureBot - {input.GameState}", emailMessage);
-                    log.LogInformation($"Email sent to {input.Email} with game state URL {input.RegistrationConfirmationURL}/ with instanceid: {input.InstanceId}/");
+                    log.LogInformation($"Email sent to {input.Email} with game state URL {input.RegistrationConfirmationURL}/ with instanceid: {input.InstanceId}");
                 }
                 else
                 {
