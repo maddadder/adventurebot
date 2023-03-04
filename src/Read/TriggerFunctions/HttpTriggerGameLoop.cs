@@ -93,8 +93,14 @@ namespace AdventureBot.TriggerFunctions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             GameLoopInput input = JsonConvert.DeserializeObject<GameLoopInput>(requestBody);
             if (input == null ||
-                string.IsNullOrEmpty(input.GameState)
+                string.IsNullOrEmpty(input.GameState) ||
+                string.IsNullOrEmpty(input.SubscriberId)
                 )
+            {
+                return new BadRequestObjectResult("Invalid request payload");
+            }
+            Guid temp = Guid.Empty;
+            if(!Guid.TryParse(input.SubscriberId, out temp))
             {
                 return new BadRequestObjectResult("Invalid request payload");
             }

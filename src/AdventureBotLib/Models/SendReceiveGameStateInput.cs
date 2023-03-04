@@ -11,7 +11,7 @@ namespace AdventureBot.Models
         public string Email { get; set; }
 
         [JsonProperty("subscriberId")]
-        public Guid SubscriberId { get; set; }
+        public string SubscriberId { get; set; }
         
         [JsonProperty("subscribers")]
         public List<string> Subscribers { get; set; } = new List<string>();

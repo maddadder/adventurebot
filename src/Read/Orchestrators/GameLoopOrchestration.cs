@@ -35,7 +35,7 @@ namespace AdventureBot.Orchestrators
                     RegistrationConfirmationURL = $"{input.BaseUri}",
                     InstanceId = input.InstanceId,
                     Email = subscriber,
-                    SubscriberId = context.NewGuid(),
+                    SubscriberId = context.NewGuid().ToString(),
                     Name = subscriber,
                     GameState = input.InitialGameState,
                     Subscribers = input.Subscribers

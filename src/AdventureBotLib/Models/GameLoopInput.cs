@@ -4,7 +4,7 @@ namespace AdventureBot.Models
 {
     public class GameLoopInput
     {
-        public GameLoopInput(Guid subscriberId, string subscriberEmail, string gameState)
+        public GameLoopInput(string subscriberId, string subscriberEmail, string gameState)
         {
             this.SubscriberId = subscriberId;
             this.SubscriberEmail = subscriberEmail;
@@ -12,7 +12,7 @@ namespace AdventureBot.Models
         }
         
         [JsonProperty("subscriberId")]
-        public Guid SubscriberId { get; set; }
+        public string SubscriberId { get; set; }
 
         [JsonProperty("subscriberEmail")]
         public string SubscriberEmail { get; set; }
