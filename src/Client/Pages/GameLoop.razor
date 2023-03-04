@@ -1,4 +1,4 @@
-﻿@page "/gameloop/{InstanceId}/{Subscriber}/{GameState}"
+﻿@page "/gameloop/{InstanceId}/{SubscriberId}/{GameState}"
 @using AdventureBotUI.Client.Services
 @using Read
 @inject AdventureBotReadService adventureBotReadService
@@ -119,7 +119,7 @@ else
     [Parameter]
     public string InstanceId { get; set; }
     [Parameter]
-    public string Subscriber { get; set; }
+    public string SubscriberId { get; set; }
     [Parameter]
     public string GameState { get; set; }
     protected string response = null;
@@ -134,15 +134,36 @@ else
     private async Task SaveState()
     {
         SaveStateClicked = true;
-        GameLoopInput input = new GameLoopInput();
-        input.Subscriber = Subscriber;
-        input.GameState = GameState;
-        response = await adventureBotReadService.GameLoopPutAsync(InstanceId, input);
+
+        Guid InstanceIdResult = Guid.Empty;
+        Guid SubscriberIdResult = Guid.Empty;
+        if(Guid.TryParse(InstanceId, out InstanceIdResult) && Guid.TryParse(SubscriberId, out SubscriberIdResult))
+        {
+            GameLoopInput input = new GameLoopInput();
+            input.SubscriberId = SubscriberId;
+            input.GameState = GameState;
+            response = await adventureBotReadService.GameLoopPutAsync(InstanceId, input);
+        }
+        else
+        {
+            response = "Invalid input parameters or this game is no longer valid. Please restart your game.";
+        }
     }
     private async Task GetStatus()
     {
         VoteCountClicked = true;
-        votingCounter = await adventureBotReadService.GameLoopGetAsync(InstanceId);
-        gameEntries = (await adventureBotReadService.GameEntrySearchAsync(votingCounter.PriorVote)).ToList();
+        Guid InstanceIdResult = Guid.Empty;
+        if(Guid.TryParse(InstanceId, out InstanceIdResult))
+        {
+            votingCounter = await adventureBotReadService.GameLoopGetAsync(InstanceId);
+            if(!string.IsNullOrEmpty(votingCounter.PriorVote))
+            {
+                gameEntries = (await adventureBotReadService.GameEntrySearchAsync(votingCounter.PriorVote)).ToList();
+            }
+        }
+        else
+        {
+            response = "Invalid input parameters or this game is no longer valid. Please restart your game.";
+        }
     }
 }

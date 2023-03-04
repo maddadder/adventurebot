@@ -357,7 +357,11 @@
       "gameLoopInput": {
         "type": "object",
         "properties": {
-          "subscriber": {
+          "subscriberId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subscriberEmail": {
             "type": "string",
             "nullable": true
           },
