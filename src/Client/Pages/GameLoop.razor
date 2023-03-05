@@ -19,7 +19,7 @@
         </div>
     </div>
 }
-else if (!SaveStateClicked)
+else
 {
     <div class="container">
         <div class="row">
@@ -149,6 +149,8 @@ else
             input.SubscriberId = SubscriberId;
             input.GameState = GameState;
             response = await adventureBotReadService.GameLoopPutAsync(InstanceId, input);
+            votingCounter = null;
+            VoteCountClicked = false;
         }
         else
         {
@@ -165,6 +167,8 @@ else
             if(!string.IsNullOrEmpty(votingCounter.PriorVote))
             {
                 gameEntries = (await adventureBotReadService.GameEntrySearchAsync(votingCounter.PriorVote)).ToList();
+                response = null;
+                SaveStateClicked = false;
             }
         }
         else
