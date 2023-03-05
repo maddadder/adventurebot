@@ -7,32 +7,7 @@
 <PageTitle>Adventure Bot</PageTitle>
 
 <h1>Adventure Bot</h1>
-@if (response == null)
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-12">
-                <div class="mb-3">
-                    <label for="Body" class="form-label">Your choice:</label>
-                    <div class="col-md-4">
-                        <input disabled="true" class="form-control" value="@GameState" placeholder="game state" />
-                    </div>
-                </div>
-                <div>Click Save State to continue</div>
-                <button class="btn btn-primary" disabled="@SaveStateClicked" @onclick="SaveState">Save State</button>
-            </div>
-        </div>
-    </div>
-}
-else
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-12">@response</div>
-        </div>
-    </div>
-}
-<div>&#160;</div>
+
 @if (votingCounter == null)
 {
     <div class="container">
@@ -44,7 +19,7 @@ else
         </div>
     </div>
 }
-else
+else if (!SaveStateClicked)
 {
     <div class="container">
         <div class="row">
@@ -94,13 +69,18 @@ else
                                     <ul>
                                     @if(gameEntry.Options != null)
                                     {
-                                        @foreach (var gameOption in gameEntry.Options)
-                                        {
-                                            <li>@gameOption.Description</li>
-                                        }
-                                        if(!gameEntry.Options.Any()){
-                                            <li>Game over. Start over.</li>
-                                        }
+                                        <InputRadioGroup @bind-Value="@GameState">
+                                            @foreach (var gameOption in gameEntry.Options)
+                                            {
+                                                <InputRadio Value="@gameOption.Next" />@(" ")@gameOption.Description
+                                                <br>
+                                            }
+                                            @if(!gameEntry.Options.Any())
+                                            {
+                                                <InputRadio Value='("begin")' />@(" Game Over. Start Over")
+                                            }
+                                        </InputRadioGroup>
+                                        
                                     }
                                     </ul>
                                 </td>
@@ -113,6 +93,32 @@ else
         </div>
     </div>
 }
+@if (response == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="mb-3" style="margin-top:10px;">
+                    <label for="Body" class="form-label">Your choice:</label>
+                    <div class="col-md-4">
+                        <input disabled="true" class="form-control" value="@GameState" placeholder="game state" />
+                    </div>
+                </div>
+                <div>Click Save State to continue</div>
+                <button class="btn btn-primary" disabled="@SaveStateClicked" @onclick="SaveState">Save State</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">@response</div>
+        </div>
+    </div>
+}
+
 @code 
 {
 
