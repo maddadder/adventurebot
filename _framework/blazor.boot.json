@@ -9,13 +9,13 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "AdventureBotUI.Client.dll": "sha256-7u45WC5hVgXSV1Az+n45DbtCmvW6xyPLwOOzFtwxBY4=",
+      "AdventureBotUI.Client.dll": "sha256-pibErVjw7EovGWEZVy+3pz\/wWBF5SSZw9we1xpOXh64=",
       "Azure.Core.dll": "sha256-4ue8\/XkGvc0Kt32rguXtyrvEiUExpljkzl6AuLX9JKM=",
       "Microsoft.AspNetCore.Authorization.dll": "sha256-FGvjgkhw0ClyF\/Xg1LV3mLgyY1u+CPbjB1VLLJUw4h4=",
       "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-\/4W9n7HrhUwFWiMb8I0S4nyPEhPgmF+Cp4e5zjVwL\/I=",
-      "Microsoft.AspNetCore.Components.dll": "sha256-sK2Wk0xXluPIO5alfVMMi2Htb30L0qLbUFIzE0lMu6Q=",
+      "Microsoft.AspNetCore.Components.dll": "sha256-5ES8vYivoPZ10XFKjZWrjudiwCitnZ3hY+ouc8lDelM=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-vjyLuTZbdulS\/grD61U84UsQNTTBeSBfss5+PswV7LM=",
-      "Microsoft.AspNetCore.Components.Web.dll": "sha256-HyKBMqHeCi2pcH3RxGEUZE+HlIYx7a8aEUp49EkOOPU=",
+      "Microsoft.AspNetCore.Components.Web.dll": "sha256-eZthTRup3hssW8+jWgcXvt+dJGErW9cjWJ9W8qC0n+Q=",
       "Microsoft.AspNetCore.Components.WebAssembly.Authentication.dll": "sha256-9hlYnUYx8uIYaKfhu7MoIyxB8qxTVTV9976a86QozEE=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-ldzFwyiPIUIE1dZxobXnK0r2m\/2AGwHxoaGwqx1DLXc=",
       "Microsoft.AspNetCore.Metadata.dll": "sha256-8vJZSTLnuDjOCF5lZvSV\/L1ZjvUV1Z20e+nShhCIxrw=",
