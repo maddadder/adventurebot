@@ -82,7 +82,7 @@ You have the following options:
 
 1. Copy/Paste in the Publish Profile into Github Actions. To configure secrets.ADVENTUREBOT_SLOT1 and PLAYADVENTUREBOT_SLOT1: Navigate to Github repo, Settings, Secrets and Variables, Actions, New Repository Secret. Type in ADVENTUREBOT_SLOT1 and paste in the publish settings found in Azure Function/Deployment Slot/Get Publish Profile
 
-1. Check in your code (which should put your code into slot1) 
+1. Make sure your function in slot1 is running and then check in your code (which should put your code into slot1)
 
 1. keep track of WEBSITE_CONTENTSHARE before you swap. WEBSITE_CONTENTSHARE should be unique per slot. Make sure that if the swap fails that these settings get reverted. I've seen the swap fail have way through and the WEBSITE_CONTENTSHARE setting swapped, but not the website because it failed have way through. 
 
