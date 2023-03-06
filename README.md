@@ -69,6 +69,14 @@ You have the following options:
 
 2. Otherwise open `Read` or `ReadWrite` as separate projects. If you use separate projects then you can use `Azurite`. If you use Azurite then set in local.settings.json `AzureWebJobsStorage` to `UseDevelopmentStorage=true`
 
+
+### Azure Slot1 Configuration
+
+1. For each slot that is not production. (Do not add to production)
+AzureFunctionsJobHost__extensions__durableTask__hubName:slot1
+
+2. WEBSITE_CONTENTSHARE should be unique per slot so keep track of WEBSITE_CONTENTSHARE before you swap. Make sure that if the swap fails that these settings get reverted. I've seen the swap fail have way through and the WEBSITE_CONTENTSHARE setting swapped, but not the website because it failed have way through. 
+
 Azurite: Start
 
 ### Debugging Blazor App:
