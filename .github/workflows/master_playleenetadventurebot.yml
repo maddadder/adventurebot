@@ -39,4 +39,4 @@ jobs:
           app-name: 'playleenetadventurebot'
           slot-name: 'slot1'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0F7C4584FD3743A68A5650C982F22E9A }}
+          publish-profile: ${{ secrets.PLAYLEENETADVENTUREBOT_SLOT1 }}
