@@ -72,13 +72,30 @@ You have the following options:
 
 ### Azure Slot1 Configuration
 
-1. For each slot that is not production. (Do not add to production)
-AzureFunctionsJobHost__extensions__durableTask__hubName:slot1
+1. Delete slot1, and recreate it. 
 
-2. WEBSITE_CONTENTSHARE should be unique per slot so keep track of WEBSITE_CONTENTSHARE before you swap. Make sure that if the swap fails that these settings get reverted. I've seen the swap fail have way through and the WEBSITE_CONTENTSHARE setting swapped, but not the website because it failed have way through. 
+1. Put in slot1 with slotSetting:true, AzureFunctionsJobHost__extensions__durableTask__hubName:slot1
 
-Azurite: Start
+1. Create a new storage account. Use this storage account for your deployment. Copy/Paste in the Access Key's Connection String in slot1. This will automatically create the file shares on your new storage account.
+
+1. Copy/Paste in the Publish Profile into Github Actions. To configure secrets.ADVENTUREBOT_SLOT1 and PLAYADVENTUREBOT_SLOT1: Navigate to Github repo, Settings, Secrets and Variables, Actions, New Repository Secret. Type in ADVENTUREBOT_SLOT1 and paste in the publish settings found in Azure Function/Deployment Slot/Get Publish Profile
+
+1. Check in your code (which should put your code into slot1) 
+
+1. keep track of WEBSITE_CONTENTSHARE before you swap. WEBSITE_CONTENTSHARE should be unique per slot. Make sure that if the swap fails that these settings get reverted. I've seen the swap fail have way through and the WEBSITE_CONTENTSHARE setting swapped, but not the website because it failed have way through. 
+
+1. Test while the app is in slot1, then swap to production. The WEBSITE_CONTENTSHARE should change
+
+```
+Setting 	Type 	Old Value 	New Value
+WEBSITE_CONTENTSHARE 	AppSetting 	redacted-slot1-share-name 	redacted-production-share-name
+```
+
+1. Delete your old storage account
+
 
 ### Debugging Blazor App:
 
-navigate to src/AdventureBotUI/Client and run dotnet watch
+1. If you are using local storage: Azurite: Start
+
+1. navigate to src/AdventureBotUI/Client and run dotnet watch
