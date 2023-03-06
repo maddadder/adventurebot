@@ -76,6 +76,8 @@ You have the following options:
 
 1. Put in slot1 with slotSetting:true, AzureFunctionsJobHost__extensions__durableTask__hubName:slot1
 
+1. Assign a system identity, and copy the identity. In your key vault, create an access policy with Secret permissions: List and Get, paste in the identity on the next screen.
+
 1. Create a new storage account. Use this storage account for your deployment. Copy/Paste in the Access Key's Connection String in slot1. This will automatically create the file shares on your new storage account.
 
 1. Copy/Paste in the Publish Profile into Github Actions. To configure secrets.ADVENTUREBOT_SLOT1 and PLAYADVENTUREBOT_SLOT1: Navigate to Github repo, Settings, Secrets and Variables, Actions, New Repository Secret. Type in ADVENTUREBOT_SLOT1 and paste in the publish settings found in Azure Function/Deployment Slot/Get Publish Profile
