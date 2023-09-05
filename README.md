@@ -86,12 +86,7 @@ You have the following options:
 
 1. keep track of WEBSITE_CONTENTSHARE before you swap. WEBSITE_CONTENTSHARE should be unique per slot. Make sure that if the swap fails that these settings get reverted. I've seen the swap fail have way through and the WEBSITE_CONTENTSHARE setting swapped, but not the website because it failed have way through. 
 
-1. Test while the app is in slot1, then swap to production. The WEBSITE_CONTENTSHARE should change
-
-```
-Setting 	Type 	Old Value 	New Value
-WEBSITE_CONTENTSHARE 	AppSetting 	redacted-slot1-share-name 	redacted-production-share-name
-```
+1. Test while the app is in slot1, then swap to production. The WEBSITE_CONTENTSHARE should change when you perform the swap.
 
 1. Delete your old storage account
 

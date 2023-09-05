@@ -110,12 +110,13 @@
         if (gameEntry.Id != Guid.Empty)
         {
             await adventureBotReadWriteService.GameEntryPutAsync((GameEntry)gameEntry);
+            Cancel();
         }
         else
         {
             await adventureBotReadWriteService.GameEntryPostAsync((GameEntry)gameEntry);
         }
-        Cancel();
+        
     }
     public void Cancel()
     {
