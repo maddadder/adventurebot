@@ -1,0 +1,46 @@
+[
+    {
+        "name": "gpt1-take-home-puppy",
+        "description": [
+            "You can't resist the cute face of the puppy and decide to buy it. You take the puppy home and give it a warm and loving welcome. What's the first thing you do with your new furry friend?"
+        ],
+        "options": [
+            {
+                "description": "Take the puppy for a walk outside",
+                "next": "gpt1-walk-outside"
+            },
+            {
+                "description": "Introduce the puppy to your other pets",
+                "next": "gpt1-introduce-pets"
+            }
+        ],
+        "id": "a7f8bc5d-1eef-4e6a-9c6f-84341d455aca",
+        "__T": "ge",
+        "Created": "2022-06-01T09:30:48.9876543Z",
+        "Modified": "2022-06-02T15:45:30.1234567Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-give-up-home",
+        "description": [
+            "Feeling disheartened, you decide to give up on finding another animal and head back home. As you enter your empty house, you can't help but feel a sense of loneliness. What do you do to lift your spirits?"
+        ],
+        "options": [
+            {
+                "description": "Watch a feel-good movie",
+                "next": "gpt1-watch-movie"
+            },
+            {
+                "description": "Call a friend and share your feelings",
+                "next": "gpt1-call-friend"
+            }
+        ],
+        "id": "739f789a-7317-4c02-b3d9-31c334b5a8c6",
+        "__T": "ge",
+        "Created": "2022-06-01T09:30:48.9876543Z",
+        "Modified": "2022-06-02T15:45:30.1234567Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "name": "gpt1-game-entry",
+        "description": [
+            "The choose your adventure content goes here"
+        ],
+        "options": [
+            {
+                "description": "this is choice one",
+                "next": "gpt1-this-is-choice-one"
+            },
+            {
+                "description": "this is choice two",
+                "next": "gpt1-this-is-choice-two"
+            },
+            {
+                "description": "this is choice three",
+                "next": "gpt1-this-is-choice-three"
+            }
+        ],
+        "id": "bef35ec2-abcb-4961-9f25-20cc0769ee75",
+        "__T": "ge",
+        "Created": "2022-05-30T01:11:44.5456615Z",
+        "Modified": "2023-03-12T21:38:57.1205151Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    }
+]

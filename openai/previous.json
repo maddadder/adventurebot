@@ -1,0 +1,22 @@
+{
+    "name": "gpt1-look-animal",
+    "description": [
+      "Determined to fill the empty space Bessy left behind, you set out to find another animal to buy. You visit various farms and animal shelters, searching for the perfect companion. Finally, you come across a small, adorable puppy. What do you do next?"
+    ],
+    "options": [
+      {
+        "description": "Buy the puppy and take it home",
+        "next": "gpt1-take-home-puppy"
+      },
+      {
+        "description": "Give up and go back home",
+        "next": "gpt1-give-up-home"
+      }
+    ],
+    "id": "34426b01-8970-46b3-b708-8c09c68de981",
+    "__T": "ge",
+    "Created": "2022-06-01T09:30:48.9876543Z",
+    "Modified": "2022-06-01T09:30:48.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  }

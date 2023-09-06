@@ -9,4 +9,6 @@ __blobstorage__/
 __queuestorage__/
 Notes.md
 backup/venv/*
+openai/venv/*
 backup/.env
+openai/.env

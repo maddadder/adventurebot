@@ -115,6 +115,7 @@
         else
         {
             await adventureBotReadWriteService.GameEntryPostAsync((GameEntry)gameEntry);
+            Cancel();
         }
         
     }

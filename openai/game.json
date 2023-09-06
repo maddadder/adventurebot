@@ -1,0 +1,903 @@
+[
+    {
+      "name": "gpt1-begin-bessy-game",
+      "description": [
+        "Good morning, Jack Spriggins! It's a beautiful day in 17th century England. Your family farm, plagued by thievery and misfortune, has fallen on hard times. Your parents told you to sell your beloved old pet cow Bessy for coin to purchase more chickens. The market is opening soon and you should take Bessy to be sold."
+      ],
+      "options": [
+        {
+          "description": "Sleep in and enjoy the morning",
+          "next": "gpt1-sleep"
+        },
+        {
+          "description": "Spend one last good morning bonding with Bessy",
+          "next": "gpt1-bond"
+        },
+        {
+          "description": "Take Bessy to the market",
+          "next": "gpt1-market"
+        }
+      ],
+      "id": "8a53c827-4708-433d-bdfa-dc5982adcd4e",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-sleep",
+      "description": [
+        "You decide to sleep in and enjoy the morning. As you lay in bed, you hear the distant sound of a horse approaching. Curiosity gets the better of you and you decide to investigate. You peek out the window to see a knight in shiny armor riding towards your farm. He looks lost and in need of directions. What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Ignore the knight and go back to sleep",
+          "next": "gpt1-ignore-knight"
+        },
+        {
+          "description": "Go outside and offer help to the knight",
+          "next": "gpt1-help-knight"
+        },
+        {
+          "description": "Stay hidden and observe the knight from afar",
+          "next": "gpt1-observe-knight"
+        }
+      ],
+      "id": "b0ded98d-ad6c-4a5c-939a-28e77ee7c69e",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-reveal-help",
+        "description": [
+            "You take a deep breath and decide to reveal yourself to the knight. Slowly, you step out from your hiding spot and approach him. Startled, the knight stops what he's doing and looks at you with surprise. You offer your assistance, explaining that you noticed him searching and thought you might be able to help. The knight studies you for a moment before nodding. What do you do?"
+        ],
+        "options": [
+            {
+                "description": "Ignore the knight and go back to sleep",
+                "next": "gpt1-ignore-knight"
+              },
+              {
+                "description": "Go outside and offer help to the knight",
+                "next": "gpt1-help-knight"
+              }
+        ],
+        "id": "65884eb0-4abf-4d22-b3e3-58894a3e89a2",
+        "__T": "ge",
+        "Created": "2022-05-30T01:11:44.5456615Z",
+        "Modified": "2023-03-12T21:38:57.1205151Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-ignore-knight",
+      "description": [
+        "You ignore the knight and go back to sleep. The sound of the horse fading in the distance. As you drift back to sleep, you can't help but wonder what the knight wanted. Maybe it was important, maybe not. You'll never know."
+      ],
+      "options": [],
+      "id": "6c35a42b-11c7-43a4-b8ee-c1aaa4c35c03",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-help-knight",
+      "description": [
+        "You decide to go outside and offer help to the knight. As you approach, you notice the knight has a map in hand. He explains that he's searching for a hidden treasure rumored to be in the nearby forest. He asks if you can guide him there. What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Agree to help the knight",
+          "next": "gpt1-agree-help"
+        },
+        {
+          "description": "Decline helping the knight",
+          "next": "gpt1-decline-help"
+        }
+      ],
+      "id": "ac3619d8-d9f1-4503-bc58-1a3f027624d2",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-decline-help",
+      "description": [
+        "You decline helping the knight. You explain that you have other commitments and cannot assist him on his quest. Disappointed but understanding, the knight thanks you for considering and continues on his journey alone."
+      ],
+      "options": [],
+      "id": "b983f024-467e-42d1-b639-162998dbe851",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-agree-help",
+      "description": [
+        "You agree to help the knight. Together, you set off on a journey into the depths of the forest. The knight leads the way while you keep a watchful eye for any dangers that may lurk. As you venture deeper, you come across a fork in the path. Which way do you choose?"
+      ],
+      "options": [
+        {
+          "description": "Take the left path",
+          "next": "gpt1-left-path"
+        },
+        {
+          "description": "Take the right path",
+          "next": "gpt1-right-path"
+        },
+        {
+          "description": "Consult the map to make a decision",
+          "next": "gpt1-consult-map"
+        }
+      ],
+      "id": "b2e63717-a3e4-4568-9075-7375337418dd",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-left-path",
+      "description": [
+        "You decide to take the left path. As you walk along the winding trail, the dense foliage of the forest creates an eerie atmosphere. The air grows colder, and you can feel a sense of foreboding. Suddenly, you hear a rustling noise coming from the bushes ahead. What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Investigate the source of the noise",
+          "next": "gpt1-investigate-noise"
+        },
+        {
+          "description": "Continue walking cautiously",
+          "next": "gpt1-continue-walking"
+        },
+        {
+          "description": "Turn back and take the right path instead",
+          "next": "gpt1-right-path"
+        }
+      ],
+      "id": "5320e101-121f-4157-a18a-fe0105c1faae",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-investigate-noise",
+      "description": [
+        "Curiosity gets the better of you, and you decide to investigate the source of the noise. As you approach the bushes, a small, fluffy creature jumps out and startles you. It's a friendly forest rabbit!",
+        "The rabbit hops away, and you continue on your path. After walking for a while, you come across a fork in the trail. One path leads deeper into the forest, and the other leads towards a clearing. Which way do you go?"
+      ],
+      "options": [
+        {
+          "description": "Take the path deeper into the forest",
+          "next": "gpt1-deeper-forest"
+        },
+        {
+          "description": "Head towards the clearing",
+          "next": "gpt1-clearing-path"
+        }
+      ],
+      "id": "23c822ea-f960-4d50-86d2-72f4bbaa9228",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-deeper-forest",
+      "description": [
+        "You decide to take the path deeper into the forest. The air feels cooler, and the sound of chirping birds fills the air. You appear to be lost. What do you do?"
+      ],
+      "options": [
+        {
+            "description": "Take the path deeper into the forest",
+            "next": "gpt1-deeper-forest"
+          }
+      ],
+      "id": "03f542c0-8736-4d9c-a7fb-3260f9108a62",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-clearing-path",
+      "description": [
+        "You choose to head towards the clearing. The path leads you to a beautiful meadow filled with colorful flowers and buzzing bees. The sun shines brightly overhead. You forget why you were out, and head back home."
+      ],
+      "options": [],
+      "id": "d8ca23e2-c2b4-4a7f-bbdc-b4a3b93ecc90",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-continue-walking",
+      "description": [
+        "You cautiously continue walking along the trail. The rustling noise grows fainter, and you begin to relax. As you walk, you notice a glimmering object on the ground. It's a sparkling gemstone!",
+        "You pick up the gemstone and put it in your pocket. Suddenly, you hear a loud growl coming from behind you. You turn around and see a ferocious bear blocking your path! What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Attempt to scare the bear away",
+          "next": "gpt1-scare-bear"
+        },
+        {
+          "description": "Slowly back away",
+          "next": "gpt1-back-away"
+        },
+        {
+          "description": "Stay still and hope the bear leaves",
+          "next": "gpt1-stay-still"
+        }
+      ],
+      "id": "5763ac4d-9ce0-45dc-b79f-f0587f01b238",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-scare-bear",
+      "description": [
+        "You raise your arms and try to make yourself look big. You shout loudly at the bear, hoping to scare it away. But instead of intimidating the bear, your actions seem to provoke it. The bear charges towards you, roaring loudly. You realize too late that scaring the bear was not the best idea.",
+        "Game over."
+      ],
+      "options": [],
+      "id": "ea6a828f-e263-465b-afb6-28d83e80c3bd",
+      "__T": "ge",
+      "Created": "2022-06-02T08:55:33.1875764Z",
+      "Modified": "2022-06-02T09:12:25.8559324Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-back-away",
+      "description": [
+        "You slowly start to move backward, keeping your eyes on the bear. You try not to make any sudden movements, hoping the bear won't view you as a threat. The bear sniffs the air and watches your every move. As you continue to back away, you step on a fallen branch, snapping it loudly. The bear's ears perk up, and it charges towards you.",
+        "Game over."
+      ],
+      "options": [],
+      "id": "cbb6bbec-982f-4970-b6e1-95c652e642a7",
+      "__T": "ge",
+      "Created": "2022-06-02T09:12:25.8559324Z",
+      "Modified": "2022-06-02T09:15:02.9722712Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-stay-still",
+      "description": [
+        "You freeze in place, trying to blend into the surroundings as much as possible. You hold your breath, hoping the bear will lose interest and leave. The bear sniffs the air for a moment, then turns around and walks away. You let out a sigh of relief and continue on your journey.",
+        "Congratulations! You successfully avoided a dangerous encounter with the bear.",
+        "Continue with your adventure."
+      ],
+      "options": [
+        {
+          "description": "Keep walking along the trail",
+          "next": "gpt1-continue-walking"
+        },
+        {
+          "description": "Take a different path",
+          "next": "gpt1-different-path"
+        }
+      ],
+      "id": "3e1b0294-55d5-4574-a8c7-3363a35577ef",
+      "__T": "ge",
+      "Created": "2022-06-02T09:15:02.9722712Z",
+      "Modified": "2022-06-02T09:20:48.3441569Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-different-path",
+      "description": [
+        "You decide to take a different path, hoping to avoid any more encounters with wildlife. As you walk along the new path, you come across a beautiful waterfall. The sound of rushing water is soothing, and you decide to take a break and enjoy the peaceful scenery. After resting for a while, you continue your journey with renewed energy."
+      ],
+      "options": [],
+      "id": "8f9a7a8f-7947-4ce3-bc57-58e2b3bfcd69",
+      "__T": "ge",
+      "Created": "2022-06-02T09:25:22.9722712Z",
+      "Modified": "2022-06-02T09:30:48.3441569Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-right-path",
+      "description": [
+        "You decide to turn back and take the right path instead. As you make your way towards the right path, you notice a faint glowing light in the distance.",
+        "Intrigued, you follow the light and discover a hidden treasure chest hidden among the trees. The chest is locked with a rusty padlock. What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Try to pick the lock",
+          "next": "gpt1-pick-lock"
+        },
+        {
+          "description": "Search for a key nearby",
+          "next": "gpt1-search-key"
+        },
+        {
+          "description": "Leave the chest and continue on your journey",
+          "next": "gpt1-continue-journey"
+        }
+      ],
+      "id": "1f89c5ce-8c11-44ee-9d18-160cacffc897",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-pick-lock",
+      "description": [
+        "You carefully examine the rusty padlock and realize that it might be possible to pick the lock. You rummage through your pockets and find a set of lockpicks. With steady hands and a bit of patience, you start working on the lock.",
+        "After a tense few minutes, you hear a satisfying click, and the padlock pops open. You eagerly open the treasure chest and find an assortment of valuable items inside. It's a successful find!",
+        "Feeling triumphant, you continue on your journey, now with the newfound wealth securely stowed away."
+      ],
+      "options": [],
+      "id": "c27a9213-0230-4ab5-8fca-e1bbcb8868b2",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-search-key",
+      "description": [
+        "You decide to search for a key nearby. You meticulously scan the surrounding area, checking under fallen leaves and among the rocks.",
+        "After a thorough search, you spot a small key hidden beneath a patch of moss. Excitedly, you grab the key and rush back to the treasure chest.",
+        "With a satisfying click, the key unlocks the padlock, and you open the treasure chest. Inside, you find a collection of valuable artifacts and precious gems.",
+        "Feeling satisfied with your discovery, you continue on your journey, knowing that you made the right choice by searching for the key."
+      ],
+      "options": [],
+      "id": "3a97a4d0-e725-40ba-89d2-49cc6412d37b",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-continue-journey",
+      "description": [
+        "You decide to leave the treasure chest behind and continue on your journey. Although the allure of hidden riches was tempting, you feel that there are more exciting adventures waiting for you.",
+        "As you walk away, you can't help but wonder what treasures were inside the chest. However, you know that sometimes it's better to move forward without being burdened by material possessions.",
+        "With a renewed sense of purpose, you continue down the path, eager to see what lies ahead."
+      ],
+      "options": [],
+      "id": "ca2d1d06-351e-4fc0-9148-297081f4639d",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-consult-map",
+      "description": [
+        "You decide to consult the map to make a decision. The map shows two possible paths: the left path, which leads to a hidden waterfall, and the right path, which leads to an ancient ruins. Which path do you choose?"
+      ],
+      "options": [
+        {
+          "description": "Follow the left path to the hidden waterfall",
+          "next": "gpt1-hidden-waterfall"
+        },
+        {
+          "description": "Follow the right path to the ancient ruins",
+          "next": "gpt1-ancient-ruins"
+        }
+      ],
+      "id": "352fb28e-70c7-412a-a455-b67821bade68",
+      "__T": "ge",
+      "Created": "2022-06-01T09:23:16.3525836Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-hidden-waterfall",
+      "description": [
+        "You follow the left path and come across a hidden waterfall. The sound of the rushing water is soothing and refreshing. Do you want to take a swim or continue your journey?"
+      ],
+      "options": [
+        {
+          "description": "Take a swim",
+          "next": "gpt1-take-a-swim"
+        },
+        {
+          "description": "Continue your journey",
+          "next": "gpt1-continue-journey"
+        }
+      ],
+      "id": "f77e062a-9468-4036-85dc-d4d28a8e9e2b",
+      "__T": "ge",
+      "Created": "2022-06-05T13:45:22.7589486Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-take-a-swim",
+      "description": [
+        "You dive into the crystal clear water and feel the coolness envelop your body. It's incredibly refreshing and invigorating. After a few moments of swimming, you notice something glittering at the bottom of the pool. Do you want to investigate or continue swimming?"
+      ],
+      "options": [
+        {
+          "description": "Investigate",
+          "next": "gpt1-investigate-glitter"
+        },
+        {
+          "description": "Continue swimming",
+          "next": "gpt1-continue-swimming"
+        }
+      ],
+      "id": "fb1cbf14-977b-444c-bc71-a6dd1a8f8333",
+      "__T": "ge",
+      "Created": "2022-07-10T09:25:01.1234567Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-investigate-glitter",
+      "description": [
+        "Curiosity gets the better of you and you decide to investigate the glittering object at the bottom of the pool. As you swim closer, you realize it's a sparkling diamond! The sight of such a valuable treasure fills you with excitement. What do you want to do with the diamond?"
+      ],
+      "options": [
+        {
+          "description": "Take the diamond",
+          "next": "gpt1-take-diamond"
+        },
+        {
+          "description": "Leave the diamond",
+          "next": "gpt1-leave-diamond"
+        }
+      ],
+      "id": "32da956b-305d-49c2-bd40-0af9ef30dbd6",
+      "__T": "ge",
+      "Created": "2022-07-10T09:25:01.1234567Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-take-diamond",
+        "description": [
+            "You reach out and grab the diamond, feeling its weight in your hand. It's even more beautiful up close, and you can't help but smile at your good fortune. What do you want to do next?"
+        ],
+        "options": [
+            {
+                "description": "Sell the diamond",
+                "next": "gpt1-sell-diamond"
+            },
+            {
+                "description": "Keep the diamond",
+                "next": "gpt1-keep-diamond"
+            },
+            {
+                "description": "Show the diamond to someone",
+                "next": "gpt1-show-diamond"
+            }
+        ],
+        "id": "e4e97cf1-3f10-4be2-b0dd-e40b8949d63e",
+        "__T": "ge",
+        "Created": "2022-07-12T08:30:00.1234567Z",
+        "Modified": "2023-03-12T21:38:57.1205151Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-leave-diamond",
+        "description": [
+            "You decide to leave the diamond alone, not wanting to take any risks. As you swim away, you can't help but wonder what might have happened if you had taken it. What do you want to do now?"
+        ],
+        "options": [
+            {
+                "description": "Continue exploring the pool",
+                "next": "gpt1-continue-exploring"
+            }
+        ],
+        "id": "c425f6c9-652d-4c6d-924f-3233800be6d8",
+        "__T": "ge",
+        "Created": "2022-07-15T14:45:00.1234567Z",
+        "Modified": "2023-03-12T21:38:57.1205151Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-continue-swimming",
+      "description": [
+        "You continue swimming, enjoying the serene beauty of the pool. The water feels incredibly soothing against your skin, and you lose yourself in the peacefulness of the moment. As you swim, you notice a hidden underwater cave in the distance. What would you like to do?"
+      ],
+      "options": [
+        {
+          "description": "Explore the underwater cave",
+          "next": "gpt1-explore-underwater-cave"
+        },
+        {
+          "description": "Keep swimming around",
+          "next": "gpt1-continue-swimming"
+        },
+        {
+          "description": "Go back to the surface",
+          "next": "gpt1-go-back-surface"
+        }
+      ],
+      "id": "cd44338e-6b13-4cef-9a0b-b8c079cc5a04",
+      "__T": "ge",
+      "Created": "2022-07-10T09:25:01.1234567Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-explore-underwater-cave",
+      "description": [
+        "You swim towards the underwater cave, your curiosity piqued. As you enter the cave, you're welcomed by the enchanting glow of bioluminescent plants and creatures. The air becomes cooler and damp, and you can hear the faint sound of water dripping. The cave splits into two paths. Which path will you choose?"
+      ],
+      "options": [
+        {
+          "description": "Take the left path",
+          "next": "gpt1-left-path"
+        },
+        {
+          "description": "Take the right path",
+          "next": "gpt1-right-path"
+        },
+        {
+          "description": "Go back to the surface",
+          "next": "gpt1-go-back-surface"
+        }
+      ],
+      "id": "0a557e0c-0d45-4a01-844a-49827589d473",
+      "__T": "ge",
+      "Created": "2022-07-15T09:12:34.5678901Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-go-back-surface",
+      "description": [
+        "You decide to return to the surface, swimming back up with a sense of tranquility. As you break through the water's surface, the warm sunlight greets you once again. You take a deep breath and appreciate the beauty of your surroundings. What would you like to do next?",
+        "Options:",
+        "1. Rest by the poolside",
+        "2. Dive back underwater",
+        "3. Explore the surrounding area"
+      ],
+      "options": [
+        {
+          "description": "Rest by the poolside",
+          "next": "gpt1-rest-poolside"
+        },
+        {
+          "description": "Dive back underwater",
+          "next": "gpt1-continue-swimming"
+        },
+        {
+          "description": "Explore the surrounding area",
+          "next": "gpt1-explore-surrounding-area"
+        }
+      ],
+      "id": "a4f9e695-a175-443d-b424-3bb7c1c44db2",
+      "__T": "ge",
+      "Created": "2022-07-12T09:15:29.7654321Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-ancient-ruins",
+      "description": [
+        "You follow the right path and arrive at the entrance of ancient ruins. The ruins are shrouded in mystery, and many have tried to uncover its secrets. Will you venture inside or turn back?"
+      ],
+      "options": [
+        {
+          "description": "Venture inside",
+          "next": "gpt1-venture-inside"
+        },
+        {
+          "description": "Turn back",
+          "next": "gpt1-turn-back"
+        }
+      ],
+      "id": "243beb62-4360-49a8-99a6-f8c2721374fc",
+      "__T": "ge",
+      "Created": "2022-06-07T09:12:36.2647722Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-observe-knight",
+      "description": [
+        "You decide to stay hidden and observe the knight from afar. He dismounts his horse and starts examining the map while mumbling to himself. Suddenly, he looks around as if sensing someone watching him. Your heart skips a beat as you try to remain hidden. After a few moments, the knight shrugs it off and continues his search for something. What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Continue observing the knight",
+          "next": "gpt1-continue-observe"
+        },
+        {
+          "description": "Reveal yourself and offer assistance",
+          "next": "gpt1-help-knight"
+        }
+      ],
+      "id": "307ba0b8-021c-4eb5-8489-3daa60bc70cd",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-continue-observe",
+        "description": [
+            "You decide to continue observing the knight from your hidden spot. As you watch, you notice that he seems to be getting frustrated with his search. He paces back and forth, occasionally glancing at the map and muttering under his breath. What do you do?"
+        ],
+        "options": [
+            {
+                "description": "Stay hidden and keep observing",
+                "next": "gpt1-continue-observe"
+            },
+            {
+                "description": "Reveal yourself and offer assistance",
+                "next": "gpt1-help-knight"
+            }
+        ],
+        "id": "fe4c5b7a-1d87-4054-9a6e-c0285c11cbe1",
+        "__T": "ge",
+        "Created": "2022-05-30T01:11:44.5456615Z",
+        "Modified": "2023-03-12T21:38:57.1205151Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-bond",
+      "description": [
+        "You decide to spend one last good morning bonding with Bessy. You take her out to the fields and lie down on the grass next to her. You stroke her soft fur and reminisce about all the memories you've shared together. Bessy looks at you with her big, gentle eyes as if she understands what's about to happen. It's a bittersweet moment, but you know it's time to say goodbye. What do you do?"
+      ],
+      "options": [
+        {
+            "description": "Take Bessy to the market",
+            "next": "gpt1-market"
+          }
+      ],
+      "id": "a09dca52-50c5-45ea-b8e9-8f55e338d0df",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-market",
+      "description": [
+        "You decide to take Bessy to the market. The bustling crowd and lively atmosphere overwhelm you as you navigate through the stalls. People are haggling, merchants are shouting, and the aroma of freshly baked bread fills the air. You tie Bessy to a post and look around for potential buyers. Suddenly, a burly man approaches you and offers to buy Bessy for a handsome price. What do you do?"
+      ],
+      "options": [
+        {
+          "description": "Accept the man's offer and sell Bessy",
+          "next": "gpt1-accept-offer"
+        },
+        {
+          "description": "Decline the man's offer and keep looking for a better buyer",
+          "next": "gpt1-decline-offer"
+        },
+        {
+          "description": "Ask the man if he will take care of Bessy and treat her well",
+          "next": "gpt1-ask-care"
+        }
+      ],
+      "id": "32db574f-03e6-4075-9710-3b470b234162",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-accept-offer",
+      "description": [
+        "You decide to accept the man's offer and sell Bessy. He hands you a bag of coins, and you reluctantly hand him the reins. Bessy looks back at you with sad eyes as the man leads her away. You can't help but feel a pang of regret, but the money will come in handy. What do you do next?"
+      ],
+      "options": [
+        {
+          "description": "Go home and count your coins",
+          "next": "gpt1-count-coins"
+        },
+        {
+          "description": "Look for another animal to buy",
+          "next": "gpt1-look-animal"
+        },
+        {
+          "description": "Feel guilty and try to find Bessy",
+          "next": "gpt1-find-bessy"
+        }
+      ],
+      "id": "52059c22-b0df-4952-b4cf-ac3eaff40a34",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-decline-offer",
+      "description": [
+        "You decline the man's offer and continue looking for a better buyer. As you search, you come across a kind old woman who takes an interest in Bessy. She offers you a fair price and promises to take good care of her. You gladly accept her offer and feel relieved that Bessy will be in loving hands."
+      ],
+      "options": [],
+      "id": "9f95d1c9-af19-4986-a55d-d8f94357457a",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-ask-care",
+      "description": [
+        "You ask the man if he will take care of Bessy and treat her well. He looks offended and scoffs at you. 'Of course I will! I've been around animals all my life,' he says. 'But if you're not willing to let her go, then I'll find another cow.' You quickly realize that he is not the right person to sell Bessy to."
+      ],
+      "options": [{
+        "description": "Accept the man's offer and sell Bessy",
+        "next": "gpt1-accept-offer"
+      }],
+      "id": "16ab13c7-70c9-4d3e-8ae3-1c7d69fc6506",
+      "__T": "ge",
+      "Created": "2022-05-30T01:11:44.5456615Z",
+      "Modified": "2023-03-12T21:38:57.1205151Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-count-coins",
+      "description": [
+        "You head home with the bag of coins. As you enter your house, you dump the coins onto the table and start counting. The sound of clinking metal fills the room, and you can't help but smile. It's a decent sum of money. What do you do next?"
+      ],
+      "options": [
+        {
+          "description": "Go to the market and buy supplies",
+          "next": "gpt1-buy-supplies"
+        },
+        {
+          "description": "Save the money for a rainy day",
+          "next": "gpt1-save-money"
+        },
+        {
+          "description": "Treat yourself to a nice meal",
+          "next": "gpt1-nice-meal"
+        }
+      ],
+      "id": "389ed21d-2cb5-4abe-b030-1a689f633738",
+      "__T": "ge",
+      "Created": "2022-06-01T09:25:17.1234567Z",
+      "Modified": "2022-06-01T09:25:17.1234567Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-look-animal",
+      "description": [
+        "Determined to fill the empty space Bessy left behind, you set out to find another animal to buy. You visit various farms and animal shelters, searching for the perfect companion. Finally, you come across a small, adorable puppy. What do you do next?"
+      ],
+      "options": [
+        {
+          "description": "Buy the puppy and take it home",
+          "next": "gpt1-take-home-puppy"
+        },
+        {
+          "description": "Give up and go back home",
+          "next": "gpt1-give-up-home"
+        }
+      ],
+      "id": "34426b01-8970-46b3-b708-8c09c68de981",
+      "__T": "ge",
+      "Created": "2022-06-01T09:30:48.9876543Z",
+      "Modified": "2022-06-01T09:30:48.9876543Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-take-home-puppy",
+        "description": [
+            "You can't resist the cute face of the puppy and decide to buy it. You take the puppy home and give it a warm and loving welcome."
+        ],
+        "options": [],
+        "id": "a7f8bc5d-1eef-4e6a-9c6f-84341d455aca",
+        "__T": "ge",
+        "Created": "2022-06-01T09:30:48.9876543Z",
+        "Modified": "2022-06-02T15:45:30.1234567Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+        "name": "gpt1-give-up-home",
+        "description": [
+            "Feeling disheartened, you decide to give up on finding another animal and head back home. As you enter your empty house, you can't help but feel a sense of loneliness."
+        ],
+        "options": [],
+        "id": "739f789a-7317-4c02-b3d9-31c334b5a8c6",
+        "__T": "ge",
+        "Created": "2022-06-01T09:30:48.9876543Z",
+        "Modified": "2022-06-02T15:45:30.1234567Z",
+        "createdBy": null,
+        "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-find-bessy",
+      "description": [
+        "Driven by guilt, you set out to find Bessy. You search far and wide, asking every person you meet if they've seen a cow named Bessy. After days of searching, you receive a tip that Bessy was sold to a farm a few towns over."
+      ],
+      "options": [],
+      "id": "1c068030-8084-47db-b155-99f1aab4cad0",
+      "__T": "ge",
+      "Created": "2022-06-01T09:37:25.5678901Z",
+      "Modified": "2022-06-01T09:37:25.5678901Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-buy-supplies",
+      "description": [
+        "You decide to head to the market and buy supplies for your journey. As you walk through the bustling marketplace, you spot various vendors selling all kinds of goods. You carefully select the items you need, making sure to haggle for the best prices. After purchasing everything on your list, you head home.",
+        "You feel satisfied with your purchases and confident that you're well-prepared for what lies ahead. "
+      ],
+      "options": [],
+      "id": "75df2fae-2029-483b-a621-dfc7dc2b531f",
+      "__T": "ge",
+      "Created": "2022-06-01T10:00:00Z",
+      "Modified": "2022-06-01T10:00:00Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-save-money",
+      "description": [
+        "You choose to save the money for a rainy day. It's always wise to have some extra funds in case of emergencies. You carefully count the coins, place them in a secure location, and make a note to yourself to keep it a secret from prying eyes.",
+        "With your savings secure, you start thinking about your future plans."
+      ],
+      "options": [],
+      "id": "bef17d47-aa79-4810-b8e4-a63c451a5c24",
+      "__T": "ge",
+      "Created": "2022-06-01T10:00:00Z",
+      "Modified": "2022-06-01T10:00:00Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    },
+    {
+      "name": "gpt1-nice-meal",
+      "description": [
+        "You decide to treat yourself to a nice meal with the money. After all, you deserve a little indulgence after your recent adventures. You head to a fancy restaurant in town and enjoy a delicious and satisfying meal.",
+        "As you savor each bite, you can't help but feel grateful for the opportunity to treat yourself. With a contented smile, you finish your meal and pay the bill."
+      ],
+      "options": [],
+      "id": "cf949834-3d41-479d-9b2d-c573799edcd3",
+      "__T": "ge",
+      "Created": "2022-06-01T10:00:00Z",
+      "Modified": "2022-06-01T10:00:00Z",
+      "createdBy": null,
+      "modifiedBy": "charlie@leenet.link"
+    }
+  ]
