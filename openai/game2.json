@@ -1,0 +1,548 @@
+[
+  {
+    "name": "gpt2-birmingshaw-mountain-pass",
+    "description": [
+      "After school, you meet with some of your classmates behind the school. One of the older boys dares you to go to the troll caves at the base of the Birmingshaw Mountain Pass and bring back an item from the cave to prove you were there. You reluctantly accept the challenge as you cannot bear the thought of being seen as a chicken, yellow, or a coward for eternity.",
+      "You go home to grab your backpack and a lantern.",
+      "You head south out of town as fast as you can so you're not seen by any family; your sister would for sure rat you out! Although that could be a good reason you didn't go... what if your sister did rat you out, and you did get grounded? Would you still be a chicken, or is it worse to get caught? You decide to keep moving.",
+      "As you make your way to the edge of the forest, you begin to see off in the distance a low ridge rising before you, beyond which you see the Birmingshaw Mountain Pass scraping the sky. The closer in you get, there is something strewn across the rocky ground ahead. Moving closer, you realize that they are skeletons of the trolls that once inhabited the cave. You follow the stone wall mountains to the south, where you find hidden amongst the brush a tunnel that burrows into the foot of the soaring snow-capped mountain."
+    ],
+    "options": [
+      {
+        "description": "Go home and be a chicken",
+        "next": "gpt2-chicken"
+      },
+      {
+        "description": "Just go into the first room of the cave; maybe there will be an item you can take back",
+        "next": "gpt2-first-room"
+      },
+      {
+        "description": "Go back to town and see if the general goods merchant has an item to help you on your quest",
+        "next": "gpt2-general-goods-merchant"
+      }
+    ],
+    "id": "5f0419fe-f6bd-4071-aa39-c7176df246bb",
+    "__T": "ge",
+    "Created": "2022-06-01T09:30:48.9876543Z",
+    "Modified": "2022-06-01T09:30:48.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-chicken",
+    "description": [
+      "You turn tail and head back home, feeling a mix of relief and disappointment. You know you'll be teased by your classmates for chickening out, but at least you won't have to face the dangers of the troll caves. As you walk back, you can't help but wonder what mysteries lay hidden in those dark caverns."
+    ],
+    "options": [],
+    "id": "49afd26c-02c8-44ef-bccc-fc19d7842b5b",
+    "__T": "ge",
+    "Created": "2022-06-01T09:35:12.3456789Z",
+    "Modified": "2022-06-01T09:35:12.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-first-room",
+    "description": [
+      "You summon your courage and step into the first room of the cave. It's dimly lit, and you can hear the eerie echoes of dripping water. As your eyes adjust to the darkness, you notice a glimmer in the corner. It's an old, rusty sword, likely dropped by a previous adventurer. You pick it up and decide to press further into the cave, hoping to find something even more valuable."
+    ],
+    "options": [
+      {
+        "description": "Continue deeper into the cave",
+        "next": "gpt2-deeper-cave"
+      },
+      {
+        "description": "Retreat from the cave with the sword",
+        "next": "gpt2-retreat-sword"
+      }
+    ],
+    "id": "22cc1966-52cc-41dc-8f44-3c38c5f0ef47",
+    "__T": "ge",
+    "Created": "2022-06-01T09:40:56.1234567Z",
+    "Modified": "2022-06-01T09:40:56.1234567Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-general-goods-merchant",
+    "description": [
+      "You decide to play it safe and head back to town to visit the general goods merchant. The merchant, an elderly woman named Agnes, greets you warmly. She listens to your story and chuckles.",
+      "'Ah, the troll caves, dearie? Well, I don't have anything specific for that, but I can offer you this enchanted lantern. It should light your way in the darkest of places,' she says as she hands you a beautifully crafted lantern with a magical flame that never goes out.",
+      "With the lantern in hand, you feel more confident about your journey. You thank Agnes and make your way back to the Birmingshaw Mountain Pass, ready to face whatever challenges lie ahead."
+    ],
+    "options": [
+      {
+        "description": "Enter the cave with the enchanted lantern",
+        "next": "gpt2-enchanted-lantern"
+      },
+      {
+        "description": "Return home with the enchanted lantern",
+        "next": "gpt2-chicken-lantern"
+      }
+    ],
+    "id": "61224dd2-db1b-47dc-b9b8-12db8a2a6137",
+    "__T": "ge",
+    "Created": "2022-06-01T09:47:33.9876543Z",
+    "Modified": "2022-06-01T09:47:33.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-deeper-cave",
+    "description": [
+      "With the rusty sword in hand, you venture deeper into the cave. The air becomes colder, and the passages narrower. Soon, you come across a fork in the path.",
+      "One path seems to lead deeper into the mountain, while the other goes down into a dark, ominous chasm. You must make a choice."
+    ],
+    "options": [
+      {
+        "description": "Follow the path deeper into the mountain",
+        "next": "gpt2-deeper-path"
+      },
+      {
+        "description": "Descend into the dark chasm",
+        "next": "gpt2-dark-chasm"
+      }
+    ],
+    "id": "73c1d668-5a0e-4c44-b81d-0ac85a898911",
+    "__T": "ge",
+    "Created": "2022-06-01T09:52:19.5678901Z",
+    "Modified": "2022-06-01T09:52:19.5678901Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-retreat-sword",
+    "description": [
+      "You decide to play it safe and retreat from the cave with the rusty sword you found. As you emerge from the cave, you feel a sense of relief washing over you. You may not have completed the dare, but you have a tangible proof of your adventure in the form of the sword. Your classmates may tease you, but you know you made the right choice."
+    ],
+    "options": [],
+    "id": "f3cce08f-4a3f-4df5-bbe2-d8bc4cc2c5f9",
+    "__T": "ge",
+    "Created": "2022-06-01T09:55:45.2345678Z",
+    "Modified": "2022-06-01T09:55:45.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-enchanted-lantern",
+    "description": [
+      "With the enchanted lantern's warm glow, you confidently enter the cave. The light reveals intricate carvings on the cave walls, and you feel a sense of wonder and curiosity. As you delve deeper, you come across a chamber with a shimmering pool of water. It seems magical, and you can't resist taking a sip.",
+      "As soon as the water touches your lips, you feel a surge of energy and vitality coursing through your body. You've gained a magical boon! With renewed strength, you continue your exploration of the cave, eager to find the item you need to complete the dare."
+    ],
+    "options": [
+      {
+        "description": "Search for the item in the cave",
+        "next": "gpt2-item-discovery"
+      },
+      {
+        "description": "Drink more of the magical water",
+        "next": "gpt2-magical-empowerment"
+      }
+    ],
+    "id": "da704970-cb32-4df7-9c17-3ccf5cb89646",
+    "__T": "ge",
+    "Created": "2022-06-01T09:59:12.3456789Z",
+    "Modified": "2022-06-01T09:59:12.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-chicken-lantern",
+    "description": [
+      "You decide to return home with the enchanted lantern from the general goods merchant. It's a wise choice, as you can always use the magical light for other adventures or emergencies. You may have avoided the troll caves, but you've gained a valuable tool for future quests."
+    ],
+    "options": [],
+    "id": "582f38a4-bbd2-4bf2-9c1f-db36cda9dfd7",
+    "__T": "ge",
+    "Created": "2022-06-01T10:03:01.2345678Z",
+    "Modified": "2022-06-01T10:03:01.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-deeper-path",
+    "description": [
+      "You choose to follow the path deeper into the mountain. The cave becomes increasingly narrow, and you have to squeeze through tight spaces. It's clauchhhhhhhhhphobic, but your determination keeps you going.",
+      "After what feels like hours, you reach a massive cavern with an astonishing sight. Crystals of all colors sparkle, casting rainbows of light on the walls. In the center of the cavern lies a giant, glittering gemstone, the likes of which you've never seen before.",
+      "You can't resist the temptation. Do you attempt to take the gemstone, or do you continue exploring the cave?"
+    ],
+    "options": [
+      {
+        "description": "Attempt to take the gemstone",
+        "next": "gpt2-gemstone-take"
+      },
+      {
+        "description": "Continue exploring the cave",
+        "next": "gpt2-explore-deeper"
+      }
+    ],
+    "id": "f0e108d9-19ee-4c20-a4f3-b7f647a8ce0d",
+    "__T": "ge",
+    "Created": "2022-06-01T10:06:59.9876543Z",
+    "Modified": "2022-06-01T10:06:59.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-dark-chasm",
+    "description": [
+      "You choose to descend into the dark chasm. As you go deeper, the darkness becomes almost suffocating, and strange noises echo around you. Suddenly, you stumble upon a hidden treasure chest half-buried in the ground. It seems like your choice was a lucky one!",
+      "You pry open the chest to find it filled with gold coins and precious gems. It's more than you ever imagined. You could take the treasure and return to town as a hero, or you could continue exploring the chasm. What will you do?"
+    ],
+    "options": [
+      {
+        "description": "Take the treasure and return to town",
+        "next": "gpt2-treasure-hero"
+      },
+      {
+        "description": "Continue exploring the dark chasm",
+        "next": "gpt2-explore-chasm"
+      }
+    ],
+    "id": "402cd938-c0c9-456d-a940-1e4d4f06a0fa",
+    "__T": "ge",
+    "Created": "2022-06-01T10:12:34.5678901Z",
+    "Modified": "2022-06-01T10:12:34.5678901Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-item-discovery",
+    "description": [
+      "You decide to search for the item in the cave, guided by the enchanted lantern's light. The cave's twists and turns lead you to a hidden chamber. Inside, you find a small, ornate chest covered in ancient runes. It seems to be the item your classmates were looking for.",
+      "With the chest in your possession, you make your way back to town, triumphant. Your classmates are in awe of your bravery, and you've proven that you're no chicken. The dare is complete, and you're hailed as a hero."
+    ],
+    "options": [],
+    "id": "cfdad06e-4849-46da-962b-99761a9cfef9",
+    "__T": "ge",
+    "Created": "2022-06-01T10:17:23.2345678Z",
+    "Modified": "2022-06-01T10:17:23.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-magical-empowerment",
+    "description": [
+      "You can't resist the allure of the magical water in the cave. You take another sip, and this time, the energy coursing through you intensifies. You feel invincible, as if nothing can stand in your way.",
+      "With newfound confidence, you continue exploring the cave, determined to find the most valuable treasure it holds. Your adventure is far from over, and you're ready to face any challenge that comes your way."
+    ],
+    "options": [
+      {
+        "description": "Search for the most valuable treasure",
+        "next": "gpt2-ultimate-treasure"
+      },
+      {
+        "description": "Explore deeper into the cave",
+        "next": "gpt2-empowered-deeper"
+      }
+    ],
+    "id": "23f88b17-96b9-46fb-8708-6540a7026a02",
+    "__T": "ge",
+    "Created": "2022-06-01T10:22:09.3456789Z",
+    "Modified": "2022-06-01T10:22:09.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-gemstone-take",
+    "description": [
+      "You can't resist the allure of the giant gemstone in the cavern. It's too beautiful and valuable to leave behind. With great care, you attempt to take the gemstone from its resting place.",
+      "As you touch it, a deep rumbling fills the cavern, and the gemstone begins to glow even brighter. You've triggered a magical trap! The cavern starts to collapse around you. You must find a way out quickly!"
+    ],
+    "options": [
+      {
+        "description": "Look for an escape route",
+        "next": "gpt2-escape-route"
+      },
+      {
+        "description": "Try to use the rusty sword to break the gemstone",
+        "next": "gpt2-sword-break-gemstone"
+      }
+    ],
+    "id": "eeac29f5-2dc5-48f5-90f4-4cbf88b6f7a3",
+    "__T": "ge",
+    "Created": "2022-06-01T10:26:45.1234567Z",
+    "Modified": "2022-06-01T10:26:45.1234567Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-explore-deeper",
+    "description": [
+      "You choose to continue exploring the cave, leaving the giant gemstone behind. There's more to discover, and your curiosity drives you forward.",
+      "As you delve deeper into the cave, you come across a chamber filled with ancient books and scrolls. It seems to be a hidden library of knowledge. You can't resist the opportunity to learn and explore the secrets within. What will you do next?"
+    ],
+    "options": [
+      {
+        "description": "Read the ancient books and scrolls",
+        "next": "gpt2-library-knowledge"
+      },
+      {
+        "description": "Keep exploring the cave",
+        "next": "gpt2-explore-deeper-2"
+      }
+    ],
+    "id": "cdb39d49-5d91-47f3-ad22-5b50d3123381",
+    "__T": "ge",
+    "Created": "2022-06-01T10:30:56.9876543Z",
+    "Modified": "2022-06-01T10:30:56.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-treasure-hero",
+    "description": [
+      "You decide to take the treasure you found in the dark chasm and return to town as a hero. Your classmates and townsfolk are amazed by your discovery, and you're celebrated as a legend. The treasure sets you up for a comfortable life, and you've proven that bravery can lead to great rewards."
+    ],
+    "options": [],
+    "id": "2851ab47-de7b-4d6b-9354-bf7afd5403a5",
+    "__T": "ge",
+    "Created": "2022-06-01T10:35:41.2345678Z",
+    "Modified": "2022-06-01T10:35:41.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-explore-chasm",
+    "description": [
+      "You can't resist the temptation of further exploration in the dark chasm. Who knows what other treasures or mysteries lie hidden in its depths?",
+      "As you journey deeper, you stumble upon an underground river, its waters flowing with a strange luminescent glow. You could follow the river's course or continue exploring the tunnels. What's your choice?"
+    ],
+    "options": [
+      {
+        "description": "Follow the underground river",
+        "next": "gpt2-river-adventure"
+      },
+      {
+        "description": "Keep exploring the tunnels",
+        "next": "gpt2-explore-tunnels"
+      }
+    ],
+    "id": "76551fa8-cc88-472e-8dcf-5b3935b74023",
+    "__T": "ge",
+    "Created": "2022-06-01T10:41:28.3456789Z",
+    "Modified": "2022-06-01T10:41:28.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-item-discovery",
+    "description": [
+      "You decide to search for the item in the cave, guided by the enchanted lantern's light. The cave's twists and turns lead you to a hidden chamber. Inside, you find a small, ornate chest covered in ancient runes. It seems to be the item your classmates were looking for.",
+      "With the chest in your possession, you make your way back to town, triumphant. Your classmates are in awe of your bravery, and you've proven that you're no chicken. The dare is complete, and you're hailed as a hero."
+    ],
+    "options": [],
+    "id": "8c068aec-2b82-4ff4-8fb7-f8cca1154151",
+    "__T": "ge",
+    "Created": "2022-06-01T10:17:23.2345678Z",
+    "Modified": "2022-06-01T10:17:23.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-library-knowledge",
+    "description": [
+      "You decide to read the ancient books and scrolls in the hidden library of the cave. As you peruse the texts, you uncover a wealth of knowledge about the history of your town, the magical properties of the cave's water, and even some long-forgotten spells.",
+      "With this newfound knowledge, you become a respected scholar in your community. Your classmates are in awe of your wisdom, and you've gained a valuable understanding of the world around you. Your adventure may not have been the most daring, but it has enriched your life in unexpected ways."
+    ],
+    "options": [],
+    "id": "2b9fa6ef-c340-4000-9df6-aad20713781b",
+    "__T": "ge",
+    "Created": "2022-06-01T10:46:09.9876543Z",
+    "Modified": "2022-06-01T10:46:09.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-explore-deeper-2",
+    "description": [
+      "You choose to keep exploring the cave, leaving the giant gemstone behind. There's more to discover, and your curiosity drives you forward.",
+      "As you delve deeper into the cave, you come across a chamber filled with ancient books and scrolls. It seems to be a hidden library of knowledge. You can't resist the opportunity to learn and explore the secrets within. What will you do next?"
+    ],
+    "options": [
+      {
+        "description": "Read the ancient books and scrolls",
+        "next": "gpt2-library-knowledge"
+      },
+      {
+        "description": "Keep exploring the cave",
+        "next": "gpt2-explore-deeper-3"
+      }
+    ],
+    "id": "b7bed58e-0690-46e7-8302-650c4698110b",
+    "__T": "ge",
+    "Created": "2022-06-01T10:30:56.9876543Z",
+    "Modified": "2022-06-01T10:30:56.9876543Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-ultimate-treasure",
+    "description": [
+      "You decide to search for the most valuable treasure in the cave, fueled by the magical empowerment you gained from the water. With each step, you feel a surge of power coursing through you, making you feel invincible.",
+      "As you venture deeper into the cave, you stumble upon a chamber filled with treasure beyond your wildest dreams. Gold, jewels, and artifacts from ancient civilizations glitter in the dim light. This is the ultimate treasure you were seeking, and it's all yours."
+    ],
+    "options": [],
+    "id": "e27ecfb2-cf7d-43f3-b65c-2d47971c66c9",
+    "__T": "ge",
+    "Created": "2022-06-01T10:51:37.3456789Z",
+    "Modified": "2022-06-01T10:51:37.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-empowered-deeper",
+    "description": [
+      "With the magical empowerment flowing through you, you continue to explore deeper into the cave. You feel like nothing can stand in your way, and you're determined to uncover the cave's greatest secrets.",
+      "As you journey further, you come across a chamber unlike any other. It's filled with strange, glowing crystals that radiate an otherworldly energy. You can't resist the urge to touch them. What happens next is beyond your wildest imagination."
+    ],
+    "options": [
+      {
+        "description": "Touch the glowing crystals",
+        "next": "gpt2-otherworldly-experience"
+      },
+      {
+        "description": "Keep exploring the cave",
+        "next": "gpt2-empowered-deeper-2"
+      }
+    ],
+    "id": "03f79c6e-6335-41cb-bb84-e0ba31059516",
+    "Created": "2022-06-01T10:56:22.2345678Z",
+    "Modified": "2022-06-01T10:56:22.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-otherworldly-experience",
+    "description": [
+      "As you touch the glowing crystals, you're enveloped in a blinding light. It feels as if you're being transported to another realm. You find yourself in a place of immense beauty and wonder, unlike anything you've ever seen before.",
+      "In this otherworldly realm, you encounter beings of pure energy and wisdom. They share their knowledge and secrets with you, granting you abilities and insights that defy imagination. You've transcended the boundaries of your world and become a being of incredible power."
+    ],
+    "options": [],
+    "id": "8f981cf8-4640-431d-bcfe-7c8f2b2e5898",
+    "__T": "ge",
+    "Created": "2022-06-01T11:01:11.1234567Z",
+    "Modified": "2022-06-01T11:01:11.1234567Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-escape-route",
+    "description": [
+      "Panic sets in as the cavern continues to collapse around you. You desperately search for an escape route, but the collapsing rocks block your way back the path you came from. You need to find another way out, and fast.",
+      "As you scramble through the narrowing passages, you discover a small opening in the wall. It's a tight squeeze, but it might lead to safety. You decide to try your luck and squeeze through the opening."
+    ],
+    "options": [
+      {
+        "description": "Squeeze through the opening",
+        "next": "gpt2-narrow-escape"
+      },
+      {
+        "description": "Keep searching for an alternative escape route",
+        "next": "gpt2-alternative-escape"
+      }
+    ],
+    "id": "1e825af4-a73d-4115-94cf-a9105573952f",
+    "__T": "ge",
+    "Created": "2022-06-01T11:06:51.3456789Z",
+    "Modified": "2022-06-01T11:06:51.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-sword-break-gemstone",
+    "description": [
+      "In a desperate attempt to escape the collapsing cave, you swing the rusty sword at the giant gemstone. The sword makes contact with the gemstone, and a blinding burst of energy erupts from the impact.",
+      "The force of the explosion propels you out of the collapsing cavern and back into the open air. You land safely outside, but the cave and the gemstone are lost in the rubble. You've narrowly escaped with your life, and you'll have quite the story to tell."
+    ],
+    "options": [],
+    "id": "0716a90b-623c-4fbc-aa81-ea4165c3c610",
+    "__T": "ge",
+    "Created": "2022-06-01T11:11:33.2345678Z",
+    "Modified": "2022-06-01T11:11:33.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-narrow-escape",
+    "description": [
+      "You manage to squeeze through the narrow opening just in time. As you emerge on the other side, you hear the deafening crash of rocks and debris sealing off the cavern behind you. You've narrowly escaped the collapsing cave.",
+      "You find yourself in a different part of the mountain, with no clear path back to the surface. It's going to be a challenging journey to make your way out, but at least you're alive and free from the dangers of the cave."
+    ],
+    "options": [],
+    "id": "79f8360b-ea6d-4637-90ce-fa2846394480",
+    "__T": "ge",
+    "Created": "2022-06-01T11:16:22.3456789Z",
+    "Modified": "2022-06-01T11:16:22.3456789Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-alternative-escape",
+    "description": [
+      "You continue searching for an alternative escape route as the cave collapses around you. The situation is dire, but you refuse to give up.",
+      "After what feels like an eternity, you spot a narrow crevice in the cave's wall. It's a tight fit, but you have no other choice. With all your strength, you squeeze through the crevice just as the cavern collapses behind you.",
+      "You emerge on the other side, battered and bruised but alive. You've escaped the cave's collapse, and you're filled with a sense of triumph and relief."
+    ],
+    "options": [],
+    "id": "1d3672ae-6b5a-4afb-8d19-7e95cd25004e",
+    "__T": "ge",
+    "Created": "2022-06-01T11:21:11.2345678Z",
+    "Modified": "2022-06-01T11:21:11.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-river-adventure",
+    "description": [
+      "You decide to follow the underground river, curious about where it might lead. The waters are cool and soothing as you wade deeper into the darkness.",
+      "The river takes you on a journey through a series of underground chambers, each more wondrous than the last. You encounter glowing mushrooms, strange aquatic creatures, and even a hidden underground waterfall. It's an adventure like no other.",
+      "Finally, the river leads you to an underground lake, where you spot a glimmering object resting at the bottom. It could be the treasure you've been searching for. What will you do?"
+    ],
+    "options": [
+      {
+        "description": "Dive into the lake to retrieve the glimmering object",
+        "next": "gpt2-lake-treasure"
+      },
+      {
+        "description": "Continue following the river's course",
+        "next": "gpt2-river-journey"
+      }
+    ],
+    "id": "4fb3ee31-01a3-4c53-b6f8-5f9094dcff9b",
+    "__T": "ge",
+    "Created": "2022-06-01T11:26:05.1234567Z",
+    "Modified": "2022-06-01T11:26:05.1234567Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-lake-treasure",
+    "description": [
+      "You take a deep breath and dive into the underground lake to retrieve the glimmering object. As you swim deeper, you realize it's not just one object, but an entire chest filled with treasures beyond your wildest dreams.",
+      "With the chest in tow, you resurface and make your way back to the shore. You've found the ultimate treasure of the underground river adventure. Your classmates will be astounded by your discovery, and you'll be hailed as a hero in town."
+    ],
+    "options": [],
+    "id": "c5e6f177-1a09-4d14-9706-e2c782e96fe2",
+    "__T": "ge",
+    "Created": "2022-06-01T11:30:55.2345678Z",
+    "Modified": "2022-06-01T11:30:55.2345678Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  },
+  {
+    "name": "gpt2-river-journey",
+    "description": [
+      "You decide to continue following the river's course, eager to see where it leads. The underground journey takes you through more wondrous chambers and mystical sights.",
+      "Eventually, the river emerges from a hidden underground cave and flows into the open air. You find yourself in a breathtakingly beautiful valley surrounded by lush greenery and vibrant wildlife. It's a paradise untouched by the outside world.",
+      "You've had an unforgettable adventure, and you've discovered a hidden paradise. Your classmates may not have their proof from the troll caves, but you have a story that will be told for generations."
+    ],
+    "options": [],
+    "id": "3146d606-3b10-4dae-8a59-9b7465294a01",
+    "__T": "ge",
+    "Created": "2022-06-01T11:35:44.1234567Z",
+    "Modified": "2022-06-01T11:35:44.1234567Z",
+    "createdBy": null,
+    "modifiedBy": "charlie@leenet.link"
+  }
+]
