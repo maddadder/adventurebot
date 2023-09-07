@@ -88,7 +88,7 @@ To unsubscribe from these messages do not respond for 24 hours and the game will
                 sb.Append($@"<br/>
 <br/>
 You received the above message because you or a party member has responded to the game within 24 hours. <br/>
-To unsubscribe from these messages you or a party member must not respond for 24 hours and the game will end.");
+To end the game, you and your party members must not respond for 24 hours and the game will end.");
                 return sb.ToString();
             }
         }

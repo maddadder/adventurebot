@@ -39,10 +39,12 @@ namespace AdventureBot
             // config the strongly typed section
             builder.Services.Configure<AwsSesApiConfig>(builtConfig.GetSection("AwsSes"));
             builder.Services.Configure<ApplicationConfig>(builtConfig.GetSection("App"));
+            builder.Services.Configure<DiscordConfig>(builtConfig.GetSection("Discord"));
             builder.Services.Configure<GraphApiAppConfig>(builtConfig.GetSection("GraphApiApp"));
 
             builder.Services.AddSingleton<ICosmosApiService, CosmosApiService>();
             builder.Services.AddSingleton<IAwsSesApiService, AwsSesApiService>();
+            builder.Services.AddSingleton<IDiscordBotService, DiscordBotService>();
 
             builder.Services.AddSingleton<IGraphClientService, GraphClientService>();
 

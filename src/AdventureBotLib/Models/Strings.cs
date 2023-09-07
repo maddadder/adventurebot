@@ -24,4 +24,11 @@ namespace AdventureBot.Models
         public const string Get = nameof(Get);
         public const string Delete = nameof(Delete);
     }
+    public static class DiscordVotingCounterOperationNames
+    {
+        public const string SetPriorVote = nameof(SetPriorVote);
+        public const string Vote = nameof(Vote);
+        public const string Get = nameof(Get);
+        public const string Delete = nameof(Delete);
+    }
 }
