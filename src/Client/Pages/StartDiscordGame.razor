@@ -1,0 +1,89 @@
+﻿@page "/startdiscordgame"
+@using AdventureBotUI.Client.Services
+@using Read;
+@inject NavigationManager NavigationManager
+@inject AdventureBotReadService adventureBotReadService
+@inject IJSRuntime JSRuntime
+
+<h1>@Title</h1>
+<hr />
+<h2>1st Time Setup Instructions</h2>
+<h3>Invite the Bot to a Discord Server (Guild):</h3>
+<ul>
+    <li>Go to the Discord Developer Portal.</li>
+    <li>Select your bot application.</li>
+    <li>In the application settings, navigate to the "OAuth2" tab.</li>
+    <li>Under the "OAuth2 URL Generator" section, select the "bot" scope.</li>
+    <li>In the "Bot Permissions" section, select the necessary permissions, such as "Send Messages," "Read Messages," and any other permissions required for your bot.</li>
+    <li>Copy the generated OAuth2 URL and paste it into your web browser. It will lead you to a page where you can choose the server (guild) to invite your bot to. Select a server and complete the authorization process.</li>
+</ul>
+<hr />
+@if(!HasSubmitted)
+{
+    <EditForm OnValidSubmit="SaveUser" EditContext="@editContext">
+        <DataAnnotationsValidator />
+        <div class="mb-3">
+            <label for="initializeGameLoopInput.TargetChannelId" class="form-label">Discord Channel Id</label>
+            <div class="col-md-4">
+                <InputText class="form-control" @bind-Value="initializeGameLoopInput.TargetChannelId" placeholder="" />
+            </div>
+            <ValidationMessage For="@(() => initializeGameLoopInput.TargetChannelId")" />
+        </div>
+        <div>&#160;</div>
+        <div class="mb-3">
+            <label for="Wait24HoursToFinalizeDecision" class="form-label">Delay game response for 24 hours</label>
+            <div class="col-md-4">
+                <InputCheckbox @bind-Value="Wait24HoursToFinalizeDecision" />
+            </div>
+            <ValidationMessage For="@(() => Wait24HoursToFinalizeDecision)" />
+        </div>
+        <ValidationSummary />
+        <div class="form-group">
+            <button type="submit" disabled="@HasSubmitted" class="btn btn-primary">Submit</button>
+        </div>
+    </EditForm>
+}
+<div class="mb-3" style="color:red;margin-top:20px;">@ValidationErrorMessage</div>
+@code {
+    private EditContext editContext;
+    protected string Title = "Start Discord Game";
+    protected InitializeDiscordLoopInput initializeGameLoopInput = new();
+    protected string ValidationErrorMessage = "";
+    private bool Wait24HoursToFinalizeDecision = true;
+    private bool HasSubmitted = false;
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(initializeGameLoopInput);
+    }
+    
+    protected async Task SaveUser()
+    {
+        ValidationErrorMessage = "";
+        if (!editContext.Validate()){
+            ValidationErrorMessage = "The form is invalid";
+            return;
+        }
+        if(string.IsNullOrEmpty(initializeGameLoopInput.TargetChannelId))
+        {
+            ValidationErrorMessage = "Missing Discord Channel Id";
+        }
+        if(!string.IsNullOrEmpty(ValidationErrorMessage))
+        {
+            return;
+        }
+
+        initializeGameLoopInput.InitialGameState = "begin";
+        if(Wait24HoursToFinalizeDecision)
+        {
+            initializeGameLoopInput.GameDelay = "1.00:00:00.000";
+        }
+        else
+        {
+            initializeGameLoopInput.GameDelay = "0.00:05:00.000";
+        }
+        HasSubmitted = true;
+        ValidationErrorMessage = "loading...";
+        CheckStatusResponse response = await adventureBotReadService.DiscordLoopPostAsync(initializeGameLoopInput);
+        ValidationErrorMessage = "Your game is active. Please wait up to 20 minutes for your game to start.";
+    }
+}

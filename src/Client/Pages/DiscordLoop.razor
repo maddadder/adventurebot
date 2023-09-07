@@ -1,0 +1,179 @@
+﻿@page "/discordloop/{InstanceId}/{SubscriberId}/{GameState}"
+@using AdventureBotUI.Client.Services
+@using Read
+@inject AdventureBotReadService adventureBotReadService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Adventure Bot</PageTitle>
+
+<h1>Adventure Bot</h1>
+
+@if (votingCounter == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div>Click Get Status to view the current votes</div>
+                <button class="btn btn-primary" disabled="@VoteCountClicked" @onclick="GetStatus">Get Status</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <th>Member</th>
+                        <th>Vote</th>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in votingCounter.VoterList)
+                        {
+                            <tr>
+                                <td>@item.Key</td>
+                                <td>@item.Value</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (gameEntries == null)
+                {
+                    <div>loading...</div>
+                }
+                else
+                {
+                    <div>&#160;</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>@votingCounter.PriorVote</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var gameEntry in gameEntries.OrderBy(x => x.Created))
+                            {
+                            <tr>
+                                <td>
+                                    <ul style="margin:0px;padding:0px;">
+                                    @foreach (var desc in gameEntry.Description)
+                                    {
+                                        <li>@desc</li>
+                                    }
+                                    </ul>
+                                    <br/>
+                                    <b>Option(s):</b>
+                                    <ul>
+                                    @if(gameEntry.Options != null)
+                                    {
+                                        <InputRadioGroup @bind-Value="@GameState">
+                                            @foreach (var gameOption in gameEntry.Options)
+                                            {
+                                                <InputRadio Value="@gameOption.Next" />@(" ")@gameOption.Description
+                                                <br>
+                                            }
+                                            @if(!gameEntry.Options.Any())
+                                            {
+                                                <InputRadio Value='("begin")' />@(" Game Over. Start Over")
+                                            }
+                                        </InputRadioGroup>
+                                        
+                                    }
+                                    </ul>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+}
+@if (response == null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="mb-3" style="margin-top:10px;">
+                    <label for="Body" class="form-label">Your choice:</label>
+                    <div class="col-md-4">
+                        <input disabled="true" class="form-control" value="@GameState" placeholder="game state" />
+                    </div>
+                </div>
+                <div>Click Save State to continue</div>
+                <button class="btn btn-primary" disabled="@SaveStateClicked" @onclick="SaveState">Save State</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">@response</div>
+        </div>
+    </div>
+}
+
+@code 
+{
+
+    [Parameter]
+    public string InstanceId { get; set; }
+    [Parameter]
+    public string SubscriberId { get; set; }
+    [Parameter]
+    public string GameState { get; set; }
+    protected string response = null;
+    private bool SaveStateClicked = false;
+    protected DiscordVotingCounter votingCounter = null;
+    protected List<GameEntry> gameEntries = null;
+    private bool VoteCountClicked = false;
+    protected override async Task OnParametersSetAsync()
+    {
+        
+    }
+    private async Task SaveState()
+    {
+        SaveStateClicked = true;
+
+        Guid InstanceIdResult = Guid.Empty;
+        Guid SubscriberIdResult = Guid.Empty;
+        if(Guid.TryParse(InstanceId, out InstanceIdResult) && Guid.TryParse(SubscriberId, out SubscriberIdResult))
+        {
+            DiscordLoopInput input = new DiscordLoopInput();
+            input.SubscriberId = SubscriberId;
+            input.GameState = GameState;
+            response = await adventureBotReadService.DiscordLoopPutAsync(InstanceId, input);
+            votingCounter = null;
+            VoteCountClicked = false;
+        }
+        else
+        {
+            response = "Invalid input parameters or this game is no longer valid. Please restart your game.";
+        }
+    }
+    private async Task GetStatus()
+    {
+        VoteCountClicked = true;
+        Guid InstanceIdResult = Guid.Empty;
+        if(Guid.TryParse(InstanceId, out InstanceIdResult))
+        {
+            votingCounter = await adventureBotReadService.DiscordLoopGetAsync(InstanceId);
+            if(!string.IsNullOrEmpty(votingCounter.PriorVote))
+            {
+                gameEntries = (await adventureBotReadService.GameEntrySearchAsync(votingCounter.PriorVote)).ToList();
+                response = null;
+                SaveStateClicked = false;
+            }
+        }
+        else
+        {
+            response = "Invalid input parameters or this game is no longer valid. Please restart your game.";
+        }
+    }
+}

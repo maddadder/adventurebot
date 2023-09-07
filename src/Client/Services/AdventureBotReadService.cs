@@ -35,4 +35,16 @@ public class AdventureBotReadService
     {
         return await client.GameLoopGetAsync(token);
     }
+    public async Task<CheckStatusResponse> DiscordLoopPostAsync(InitializeDiscordLoopInput input)
+    {
+        return await client.DiscordLoopPostAsync(input);
+    }
+    public async Task<string> DiscordLoopPutAsync(string token, DiscordLoopInput input)
+    {
+        return await client.DiscordLoopPutAsync(token,input);
+    }
+    public async Task<DiscordVotingCounter> DiscordLoopGetAsync(string token)
+    {
+        return await client.DiscordLoopGetAsync(token);
+    }
 }
