@@ -1,4 +1,4 @@
-﻿@page "/discordloop/{InstanceId}/{SubscriberId}/{GameState}"
+﻿@page "/discordloop/{InstanceId}/{TargetChannelId}/{SubscriberId}/{GameState}"
 @using AdventureBotUI.Client.Services
 @using Read
 @inject AdventureBotReadService adventureBotReadService
@@ -42,7 +42,7 @@ else
 
                 @if (gameEntries == null)
                 {
-                    <div>loading...</div>
+                    <div>loading or no prior votes...</div>
                 }
                 else
                 {
@@ -125,6 +125,8 @@ else
     [Parameter]
     public string InstanceId { get; set; }
     [Parameter]
+    public string TargetChannelId {get;set;}
+    [Parameter]
     public string SubscriberId { get; set; }
     [Parameter]
     public string GameState { get; set; }
@@ -147,6 +149,7 @@ else
         {
             DiscordLoopInput input = new DiscordLoopInput();
             input.SubscriberId = SubscriberId;
+            input.TargetChannelId = TargetChannelId;
             input.GameState = GameState;
             response = await adventureBotReadService.DiscordLoopPutAsync(InstanceId, input);
             votingCounter = null;

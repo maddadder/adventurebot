@@ -46,12 +46,12 @@ namespace AdventureBot.Services
             //[Custom Text](URL)
             if(!gameEntry.options.Any())
             {
-                sb.Append($"[Start Over]({gameState.RegistrationConfirmationURL}/discordloop/{gameState.InstanceId}/{gameState.SubscriberId}/begin/)\n\n");
+                sb.Append($"[Start Over]({gameState.RegistrationConfirmationURL}/discordloop/{gameState.InstanceId}/{gameState.TargetChannelId}/{gameState.SubscriberId}/begin/)\n\n");
             }
             else
             {
                 foreach(var option in gameEntry.options){
-                    sb.Append($"[{option.description}]({gameState.RegistrationConfirmationURL}/discordloop/{gameState.InstanceId}/{gameState.SubscriberId}/{option.next}/)\n\n");
+                    sb.Append($"[{option.description}]({gameState.RegistrationConfirmationURL}/discordloop/{gameState.InstanceId}/{gameState.TargetChannelId}/{gameState.SubscriberId}/{option.next}/)\n\n");
                 }
             }
             sb.Append($@"
