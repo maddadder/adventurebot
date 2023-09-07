@@ -51,7 +51,7 @@ namespace AdventureBot.Orchestrators
                 var customStatus = new DiscordLoopOrchestatorStatus { Text = $"Waiting for user response", ExpireAt = expiredAt };
                 context.SetCustomStatus(customStatus);
 
-                var gameAdvanceButtonClicked = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.GameStateAdvanced);
+                var gameAdvanceButtonClicked = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.DiscordStateAdvanced);
                 
                 // Whatever comes first is the winner (timer vs input)
                 var winner = await Task.WhenAny(gameAdvanceButtonClicked, gameTimeout);
@@ -71,7 +71,7 @@ namespace AdventureBot.Orchestrators
                         //    Only break out when the timeout expires
                         var gameDelayExpiredAt = context.CurrentUtcDateTime.Add(input.GameDelay);
                         var gameDelayTimeout = context.CreateTimer(gameDelayExpiredAt, ctsGameDelayTimeout.Token);
-                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.GameStateAdvanced);
+                        var gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.DiscordStateAdvanced);
                         while(await Task.WhenAny(gameAdvanceButtonClickedBeforeTimeout, gameDelayTimeout) != gameDelayTimeout)
                         {
                             // 6. Add the vote to the tally
@@ -80,7 +80,7 @@ namespace AdventureBot.Orchestrators
                             {
                                context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Vote, gameLoopInput);
                             }
-                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.GameStateAdvanced);
+                            gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.DiscordStateAdvanced);
                         }
                         // 7. Get the current state of the votingCounter
                         DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.Get);

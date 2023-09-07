@@ -116,7 +116,7 @@ namespace AdventureBot.TriggerFunctions
                     }
                 }
 
-                await client.RaiseEventAsync(instanceId, EventNames.GameStateAdvanced, input);
+                await client.RaiseEventAsync(instanceId, EventNames.DiscordStateAdvanced, input);
 
                 return new OkObjectResult("A new game state has been received");
             }

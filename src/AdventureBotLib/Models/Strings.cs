@@ -16,6 +16,7 @@ namespace AdventureBot.Models
     public static class EventNames
     {
         public const string GameStateAdvanced = nameof(GameStateAdvanced);
+        public const string DiscordStateAdvanced = nameof(DiscordStateAdvanced);
     }
     public static class VotingCounterOperationNames
     {
