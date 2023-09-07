@@ -13,20 +13,20 @@ public partial class EntityTriggerDiscordVotingCounter
         var vote = ctx.GetState<DiscordVotingCounter>() ?? new DiscordVotingCounter();
         switch (ctx.OperationName)
         {
-            case DiscordVotingCounterOperationNames.SetPriorVote:
+            case DiscordVotingCounterOperationNames.DiscordSetPriorVote:
                 var priorVote = ctx.GetInput<string>();
                 vote.SetPriorVote(priorVote);
                 ctx.SetState(vote);
                 break;
-            case DiscordVotingCounterOperationNames.Vote:
+            case DiscordVotingCounterOperationNames.DiscordVote:
                 var candidateToAdd = ctx.GetInput<DiscordLoopInput>();
                 vote.Vote(candidateToAdd);
                 ctx.SetState(vote);
                 break;
-            case DiscordVotingCounterOperationNames.Get:
+            case DiscordVotingCounterOperationNames.DiscordGet:
                 ctx.Return(vote);
                 break;
-            case DiscordVotingCounterOperationNames.Delete:
+            case DiscordVotingCounterOperationNames.DiscordDelete:
                 ctx.DeleteState();
                 break;
         }

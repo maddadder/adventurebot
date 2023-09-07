@@ -40,7 +40,7 @@ namespace AdventureBot.Orchestrators
             await context.CallActivityAsync(nameof(DiscordStateLoopActivity), sendReceiveGameStateInput);
             // 2. Initialize an entity and set the prior vote
             var entityId = new EntityId(EntityTriggerDiscordVotingCounter.Name.Vote, $"{EntityTriggerDiscordVotingCounter.Name.Vote},{input.InstanceId}");
-            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetPriorVote, input.InitialGameState);
+            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordSetPriorVote, input.InitialGameState);
 
             // 3. Setup timer for 1 day and wait for external event to be executed. Whatever comes first is the winner (timer vs input)
             using (var ctsGameTimeout = new CancellationTokenSource())
@@ -65,7 +65,7 @@ namespace AdventureBot.Orchestrators
                         if(mapping.Select(x => x.SubscriberId).Contains(gameLoopInput.SubscriberId))
                         {
                             // 4. Add the vote to the tally
-                            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Vote, gameLoopInput);
+                            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordVote, gameLoopInput);
                         }
                         // 5. Initialize the WaitForExternalEvent and then loop on the await.
                         //    Only break out when the timeout expires
@@ -78,12 +78,12 @@ namespace AdventureBot.Orchestrators
                             gameLoopInput = gameAdvanceButtonClickedBeforeTimeout.Result;
                             if(mapping.Select(x => x.SubscriberId).Contains(gameLoopInput.SubscriberId))
                             {
-                               context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Vote, gameLoopInput);
+                               context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordVote, gameLoopInput);
                             }
                             gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.DiscordStateAdvanced);
                         }
                         // 7. Get the current state of the votingCounter
-                        DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.Get);
+                        DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.DiscordGet);
                         Dictionary<string, int> votes = votingCounter.VoteCount;
                         // 8. Tally up the votes, and get the new game state
                         var newGameState = await context.CallActivityAsync<string>(nameof(TallyVoteActivity), votes);
@@ -92,7 +92,7 @@ namespace AdventureBot.Orchestrators
                             input.InitialGameState = newGameState;
                         }
                         // 9. Delete the entity because we are done with it
-                        context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Delete);
+                        context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordDelete);
                         log.LogInformation($"New Game State: {input.InitialGameState}");
                         // 10. restart the workflow with new input
                         context.ContinueAsNew(input, false);

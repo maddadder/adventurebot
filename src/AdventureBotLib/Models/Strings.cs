@@ -27,9 +27,9 @@ namespace AdventureBot.Models
     }
     public static class DiscordVotingCounterOperationNames
     {
-        public const string SetPriorVote = nameof(SetPriorVote);
-        public const string Vote = nameof(Vote);
-        public const string Get = nameof(Get);
-        public const string Delete = nameof(Delete);
+        public const string DiscordSetPriorVote = nameof(DiscordSetPriorVote);
+        public const string DiscordVote = nameof(DiscordVote);
+        public const string DiscordGet = nameof(DiscordGet);
+        public const string DiscordDelete = nameof(DiscordDelete);
     }
 }
