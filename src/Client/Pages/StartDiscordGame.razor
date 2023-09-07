@@ -14,8 +14,8 @@
     <li>Select your bot application.</li>
     <li>In the application settings, navigate to the "OAuth2" tab.</li>
     <li>Under the "OAuth2 URL Generator" section, select the "bot" scope.</li>
-    <li>In the "Bot Permissions" section, select the necessary permissions, such as "Send Messages," "Read Messages," and any other permissions required for your bot.</li>
-    <li>Copy the generated OAuth2 URL and paste it into your web browser. It will lead you to a page where you can choose the server (guild) to invite your bot to. Select a server and complete the authorization process.</li>
+    <li>In the "Bot Permissions" section, select the necessary permissions: Add Reactions, Create Messages, Manage Messages, Mention Everyone, Guilds, and applications.commands</li>
+    <li>Copy the generated OAuth2 URL and paste it into your web browser. It will lead you to a page where you can choose the server guild to invite your bot to. Select a server and complete the authorization process.</li>
 </ul>
 <hr />
 @if(!HasSubmitted)
@@ -25,9 +25,9 @@
         <div class="mb-3">
             <label for="initializeGameLoopInput.TargetChannelId" class="form-label">Discord Channel Id</label>
             <div class="col-md-4">
-                <InputText class="form-control" @bind-Value="initializeGameLoopInput.TargetChannelId" placeholder="" />
+                <InputText class="form-control" @bind-Value="initializeGameLoopInput.TargetChannelId" placeholder="18 digit number" />
             </div>
-            <ValidationMessage For="@(() => initializeGameLoopInput.TargetChannelId")" />
+            <ValidationMessage For="@(() => initializeGameLoopInput.TargetChannelId)" />
         </div>
         <div>&#160;</div>
         <div class="mb-3">
