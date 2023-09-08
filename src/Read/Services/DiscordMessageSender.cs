@@ -26,7 +26,8 @@ public class DiscordMessageSender
         await client.LoginAsync(TokenType.Bot, _botToken);
         _logger.LogInformation("DiscordMessageSender StartAsync");
         await client.StartAsync();
-
+        int attempts = 0;
+        int maxAttempts = 10;
         client.Ready += async () =>
         {
             _logger.LogInformation("DiscordMessageSender client Ready");
@@ -47,11 +48,17 @@ public class DiscordMessageSender
             await client.StopAsync();
         };
 
-        // Block until the bot is ready
-        while (client.ConnectionState != ConnectionState.Connected)
+        // Check connection state with a limited number of attempts
+        while (attempts < maxAttempts && client.ConnectionState != ConnectionState.Connected)
         {
             _logger.LogInformation("client.ConnectionState != ConnectionState.Connected");
             await Task.Delay(1000);
+            attempts++;
+        }
+
+        if (attempts >= maxAttempts)
+        {
+            _logger.LogInformation("Bot could not connect to Discord within the specified number of attempts.");
         }
     }
 
