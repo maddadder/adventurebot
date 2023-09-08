@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -39,37 +41,33 @@ public class DiscordMessageSender
                 if (channel != null)
                 {
                     _logger.LogInformation("DiscordMessageSender channel.SendMessageAsync");
-                    var words = messageText.Split(' '); // Split the message into words
+                    // Split the message into words and Markdown links
+                    var wordsAndLinks = Regex.Split(messageText, @"(\[.*?\]\(.*?\))|\s+");
+                    var chunks = new List<string>();
+                    var currentChunk = new StringBuilder();
 
-                    // Initialize a StringBuilder for each chunk
-                    var chunkBuilder = new StringBuilder();
-
-                    foreach (var word in words)
+                    foreach (var wordOrLink in wordsAndLinks)
                     {
-                        if (chunkBuilder.Length + word.Length + 1 <= 1500)
+                        if (currentChunk.Length + wordOrLink.Length <= 1999)
                         {
-                            // If adding the word doesn't exceed the character limit, add it to the current chunk
-                            if (chunkBuilder.Length > 0)
-                            {
-                                chunkBuilder.Append(' '); // Add a space between words
-                            }
-                            chunkBuilder.Append(word);
+                            currentChunk.Append(wordOrLink);
                         }
                         else
                         {
-                            // If adding the word exceeds the character limit, send the current chunk
-                            await channel.SendMessageAsync(chunkBuilder.ToString());
-
-                            // Reset the chunkBuilder for the next chunk
-                            chunkBuilder.Clear();
-                            chunkBuilder.Append(word);
+                            chunks.Add(currentChunk.ToString());
+                            currentChunk.Clear();
+                            currentChunk.Append(wordOrLink);
                         }
                     }
 
-                    // Send any remaining part of the message
-                    if (chunkBuilder.Length > 0)
+                    if (currentChunk.Length > 0)
                     {
-                        await channel.SendMessageAsync(chunkBuilder.ToString());
+                        chunks.Add(currentChunk.ToString());
+                    }
+
+                    foreach (var chunk in chunks)
+                    {
+                        await channel.SendMessageAsync(chunk);
                     }
                 }
                 else
