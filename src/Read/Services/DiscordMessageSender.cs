@@ -30,22 +30,29 @@ public class DiscordMessageSender
         int maxAttempts = 10;
         client.Ready += async () =>
         {
-            _logger.LogInformation("DiscordMessageSender client Ready");
-            var channel = client.GetChannel(_targetChannelId) as ISocketMessageChannel;
-
-            if (channel != null)
+            try
             {
-                 _logger.LogInformation("DiscordMessageSender channel.SendMessageAsync");
-                // Send the custom message
-                await channel.SendMessageAsync(messageText);
-            }
-            else
-            {
-                _logger.LogInformation("Target channel not found.");
-            }
+                _logger.LogInformation("DiscordMessageSender client Ready");
+                var channel = client.GetChannel(_targetChannelId) as ISocketMessageChannel;
 
-            _logger.LogInformation("Shutting down the bot");
-            await client.StopAsync();
+                if (channel != null)
+                {
+                    _logger.LogInformation("DiscordMessageSender channel.SendMessageAsync");
+                    // Send the custom message
+                    await channel.SendMessageAsync(messageText);
+                }
+                else
+                {
+                    _logger.LogInformation("Target channel not found.");
+                }
+
+                _logger.LogInformation("Shutting down the bot");
+                await client.StopAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation($"Error in Ready event handler: {ex.Message}");
+            }
         };
 
         // Check connection state with a limited number of attempts
