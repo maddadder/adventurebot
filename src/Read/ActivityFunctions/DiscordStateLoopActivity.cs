@@ -26,12 +26,16 @@ namespace AdventureBot.ActivityFunctions
         public async Task Run(          
             [ActivityTrigger] SendReceiveDiscordStateInput input, ILogger log)
         {
+            log.LogInformation("DiscordStateLoopActivity has started");
             ulong temp = 0;
             if(ulong.TryParse(input.TargetChannelId, out temp) && !string.IsNullOrEmpty(input.GameState))
             {
+                log.LogInformation("Getting GetGameStatesFromOption from GameState");
                 var gameEntry = await _cosmosApiService.GetGameStatesFromOption(input.GameState);
+                log.LogInformation("Getting Message to send from GameState");
                 string message = await _discordBotService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
                 if(!string.IsNullOrEmpty(message)){
+                    log.LogInformation("Sending Message using DiscordBotService");
                     await _discordBotService.SendMessage(input.TargetChannelId, message);
                     log.LogInformation($"Message sent to {input.TargetChannelId} with game state URL {input.RegistrationConfirmationURL}/ with instanceid: {input.InstanceId}");
                 }
