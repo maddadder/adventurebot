@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Logging;
 
 namespace AdventureBot.Services
 {
@@ -18,10 +18,13 @@ namespace AdventureBot.Services
     {
         private readonly string BaseUrl;
         private readonly string BotToken;
+        private readonly ILogger _logger;
         public DiscordBotService(
+            ILogger logger,
             IOptions<DiscordConfig> discordConfig,
             IOptions<ApplicationConfig> applicationConfig)
         {
+            _logger = logger;
             var discordConfigValue = discordConfig.Value;
             var applicationConfigValue = applicationConfig.Value;
             BotToken = discordConfigValue.BotToken;
@@ -63,7 +66,7 @@ To end the game, you and your party members must not respond for 24 hours and th
         }
         public async Task SendMessage(string TargetChannelId, string Body)
         {
-            DiscordMessageSender sender = new DiscordMessageSender(BotToken, ulong.Parse(TargetChannelId));
+            DiscordMessageSender sender = new DiscordMessageSender(_logger, BotToken, ulong.Parse(TargetChannelId));
             await sender.SendMessageAsync(Body);
         }
     }
