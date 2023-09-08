@@ -13,40 +13,42 @@ namespace AdventureBot.ActivityFunctions
     {
         private readonly IDiscordBotService _discordBotService;
         private readonly ICosmosApiService _cosmosApiService;
-
+        private readonly ILogger _logger;
         public DiscordStateLoopActivity(
+            ILogger<DiscordStateLoopActivity> logger,
             IDiscordBotService discordBotService,
             ICosmosApiService cosmosApiService)
         {
+            _logger = logger;
             _discordBotService = discordBotService;
             _cosmosApiService = cosmosApiService;
         }
 
         [FunctionName(nameof(DiscordStateLoopActivity))]
         public async Task Run(          
-            [ActivityTrigger] SendReceiveDiscordStateInput input, ILogger log)
+            [ActivityTrigger] SendReceiveDiscordStateInput input)
         {
-            log.LogInformation("DiscordStateLoopActivity has started");
+            _logger.LogInformation("DiscordStateLoopActivity has started");
             ulong temp = 0;
             if(ulong.TryParse(input.TargetChannelId, out temp) && !string.IsNullOrEmpty(input.GameState))
             {
-                log.LogInformation("Getting GetGameStatesFromOption from GameState");
+                _logger.LogInformation("Getting GetGameStatesFromOption from GameState");
                 var gameEntry = await _cosmosApiService.GetGameStatesFromOption(input.GameState);
-                log.LogInformation("Getting Message to send from GameState");
+                _logger.LogInformation("Getting Message to send from GameState");
                 string message = await _discordBotService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
                 if(!string.IsNullOrEmpty(message)){
-                    log.LogInformation("Sending Message using DiscordBotService");
+                    _logger.LogInformation("Sending Message using DiscordBotService");
                     await _discordBotService.SendMessage(input.TargetChannelId, message);
-                    log.LogInformation($"Message sent to {input.TargetChannelId} with game state URL {input.RegistrationConfirmationURL}/ with instanceid: {input.InstanceId}");
+                    _logger.LogInformation($"Message sent to {input.TargetChannelId} with game state URL {input.RegistrationConfirmationURL}/ with instanceid: {input.InstanceId}");
                 }
                 else
                 {
-                    log.LogInformation($"Message not sent to {input.TargetChannelId}");
+                    _logger.LogInformation($"Message not sent to {input.TargetChannelId}");
                 }
             }
             else
             {
-                log.LogInformation($"TargetChannelId or game state is invalid");
+                _logger.LogInformation($"TargetChannelId or game state is invalid");
             }
         }
 

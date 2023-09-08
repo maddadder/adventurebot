@@ -35,6 +35,8 @@ namespace AdventureBot
             builtConfig = configBuilder.Build();
 
             builder.Services.Replace(new ServiceDescriptor(typeof(IConfiguration), builtConfig));
+            
+            builder.Services.AddLogging();
 
             // config the strongly typed section
             builder.Services.Configure<AwsSesApiConfig>(builtConfig.GetSection("AwsSes"));
