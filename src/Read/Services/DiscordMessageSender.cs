@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -38,8 +39,38 @@ public class DiscordMessageSender
                 if (channel != null)
                 {
                     _logger.LogInformation("DiscordMessageSender channel.SendMessageAsync");
-                    // Send the custom message
-                    await channel.SendMessageAsync(messageText);
+                    var words = messageText.Split(' '); // Split the message into words
+
+                    // Initialize a StringBuilder for each chunk
+                    var chunkBuilder = new StringBuilder();
+
+                    foreach (var word in words)
+                    {
+                        if (chunkBuilder.Length + word.Length + 1 <= 1500)
+                        {
+                            // If adding the word doesn't exceed the character limit, add it to the current chunk
+                            if (chunkBuilder.Length > 0)
+                            {
+                                chunkBuilder.Append(' '); // Add a space between words
+                            }
+                            chunkBuilder.Append(word);
+                        }
+                        else
+                        {
+                            // If adding the word exceeds the character limit, send the current chunk
+                            await channel.SendMessageAsync(chunkBuilder.ToString());
+
+                            // Reset the chunkBuilder for the next chunk
+                            chunkBuilder.Clear();
+                            chunkBuilder.Append(word);
+                        }
+                    }
+
+                    // Send any remaining part of the message
+                    if (chunkBuilder.Length > 0)
+                    {
+                        await channel.SendMessageAsync(chunkBuilder.ToString());
+                    }
                 }
                 else
                 {
