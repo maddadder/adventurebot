@@ -22,8 +22,8 @@ public class DiscordBot
         await _client.LoginAsync(TokenType.Bot, _botToken);
         await _client.StartAsync();
 
-        // Block the program for 10 seconds to let the ReadyAsync run.
-        await Task.Delay(10000);
+        // Block the program for 20 seconds to let the ReadyAsync run.
+        await Task.Delay(20000);
     }
 
 
