@@ -41,33 +41,31 @@ public class DiscordMessageSender
                 if (channel != null)
                 {
                     _logger.LogInformation("DiscordMessageSender channel.SendMessageAsync");
-                    // Split the message into words and Markdown links
-                    var wordsAndLinks = Regex.Split(messageText, @"(\[.*?\]\(.*?\))|\s+");
-                    var chunks = new List<string>();
-                    var currentChunk = new StringBuilder();
+                    // Tokenize the message into words, Markdown links, and other characters
+                    var tokens = TokenizeMessage(messageText);
 
-                    foreach (var wordOrLink in wordsAndLinks)
+                    var currentChunk = new StringBuilder();
+                    var currentChunkLength = 0;
+
+                    foreach (var token in tokens)
                     {
-                        if (currentChunk.Length + wordOrLink.Length <= 1999)
+                        if (currentChunkLength + token.Length <= 1999)
                         {
-                            currentChunk.Append(wordOrLink);
+                            currentChunk.Append(token);
+                            currentChunkLength += token.Length;
                         }
                         else
                         {
-                            chunks.Add(currentChunk.ToString());
+                            await channel.SendMessageAsync(currentChunk.ToString());
                             currentChunk.Clear();
-                            currentChunk.Append(wordOrLink);
+                            currentChunk.Append(token);
+                            currentChunkLength = token.Length;
                         }
                     }
 
-                    if (currentChunk.Length > 0)
+                    if (currentChunkLength > 0)
                     {
-                        chunks.Add(currentChunk.ToString());
-                    }
-
-                    foreach (var chunk in chunks)
-                    {
-                        await channel.SendMessageAsync(chunk);
+                        await channel.SendMessageAsync(currentChunk.ToString());
                     }
                 }
                 else
@@ -97,7 +95,64 @@ public class DiscordMessageSender
             _logger.LogInformation("Bot could not connect to Discord within the specified number of attempts.");
         }
     }
+    private List<string> TokenizeMessage(string messageText)
+    {
+        var tokens = new List<string>();
+        var currentToken = new StringBuilder();
 
+        for (int i = 0; i < messageText.Length; i++)
+        {
+            if (messageText[i] == '[')
+            {
+                // Check for Markdown link start
+                var linkEndIndex = messageText.IndexOf(']', i + 1);
+                if (linkEndIndex != -1)
+                {
+                    var linkText = messageText.Substring(i, linkEndIndex - i + 1);
+                    tokens.Add(linkText);
+                    i = linkEndIndex;
+                    continue;
+                }
+            }
+            
+            if (messageText[i] == '(')
+            {
+                // Check for Markdown link end
+                var linkEndIndex = messageText.IndexOf(')', i + 1);
+                if (linkEndIndex != -1)
+                {
+                    var linkHref = messageText.Substring(i, linkEndIndex - i + 1);
+                    tokens.Add(linkHref);
+                    i = linkEndIndex;
+                    continue;
+                }
+            }
+
+            // Handle other characters and spaces
+            if (char.IsWhiteSpace(messageText[i]))
+            {
+                // Preserve spaces and line breaks
+                if (currentToken.Length > 0)
+                {
+                    tokens.Add(currentToken.ToString());
+                    currentToken.Clear();
+                }
+                tokens.Add(messageText[i].ToString());
+            }
+            else
+            {
+                currentToken.Append(messageText[i]);
+            }
+        }
+
+        // Add any remaining token
+        if (currentToken.Length > 0)
+        {
+            tokens.Add(currentToken.ToString());
+        }
+
+        return tokens;
+    }
     private Task LogAsync(LogMessage log)
     {
         _logger.LogInformation(log.Message);
