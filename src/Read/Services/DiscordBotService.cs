@@ -63,8 +63,8 @@ To end the game, you and your party members must not respond for 24 hours and th
         }
         public async Task SendMessage(string TargetChannelId, string Body)
         {
-            DiscordBot bot = new DiscordBot();
-            await bot.RunBotAsync(BotToken, ulong.Parse(TargetChannelId), Body);
+            DiscordMessageSender sender = new DiscordMessageSender(BotToken, ulong.Parse(TargetChannelId));
+            await sender.SendMessageAsync(Body);
         }
     }
 }
