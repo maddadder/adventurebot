@@ -8,7 +8,7 @@ namespace AdventureBot.Services
 {
     public interface IDiscordBotService
     {
-        Task<string> RenderGameStateGameEntry(SendReceiveDiscordStateInput gameState, GameEntry entry);
-        Task SendMessage(string TargetChannelId, string Body);
+        Task<IEnumerable<string>> RenderGameStateGameEntry(SendReceiveDiscordStateInput gameState, GameEntry entry);
+        Task SendMessages(string TargetChannelId, IEnumerable<string> messages);
     }
 }

@@ -35,10 +35,11 @@ namespace AdventureBot.ActivityFunctions
                 _logger.LogInformation("Getting GetGameStatesFromOption from GameState");
                 var gameEntry = await _cosmosApiService.GetGameStatesFromOption(input.GameState);
                 _logger.LogInformation("Getting Message to send from GameState");
-                string message = await _discordBotService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
-                if(!string.IsNullOrEmpty(message)){
+                var messages = await _discordBotService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
+                if(messages.Any())
+                {
                     _logger.LogInformation("Sending Message using DiscordBotService");
-                    await _discordBotService.SendMessage(input.TargetChannelId, message);
+                    await _discordBotService.SendMessages(input.TargetChannelId, messages);
                     _logger.LogInformation($"Message sent to {input.TargetChannelId} with game state URL {input.RegistrationConfirmationURL}/ with instanceid: {input.InstanceId}");
                 }
                 else

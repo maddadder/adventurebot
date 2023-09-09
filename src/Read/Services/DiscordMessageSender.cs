@@ -20,7 +20,7 @@ public class DiscordMessageSender
         _targetChannelId = targetChannelId;
     }
 
-    public async Task SendMessageAsync(string messageText)
+    public async Task SendMessageAsync(IEnumerable<string> messages)
     {
         var client = new DiscordSocketClient();
         client.Log += LogAsync;
@@ -41,31 +41,34 @@ public class DiscordMessageSender
                 if (channel != null)
                 {
                     _logger.LogInformation("DiscordMessageSender channel.SendMessageAsync");
-                    // Tokenize the message into words, Markdown links, and other characters
-                    var tokens = TokenizeMessage(messageText);
-
-                    var currentChunk = new StringBuilder();
-                    var currentChunkLength = 0;
-
-                    foreach (var token in tokens)
+                    foreach(var messageText in messages)
                     {
-                        if (currentChunkLength + token.Length <= 1999)
+                        // Tokenize the message into words, Markdown links, and other characters
+                        var tokens = TokenizeMessage(messageText);
+
+                        var currentChunk = new StringBuilder();
+                        var currentChunkLength = 0;
+
+                        foreach (var token in tokens)
                         {
-                            currentChunk.Append(token);
-                            currentChunkLength += token.Length;
+                            if (currentChunkLength + token.Length <= 1999)
+                            {
+                                currentChunk.Append(token);
+                                currentChunkLength += token.Length;
+                            }
+                            else
+                            {
+                                await channel.SendMessageAsync(currentChunk.ToString());
+                                currentChunk.Clear();
+                                currentChunk.Append(token);
+                                currentChunkLength = token.Length;
+                            }
                         }
-                        else
+
+                        if (currentChunkLength > 0)
                         {
                             await channel.SendMessageAsync(currentChunk.ToString());
-                            currentChunk.Clear();
-                            currentChunk.Append(token);
-                            currentChunkLength = token.Length;
                         }
-                    }
-
-                    if (currentChunkLength > 0)
-                    {
-                        await channel.SendMessageAsync(currentChunk.ToString());
                     }
                 }
                 else
