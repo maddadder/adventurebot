@@ -430,6 +430,14 @@
       "discordVotingCounter": {
         "type": "object",
         "properties": {
+          "targetChannelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "voteInstanceId": {
+            "type": "string",
+            "nullable": true
+          },
           "priorVote": {
             "type": "string",
             "nullable": true
