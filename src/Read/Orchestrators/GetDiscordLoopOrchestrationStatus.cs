@@ -23,7 +23,7 @@ namespace AdventureBot.Orchestrators
 
             var entityId = new EntityId(EntityTriggerDiscordVotingCounter.Name.Vote, $"{EntityTriggerDiscordVotingCounter.Name.Vote},{InstanceId}");
 
-            DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.DiscordGet);
+            DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.Get);
             return votingCounter;
         }
     }

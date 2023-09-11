@@ -38,9 +38,11 @@ namespace AdventureBot.Orchestrators
             };
             mapping.Add(sendReceiveGameStateInput);
             await context.CallActivityAsync(nameof(DiscordStateLoopActivity), sendReceiveGameStateInput);
-            log.LogInformation("2. Initialize an entity and set the prior vote");
+            log.LogInformation("2. Initialize an entity and set the priorVote, voteInstanceId, and targetChannelId");
             var entityId = new EntityId(EntityTriggerDiscordVotingCounter.Name.Vote, $"{EntityTriggerDiscordVotingCounter.Name.Vote},{input.InstanceId}");
-            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordSetPriorVote, input.InitialGameState);
+            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetPriorVote, input.InitialGameState);
+            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetVoteInstanceId, sendReceiveGameStateInput.SubscriberId);
+            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetTargetChannelId, sendReceiveGameStateInput.TargetChannelId);
 
             log.LogInformation("3. Setup timer for 1 day and wait for external event to be executed. Whatever comes first is the winner (timer vs input)");
             using (var ctsGameTimeout = new CancellationTokenSource())
@@ -65,7 +67,7 @@ namespace AdventureBot.Orchestrators
                         if(mapping.Select(x => x.SubscriberId).Contains(gameLoopInput.SubscriberId))
                         {
                             log.LogInformation("4. Add the vote to the tally");
-                            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordVote, gameLoopInput);
+                            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Vote, gameLoopInput);
                         }
                         log.LogInformation("5. Initialize the WaitForExternalEvent and then loop on the await.");
                         log.LogInformation("Only break out when the timeout expires");
@@ -78,12 +80,12 @@ namespace AdventureBot.Orchestrators
                             gameLoopInput = gameAdvanceButtonClickedBeforeTimeout.Result;
                             if(mapping.Select(x => x.SubscriberId).Contains(gameLoopInput.SubscriberId))
                             {
-                               context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordVote, gameLoopInput);
+                               context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Vote, gameLoopInput);
                             }
                             gameAdvanceButtonClickedBeforeTimeout = context.WaitForExternalEvent<DiscordLoopInput>(EventNames.DiscordStateAdvanced);
                         }
                         log.LogInformation("7. Get the current state of the votingCounter");
-                        DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.DiscordGet);
+                        DiscordVotingCounter votingCounter = await context.CallEntityAsync<DiscordVotingCounter>(entityId, DiscordVotingCounterOperationNames.Get);
                         Dictionary<string, int> votes = votingCounter.VoteCount;
                         log.LogInformation("8. Tally up the votes, and get the new game state");
                         var newGameState = await context.CallActivityAsync<string>(nameof(TallyVoteActivity), votes);
@@ -93,7 +95,7 @@ namespace AdventureBot.Orchestrators
                             input.InitialGameState = newGameState;
                         }
                         log.LogInformation("9. Delete the entity because we are done with it");
-                        context.SignalEntity(entityId, DiscordVotingCounterOperationNames.DiscordDelete);
+                        context.SignalEntity(entityId, DiscordVotingCounterOperationNames.Delete);
                         log.LogInformation($"Saved Game State: {input.InitialGameState}");
                         log.LogInformation("10. restart the workflow with new input");
                         context.ContinueAsNew(input, false);

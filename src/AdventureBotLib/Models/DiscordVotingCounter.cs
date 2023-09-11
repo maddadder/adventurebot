@@ -5,6 +5,12 @@ namespace AdventureBot.Models;
 [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
 public class DiscordVotingCounter : IDiscordVotingCounter
 {
+    [JsonProperty("targetChannelId")]
+    public string TargetChannelId { get; set; }
+
+    [JsonProperty("voteInstanceId")]
+    public string VoteInstanceId { get; set; }
+
     [JsonProperty("priorVote")]
     public string PriorVote { get; set; }
 
@@ -13,6 +19,16 @@ public class DiscordVotingCounter : IDiscordVotingCounter
 
     [JsonProperty("voterList")]
     public Dictionary<string, string> VoterList { get; set; } = new();
+
+    public void SetTargetChannelId(string targetChannelId)
+    {
+        TargetChannelId = targetChannelId;
+    }
+
+    public void SetVoteInstanceId(string voteInstanceId)
+    {
+        VoteInstanceId = voteInstanceId;
+    }
 
     public void SetPriorVote(string priorVote)
     {
