@@ -27,6 +27,7 @@ namespace AdventureBot.Models
     }
     public static class DiscordVotingCounterOperationNames
     {
+        public const string SetGameOptions = nameof(SetGameOptions);
         public const string SetTargetChannelId = nameof(SetTargetChannelId);
         public const string SetVoteInstanceId = nameof(SetVoteInstanceId);
         public const string SetPriorVote = nameof(SetPriorVote);

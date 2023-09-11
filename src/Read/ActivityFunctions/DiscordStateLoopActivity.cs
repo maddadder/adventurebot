@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Collections.Generic;
 namespace AdventureBot.ActivityFunctions
 {
     public class DiscordStateLoopActivity
@@ -25,7 +26,7 @@ namespace AdventureBot.ActivityFunctions
         }
 
         [FunctionName(nameof(DiscordStateLoopActivity))]
-        public async Task Run(          
+        public async Task<List<GameOption>> Run(          
             [ActivityTrigger] SendReceiveDiscordStateInput input)
         {
             _logger.LogInformation("DiscordStateLoopActivity has started");
@@ -33,9 +34,10 @@ namespace AdventureBot.ActivityFunctions
             if(ulong.TryParse(input.TargetChannelId, out temp) && !string.IsNullOrEmpty(input.GameState))
             {
                 _logger.LogInformation("Getting GetGameStatesFromOption from GameState");
-                var gameEntry = await _cosmosApiService.GetGameStatesFromOption(input.GameState);
+                var gameEntries = await _cosmosApiService.GetGameStatesFromOption(input.GameState);
+                var gameEntry = gameEntries.FirstOrDefault();
                 _logger.LogInformation("Getting Message to send from GameState");
-                var messages = await _discordBotService.RenderGameStateGameEntry(input, gameEntry.FirstOrDefault());
+                var messages = await _discordBotService.RenderGameStateGameEntry(input, gameEntry);
                 if(messages.Any())
                 {
                     _logger.LogInformation("Sending Message using DiscordBotService");
@@ -46,10 +48,19 @@ namespace AdventureBot.ActivityFunctions
                 {
                     _logger.LogInformation($"Message not sent to {input.TargetChannelId}");
                 }
+                if(gameEntry != null)
+                {
+                    return gameEntry.options;
+                }
+                else
+                {
+                    return new List<GameOption>();
+                }
             }
             else
             {
                 _logger.LogInformation($"TargetChannelId or game state is invalid");
+                return new List<GameOption>();
             }
         }
 

@@ -37,12 +37,14 @@ namespace AdventureBot.Orchestrators
                 TargetChannelId = input.TargetChannelId
             };
             mapping.Add(sendReceiveGameStateInput);
-            await context.CallActivityAsync(nameof(DiscordStateLoopActivity), sendReceiveGameStateInput);
-            log.LogInformation("2. Initialize an entity and set the priorVote, voteInstanceId, and targetChannelId");
+             log.LogInformation("1.5. Call DiscordStateLoopActivity to send out game state and return the current list of options.");
+            var gameOptions = await context.CallActivityAsync<List<GameOption>>(nameof(DiscordStateLoopActivity), sendReceiveGameStateInput);
+            log.LogInformation("2. Initialize an entity and set the priorVote, voteInstanceId, targetChannelId, and gameOptions");
             var entityId = new EntityId(EntityTriggerDiscordVotingCounter.Name.Vote, $"{EntityTriggerDiscordVotingCounter.Name.Vote},{input.InstanceId}");
             context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetPriorVote, input.InitialGameState);
             context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetVoteInstanceId, sendReceiveGameStateInput.SubscriberId);
             context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetTargetChannelId, sendReceiveGameStateInput.TargetChannelId);
+            context.SignalEntity(entityId, DiscordVotingCounterOperationNames.SetGameOptions, gameOptions);
 
             log.LogInformation("3. Setup timer for 1 day and wait for external event to be executed. Whatever comes first is the winner (timer vs input)");
             using (var ctsGameTimeout = new CancellationTokenSource())

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AdventureBot.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
@@ -13,6 +14,11 @@ public partial class EntityTriggerDiscordVotingCounter
         var vote = ctx.GetState<DiscordVotingCounter>() ?? new DiscordVotingCounter();
         switch (ctx.OperationName)
         {
+            case DiscordVotingCounterOperationNames.SetGameOptions:
+                var gameOptions = ctx.GetInput<List<GameOption>>();
+                vote.SetGameOptions(gameOptions);
+                ctx.SetState(vote);
+                break;
             case DiscordVotingCounterOperationNames.SetTargetChannelId:
                 var targetChannelId = ctx.GetInput<string>();
                 vote.SetTargetChannelId(targetChannelId);
