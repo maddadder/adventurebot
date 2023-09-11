@@ -50,7 +50,7 @@ namespace AdventureBot.Services
                 }
             }
             message1.Append($"\nOptions:\n\n");
-            //[Custom Text](URL)
+            /*//[Custom Text](URL)
             if(!gameEntry.options.Any())
             {
                 message1.Append($"[Start Over]({gameState.RegistrationConfirmationURL}/discordloop/{gameState.InstanceId}/{gameState.TargetChannelId}/{gameState.SubscriberId}/begin/)\n\n");
@@ -60,6 +60,38 @@ namespace AdventureBot.Services
                 foreach(var option in gameEntry.options){
                     message1.Append($"[{option.description}]({gameState.RegistrationConfirmationURL}/discordloop/{gameState.InstanceId}/{gameState.TargetChannelId}/{gameState.SubscriberId}/{option.next}/)\n\n");
                 }
+            }*/
+            List<string> optionEmojis = new List<string>
+            {
+                "1️⃣", 
+                "2️⃣", 
+                "3️⃣", 
+                "4️⃣", 
+                "5️⃣", 
+                "6️⃣",
+                "7️⃣",
+                "8️⃣",
+                "9️⃣",
+                "🔟"
+            };
+            if (!gameEntry.options.Any())
+            {
+                message1.Append($"1️⃣ begin)\n\n");
+            }
+            else
+            {
+                for (int i = 0; i < gameEntry.options.Count; i++)
+                {
+                    if (i < optionEmojis.Count)
+                    {
+                        message1.Append($"{optionEmojis[i]} {gameEntry.options[i].description})\n\n");
+                    }
+                    else
+                    {
+                        // Handle the case where there are more options than available emojis.
+                        message1.Append($"{i + 1}️ {gameEntry.options[i].description})\n\n");
+                    }
+                }
             }
             message1.Append($@"
 
@@ -67,7 +99,7 @@ You received the above message because you or a party member has responded to th
 
 To end the game, you and your party members must not respond for 24 hours and the game will end.
 
-To get the game status, use the following command:
+Use the command /status or the following command to respond to the game:
 
 ");
 message2.Append($"/status instanceid:{gameState.InstanceId}");
