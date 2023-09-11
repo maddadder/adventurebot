@@ -430,6 +430,13 @@
       "discordVotingCounter": {
         "type": "object",
         "properties": {
+          "gameOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/gameOption"
+            },
+            "nullable": true
+          },
           "targetChannelId": {
             "type": "string",
             "nullable": true
