@@ -76,7 +76,7 @@ namespace AdventureBot.Services
             };
             if (!gameEntry.options.Any())
             {
-                message1.Append($"1️⃣ begin)\n\n");
+                message1.Append($"1️⃣ begin\n\n");
             }
             else
             {
@@ -84,12 +84,12 @@ namespace AdventureBot.Services
                 {
                     if (i < optionEmojis.Count)
                     {
-                        message1.Append($"{optionEmojis[i]} {gameEntry.options[i].description})\n\n");
+                        message1.Append($"{optionEmojis[i]} {gameEntry.options[i].description}\n\n");
                     }
                     else
                     {
                         // Handle the case where there are more options than available emojis.
-                        message1.Append($"{i + 1}️ {gameEntry.options[i].description})\n\n");
+                        message1.Append($"{i + 1}️ {gameEntry.options[i].description}\n\n");
                     }
                 }
             }
