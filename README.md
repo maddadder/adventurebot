@@ -67,32 +67,16 @@ You have the following options:
 
 1. For multiple projects loaded at the same time: In VS Code: Open `main.code-workspace` then click Open Workspace. If you use this then set in local.settings.json `AzureWebJobsStorage` to `DefaultEndpointsProtocol=https;AccountName=redacted;AccountKey=redacted;EndpointSuffix=core.windows.net`. For more info see: https://github.com/microsoft/vscode-azurefunctions/issues/1121
 
-2. Otherwise open `Read` or `ReadWrite` as separate projects. If you use separate projects then you can use `Azurite`. If you use Azurite then set in local.settings.json `AzureWebJobsStorage` to `UseDevelopmentStorage=true`
+2. Otherwise open `Read` or `ReadWrite` as separate projects. If you use separate projects then you can use `Azurite`. If you use Azurite then set in local.settings.json `AzureWebJobsStorage` to `UseDevelopmentStorage=true`. You can then start Azurite with `Azurite: Start`, however, with AzureWebJobsStorage configured with the DefaultEndpointsProtocol then you don't need Azurite at all.
 
-
-### Azure Slot1 Configuration
-
-1. Delete slot1, and recreate it. 
-
-1. Put in slot1 with slotSetting:true, AzureFunctionsJobHost__extensions__durableTask__hubName:slot1
-
-1. Assign a system identity, and copy the identity. In your key vault, create an access policy with Secret permissions: List and Get, paste in the identity on the next screen.
-
-1. Create a new storage account. Use this storage account for your deployment. Copy/Paste in the Access Key's Connection String in slot1. This will automatically create the file shares on your new storage account.
-
-1. Copy/Paste in the Publish Profile into Github Actions. To configure secrets.ADVENTUREBOT_SLOT1 and PLAYADVENTUREBOT_SLOT1: Navigate to Github repo, Settings, Secrets and Variables, Actions, New Repository Secret. Type in ADVENTUREBOT_SLOT1 and paste in the publish settings found in Azure Function/Deployment Slot/Get Publish Profile
-
-1. Make sure your function in slot1 is running and then check in your code (which should put your code into slot1)
-
-1. keep track of WEBSITE_CONTENTSHARE before you swap. WEBSITE_CONTENTSHARE should be unique per slot. Make sure that if the swap fails that these settings get reverted. I've seen the swap fail have way through and the WEBSITE_CONTENTSHARE setting swapped, but not the website because it failed have way through. 
-
-1. Test while the app is in slot1, then swap to production. The WEBSITE_CONTENTSHARE should change when you perform the swap.
-
-1. Delete your old storage account
-
+3. When you build the project it should prompt you to build `Read` or `ReadWrite`. Choose whichever workspace you are in.
 
 ### Debugging Blazor App:
 
 1. If you are using local storage: Azurite: Start
 
-1. navigate to src/AdventureBotUI/Client and run dotnet watch
+1. navigate to src/AdventureBotUI/Client and run `dotnet watch` to start the client.
+
+### Using a Discord bot:
+
+1. There is a discord bot over [here](https://github.com/maddadder/microk8s-discord-bot/) that can run the client side operations to advance the quest, and allows all the interaction to stay within Discord without having to navigate outside of Discord. 
