@@ -1,7 +1,24 @@
 
 # adventurebot
 
-ToDo: Build an adventure bot in c#
+A workflow that sends messages for interactive choose-your-own-adventure stories. 
+
+### Install Azure Cli
+1. See link [here](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
+```
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+2. run `az login`
+
+### Install Durable Functions Tools
+
+1. See link [here](https://github.com/Azure/azure-functions-core-tools)
+```
+wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt update
+sudo apt install azure-functions-core-tools-4
+```
 
 ### Help along the way
 
